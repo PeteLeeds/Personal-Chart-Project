@@ -9,7 +9,7 @@ export class ServerRouter {
             res.send('database api')
         })
 
-        router.use('/charts', await ChartRouter.create())
+        router.use('/series', await ChartRouter.create())
 
         return router;
     }

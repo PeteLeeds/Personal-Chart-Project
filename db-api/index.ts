@@ -1,24 +1,25 @@
 import { Db, MongoClient } from 'mongodb'
-import { ChartDb } from './chart';
+import { SeriesDb } from './db-scripts/series';
 import { MONGO_DB, MONGO_URI } from './config'
 import Express from 'express'
 import { ServerRouter } from './routes';
+import BodyParser from 'body-parser'
 
 const app = Express()
 
 export class Database {
-    public chartDb: ChartDb;
+    public seriesDb: SeriesDb;
 
-    public constructor(chartDb: ChartDb) {
-        this.chartDb = chartDb
+    public constructor(chartDb: SeriesDb) {
+        this.seriesDb = chartDb
     }
 }
 
 class App {
     public static async run() {
         console.log('Connecting to db...')
-        const db = await new Promise<MongoClient> ((resolve, reject) => {
-            MongoClient.connect(MONGO_URI, {useUnifiedTopology: true},  (err, db) => {
+        const db = await new Promise<MongoClient>((resolve, reject) => {
+            MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, db) => {
                 if (err) {
                     console.error('Error initialising Mongo: ', err)
                     reject(err)
@@ -27,9 +28,13 @@ class App {
             })
         })
         const database = db.db(MONGO_DB)
-        const db2 = new Database(ChartDb.init(database));
+        const db2 = new Database(SeriesDb.init(database));
+
+        app.use(BodyParser.urlencoded({ extended: true }))
+        app.use(BodyParser.json())
+
         app.use((_, res, next) => {
-            res.locals = {db: db2}                
+            res.locals = { db: db2 }
             next()
         })
 
@@ -37,9 +42,10 @@ class App {
             console.log('here!!!');
             res.send('it is working')
         });
-        
+
         app.use('/database', await ServerRouter.create())
-        
+        app.use(Express.json())
+
         app.set('port', 8083)
         app.listen(8083, () => {
             console.log('app is listening')
