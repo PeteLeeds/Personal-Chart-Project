@@ -4,14 +4,24 @@ import { MONGO_DB, MONGO_URI } from './config'
 import Express from 'express'
 import { ServerRouter } from './routes';
 import BodyParser from 'body-parser'
+import { SongDb } from './db-scripts/song';
+import { ArtistDb } from './db-scripts/artist';
 
 const app = Express()
 
 export class Database {
     public seriesDb: SeriesDb;
+    public songDb: SongDb
+    public artistDb: ArtistDb;
 
-    public constructor(chartDb: SeriesDb) {
-        this.seriesDb = chartDb
+    public constructor(
+        seriesDb: SeriesDb, 
+        songDb: SongDb, 
+        artistDb: ArtistDb) 
+    {
+        this.seriesDb = seriesDb;
+        this.songDb = songDb;
+        this.artistDb = artistDb;
     }
 }
 
@@ -27,8 +37,8 @@ class App {
                 resolve(db)
             })
         })
-        const database = db.db(MONGO_DB)
-        const db2 = new Database(SeriesDb.init(database));
+        const database = db.db(MONGO_DB);
+        const db2 = new Database(SeriesDb.init(database), SongDb.init(database), ArtistDb.init(database));
 
         app.use(BodyParser.urlencoded({ extended: true }))
         app.use(BodyParser.json())
