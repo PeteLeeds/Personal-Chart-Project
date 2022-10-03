@@ -1,0 +1,36 @@
+<h1>{{artistInfo.name}}</h1>
+
+<h2>Songs:</h2>
+<div>
+    Selected Series:
+    <select *ngIf="chartSelectOptions" [(ngModel)]="selectedSeries" (click)="reloadArtist()">
+        <ng-container *ngFor="let chart of chartSelectOptions">
+            <option>{{chart}}</option>
+        </ng-container>
+    </select>
+</div>
+
+<ng-container *ngIf="artistInfo.songs; else loading">
+    <table>
+        <tr>
+            <th>Debut</th>
+            <th>Artist</th>
+            <th>Title</th>
+            <th>Weeks On</th>
+            <th>Peak</th>
+        </tr>
+        <ng-container *ngFor="let song of artistInfo.songs">
+            <ng-container *ngIf="song.charts[selectedSeries]">
+                <tr>
+                    <td>{{song.charts[selectedSeries][0].chart}}</td>
+                    <td>{{song.artistDisplay}}</td>
+                    <td><a [routerLink]="['/song', song._id]">{{song.title}}</a></td>
+                    <td>{{song.charts[selectedSeries].length}}</td>
+                    <td>{{song.peak}}</td>
+                </tr>
+            </ng-container>
+        </ng-container>
+    </table>
+</ng-container>
+
+<ng-template #loading>Loading...</ng-template>

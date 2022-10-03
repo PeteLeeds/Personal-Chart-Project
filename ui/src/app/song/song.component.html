@@ -1,0 +1,14 @@
+<p>Number of songs: {{songCount}}</p>
+<div *ngIf="pageNumber > 1" class="fake-link" (click)="decPageNumber()">Previous Page</div>
+<div *ngIf="songCount && songCount > pageNumber * 20" class="fake-link" (click)="incPageNumber()">Next Page</div>
+<div>
+    <b>Sort By:</b>
+    <select [(ngModel)]="sortBy" (change)="reloadSongs()">
+        <ng-container *ngFor="let option of sortOptions">
+            <option>{{option}}</option>
+        </ng-container>
+    </select>
+</div>
+<p *ngFor="let song of songs">
+    <a [routerLink]="['/song', song._id]">{{song.artistDisplay}} - {{song.title}}</a>
+</p>

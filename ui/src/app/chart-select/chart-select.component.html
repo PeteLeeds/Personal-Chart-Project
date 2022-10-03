@@ -1,0 +1,11 @@
+<h1>{{seriesName}}</h1>
+<h2>Select a Chart</h2>
+
+<p *ngFor="let chart of chartList">
+    <a [routerLink]=[chart.name]>{{chart.name}}</a>
+</p>
+
+<a routerLink="new">Upload new chart</a>
+<p class="fake-link" (click)="openModal()">Delete Series</p>
+
+<delete-series-modal #deleteSeriesModal></delete-series-modal>

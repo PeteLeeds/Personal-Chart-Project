@@ -1,0 +1,31 @@
+<form [formGroup]="chartForm" (ngSubmit)="onSubmit()">
+    <table class="title-submit-table">
+        <tr>
+            <td>
+                <h1>New Chart</h1>
+            </td>
+            <td><button type="submit" class="submit-chart" [disabled]="!chartForm.valid">Submit</button></td>
+        </tr>
+    </table>
+    <div class="input-option">
+        <label for="chart-name">Chart Name: </label>
+        <input id="chart-name" type="text" formControlName="name">
+        <input type="checkbox" [(ngModel)]="useDateAsTitle" (change)="onCheckboxChange()"
+            [ngModelOptions]="{standalone: true}">
+        Use date as title
+    </div>
+    <div class="input-option">
+        <label>Chart Date:
+            <input [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3" placeholder="Date Time" formControlName="date">
+            <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+        </label>
+    </div>
+    <div class="input-option">
+        <p>Chart Text:</p>
+        <p class="subtext">(Please enter the artist and title of each song in order, separated by hyphens)</p>
+        <textarea id="chart-text" type="text" formControlName="songs"></textarea>
+    </div>
+</form>
+<p class="centre" *ngIf="checkingSongs">Checking Songs...</p>
+
+<new-songs-modal #newSongsModal></new-songs-modal>

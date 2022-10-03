@@ -1,0 +1,19 @@
+<custom-modal #modal [modalConfig]="modalConfig">
+    <div id="restrict-height">
+        <p>Some new songs have been detected. Please check the details are correct and press 'Confirm' when complete</p>
+        <table>
+            <tr>
+                <th>Artists</th>
+                <td>Title</td>
+            </tr>
+            <tr *ngFor="let song of chartSongs">
+                <ng-container *ngIf="!song.exists">
+                    <td>
+                        <artist-selector [artists]="song.artists" (artistsChangeEvent)="updateArtists(song, $event)"></artist-selector>
+                    </td>
+                    <tr>{{song.title}}</tr>
+                </ng-container>
+            </tr>
+        </table>
+    </div>
+</custom-modal>

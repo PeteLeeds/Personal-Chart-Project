@@ -1,0 +1,10 @@
+<h1>Select a Series</h1>
+
+<p *ngFor="let series of seriesList">
+    <a [routerLink]="['/series', series.name, 'chart']">{{series.name}}</a>
+</p>
+
+<!--This should probably be a modal-->
+<p class="fake-link" (click)="openModal()">Create new series</p>
+
+<create-series-modal #createSeriesModal></create-series-modal>

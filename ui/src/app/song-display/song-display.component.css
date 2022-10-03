@@ -1,0 +1,67 @@
+table, th, td{
+    border: 1px solid blue
+}
+
+mat-select {
+    background-color: green;
+}
+
+.top-right {
+    position:absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.container {
+    position: relative;
+}
+
+.fake-link {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
+.peak {
+  background-color: #D7E5F0;
+}
+
+/* Dropdown Button */
+.dropbtn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+  }
+  
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0rem
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content .dropdown-option {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content .dropdown-option:hover {background-color: #ddd; cursor: pointer;}
+  
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {display: block;}
