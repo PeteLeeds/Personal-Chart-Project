@@ -52,9 +52,9 @@ export class SongDb {
 
     public async findSong(details: string) {
         console.log('find song', details)
-        const splitSongString = details.split(' - ');
-        const artistDisplay = splitSongString[0];
-        const title = splitSongString[1];
+        const indexOfFirstHyphen = details.indexOf(' - ')
+        const artistDisplay = details.slice(0, indexOfFirstHyphen);
+        const title = details.slice(indexOfFirstHyphen + 3);
         return this.db.collection(SONG_COLLECTION).findOne({ $and: [{ artistDisplay }, { title }] })
     }
 

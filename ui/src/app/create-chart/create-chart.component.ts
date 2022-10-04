@@ -98,7 +98,9 @@ export class CreateChartComponent implements OnInit {
         return {pos: song.pos, id: song.song._id, exists: song.exists};
       }
       else {
-        let [artist, title] = song.songString.split('-');
+        const indexOfFirstHyphen = song.songString.indexOf(' - ')
+        let artist = song.songString.slice(0, indexOfFirstHyphen);
+        let title = song.songString.slice(indexOfFirstHyphen + 3);
         artist = artist.trim(); title = title.trim();
         // Initially set artist as both and let the user change it if there is more than one artist
         // If we're clever we can add better artist detection here
