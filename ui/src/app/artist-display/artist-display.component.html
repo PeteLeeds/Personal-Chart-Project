@@ -22,7 +22,7 @@
         <ng-container *ngFor="let song of artistInfo.songs">
             <ng-container *ngIf="song.charts[selectedSeries]">
                 <tr>
-                    <td>{{song.charts[selectedSeries][0].chart}}</td>
+                    <td><a [routerLink]="['/series', selectedSeries, 'chart', song.charts[selectedSeries][0].chart]">{{song.charts[selectedSeries][0].chart}}</a></td>
                     <td>{{song.artistDisplay}}</td>
                     <td><a [routerLink]="['/song', song._id]">{{song.title}}</a></td>
                     <td>{{song.charts[selectedSeries].length}}</td>
