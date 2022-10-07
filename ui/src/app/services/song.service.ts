@@ -54,4 +54,14 @@ export class SongService {
       map((res => {})), catchError(error => {throw error})
     )
   }
+
+  public searchSongs(title?: string, artist?: string): Observable<Song[]> {
+    return this.httpClient.get<Song[]>(`${BASE_URL}/song/search?title=${title}&artist=${artist}`)
+  }
+
+  public mergeSongs(fromId: string, toId: string) {
+    const url = `${BASE_URL}/song/merge/${fromId}/${toId}`
+    console.log('merge songs', url)
+    return this.httpClient.delete(url)
+  }
 }

@@ -47,7 +47,7 @@
             <p class="fake-link">Options</p>
             <div class="dropdown-content">
                 <div class="dropdown-option" (click)="enterEditMode()">Edit Details</div>
-                <div class="dropdown-option">Mark as Duplicate</div>
+                <div class="dropdown-option" (click)="markDuplicate()">Mark as Duplicate</div>
             </div>
         </div>
     </div>
@@ -87,3 +87,5 @@
 </div>
 
 <ng-template #loading>Loading...</ng-template>
+
+<mark-duplicate-modal #markDuplicateModal></mark-duplicate-modal>

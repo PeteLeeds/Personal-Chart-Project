@@ -24,6 +24,7 @@ import { SongComponent } from './song/song.component';
 import { ArtistComponent } from './artist/artist.component';
 import { ArtistDisplayComponent } from './artist-display/artist-display.component';
 import { ArtistSelectorComponent } from './shared/artist-selector.commponent';
+import { MarkDuplicateComponent } from './modals/mark-duplicate/mark-duplicate.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { ArtistSelectorComponent } from './shared/artist-selector.commponent';
     SongComponent,
     ArtistComponent,
     ArtistDisplayComponent,
-    ArtistSelectorComponent
+    ArtistSelectorComponent,
+    MarkDuplicateComponent
   ],
   imports: [
     BrowserModule,

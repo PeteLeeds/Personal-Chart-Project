@@ -1,0 +1,17 @@
+<custom-modal #modal [modalConfig]="modalConfig">
+    <b>Please search for the song this is a duplicate of:</b>
+    <div>
+        Title: 
+        <input type="text" [(ngModel)]="title" (input)="search()" />
+    </div>
+    <div>
+        Artist: 
+        <input type="text" [(ngModel)]="artist" (input)="search()" />
+    </div>
+    <div (click)="selectSong(song)" 
+        [ngClass]="song._id === selectedSongId ? 'bold' : 'fake-link'" 
+        *ngFor="let song of songSuggestions">
+        <!-- *ngIf to prevent us making a song a duplicate of itself -->
+        <p *ngIf="!(songId === song._id)">{{song.artistDisplay}} - {{song.title}}</p>
+    </div>
+</custom-modal>

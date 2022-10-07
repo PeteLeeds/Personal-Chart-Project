@@ -58,6 +58,19 @@ export class SongDb {
         return this.db.collection(SONG_COLLECTION).findOne({ $and: [{ artistDisplay }, { title }] })
     }
 
+    public async searchSong(title: string, artist: string) {
+        console.log('search song', title, artist)
+        const songs = await this.db.collection(SONG_COLLECTION)
+            .aggregate([
+                {"$match": {"$and": [
+                    {"title": {"$regex": new RegExp(title), "$options": 'i'}},
+                    {"artistDisplay": {"$regex": new RegExp(artist), "$options": 'i'}}
+                ]}},
+                {"$limit": 10}
+            ])
+        return songs.toArray()
+    }
+
     public async updateSong(id: string, newData: Record<string, unknown>) {
         if (newData.artists) {
             let artistIds: ObjectId[] = []
@@ -68,5 +81,34 @@ export class SongDb {
             delete newData.artists
         }
         return this.db.collection(SONG_COLLECTION).updateOne({ '_id': new ObjectId(id) }, { '$set': newData })
+    }
+
+    public async mergeSongs(fromId: string, toId: string) {
+        console.log('merging', fromId, toId)
+        if (fromId === toId) {
+            throw new Error('both fromId and toId point to the same song')
+        }
+        const from = await this.db.collection(SONG_COLLECTION).findOne({'_id': new ObjectId(fromId)})
+        const to = await this.db.collection(SONG_COLLECTION).findOne({'_id': new ObjectId(toId)})
+        if (!from || !to) {
+            throw new Error('Both fromId and toId need to be correctly defined')
+        }
+        // Merge chart runs
+        for (let series of Object.keys(from.charts)) {
+            if (!to.charts[series]) {
+                to.charts[series] = from.charts[series]
+            } else {
+                for (const chart1 of from.charts[series]) {
+                    for (const chart2 of to.charts[series]) {
+                        if (chart1.chart === chart2.chart) {
+                            throw new Error('Cannot merge as both songs appear at different positions in the same chart')
+                        }
+                    }
+                }
+                to.charts[series] = [...to.charts[series], ...from.charts[series]]
+            }
+        }
+        await this.db.collection(SONG_COLLECTION).updateOne({ '_id': new ObjectId(toId) }, {'$set': to})
+        return this.db.collection(SONG_COLLECTION).deleteOne({ '_id': new ObjectId(fromId) })
     }
 }

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
+import { MarkDuplicateComponent } from '../modals/mark-duplicate/mark-duplicate.component';
 import { ChartService } from '../services/chart.service';
 import { SongService } from '../services/song.service';
 import { Chart } from '../types/chart';
@@ -19,10 +20,13 @@ interface ChartRun {
   styleUrls: ['./song-display.component.css']
 })
 export class SongDisplayComponent implements OnInit {
+  @ViewChild('markDuplicateModal') private markDuplicateModal: MarkDuplicateComponent;
 
   private subscriptions: Subscription[] = []
   private activatedRoute: ActivatedRoute;
   private songService: SongService;
+  private router: Router;
+
 
   public songInfo: Song;
   public selectedSeries = "";
@@ -40,9 +44,12 @@ export class SongDisplayComponent implements OnInit {
     artistDisplay: new FormControl(''),
   });
 
-  constructor(activatedRoute: ActivatedRoute, songService: SongService) {
+  constructor(activatedRoute: ActivatedRoute, 
+              songService: SongService,
+              router: Router) {
     this.activatedRoute = activatedRoute;
     this.songService = songService;
+    this.router = router
   }
 
   ngOnInit(): void {
@@ -102,6 +109,11 @@ export class SongDisplayComponent implements OnInit {
 
   public updateArtists(event: string[]) {
     this.artistNames = event
+  }
+
+  public async markDuplicate() {
+    const duplicateId = await this.markDuplicateModal.open(this.songInfo._id)
+    this.router.navigate(['../', duplicateId], { relativeTo: this.activatedRoute })
   }
 
   /**

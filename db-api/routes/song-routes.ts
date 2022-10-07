@@ -64,6 +64,24 @@ export class SongRouter {
             )
         })
 
+        /** 
+         * Search for a song given artist and title strings
+         */
+        router.get('/search', async (req, res) => {
+            console.log('search for song')
+            res.json(await this.getDb(res as unknown as Record<string, Record<string, unknown>>).songDb.searchSong(req.query.title as string, req.query.artist as string)
+            )
+        })
+
+        /** 
+        * Merge one song's chart runs into another given their ids
+        */
+        router.delete('/merge/:fromId/:toId', async (req, res) => {
+            console.log('merge songs')
+            res.json(await this.getDb(res as unknown as Record<string, Record<string, unknown>>).songDb.mergeSongs(req.params.fromId, req.params.toId)
+            )
+        })
+
 
         return router;
     }
