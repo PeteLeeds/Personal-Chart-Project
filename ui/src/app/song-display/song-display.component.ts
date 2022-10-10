@@ -112,7 +112,7 @@ export class SongDisplayComponent implements OnInit {
   }
 
   public async markDuplicate() {
-    const duplicateId = await this.markDuplicateModal.open(this.songInfo._id)
+    const duplicateId = await this.markDuplicateModal.open('song', this.songInfo._id)
     this.router.navigate(['../', duplicateId], { relativeTo: this.activatedRoute })
   }
 

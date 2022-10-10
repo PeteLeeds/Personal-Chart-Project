@@ -36,4 +36,12 @@ export class ArtistService {
             map((res) => +res.headers.get("X-Count"))
           );
       }
+
+    public searchArtists(nameString: string): Observable<Artist[]> {
+        return this.httpClient.get<Artist[]>(`${BASE_URL}/artist/search?name=${nameString}`)
+    }
+
+    public mergeArtists(fromId: string, toId: string): Observable<Artist[]> {
+        return this.httpClient.delete<Artist[]>(`${BASE_URL}/artist/merge/${fromId}/${toId}`)
+    }
 }

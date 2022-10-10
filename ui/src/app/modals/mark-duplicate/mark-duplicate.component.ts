@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ArtistService } from 'src/app/services/artist.service';
 import { ChartService } from 'src/app/services/chart.service';
 import { SongService } from 'src/app/services/song.service';
 import { Song } from 'src/app/types/song';
@@ -16,17 +17,21 @@ export class MarkDuplicateComponent implements OnInit {
   public title = '';
   public artist = '';
   private songService: SongService;
-  public songSuggestions = []
-  public selectedSongId = ''
-  private songId = ''
+  private artistService: ArtistService;
+  public suggestions = []
+  public selectedId = ''
+  private id = ''
+  public type = ''
 
-  constructor(songService: SongService) {
+  constructor(songService: SongService, artistService: ArtistService) {
     this.songService = songService
+    this.artistService = artistService
   }
 
-  public open(songId: string): Promise<unknown> {
-    this.songId = songId
-    console.log(this.songId)
+  public open(type: string, id: string): Promise<unknown> {
+    this.type = type
+    this.id = id
+    console.log(this.id)
     return this.baseModal.open();
   }
 
@@ -36,23 +41,31 @@ export class MarkDuplicateComponent implements OnInit {
     // An 'x' in the corner should eventually be sufficient
     closeButtonLabel: 'Mark Duplicate',
     onClose: () => new Promise<string>((resolve) => {
-      this.songService.mergeSongs(this.songId, this.selectedSongId)
-        .subscribe((res) => {
+      const subscription = this.type === 'song'
+                          ? this.songService.mergeSongs(this.id, this.selectedId)
+                          : this.artistService.mergeArtists(this.id, this.selectedId)
+      subscription.subscribe((res) => {
           console.log('merged', res)
-          resolve(this.selectedSongId)
-        })
+          resolve(this.selectedId)
+      })
     })
   }
 
   public search(): void {
     console.log(this.title, this.artist)
-    this.songService.searchSongs(this.title, this.artist)
-      .subscribe(res => this.songSuggestions = res)
+    if (this.type === 'song') {
+      this.songService.searchSongs(this.title, this.artist)
+      .subscribe(res => this.suggestions = res)
+    }
+    else {
+      this.artistService.searchArtists(this.artist)
+      .subscribe(res => this.suggestions = res)
+    }
   }
 
-  public selectSong(song: Song): void {
-    this.selectedSongId = song._id
-    console.log(this.selectedSongId)
+  public selectItem(song: Song): void {
+    this.selectedId = song._id
+    console.log(this.selectedId)
   }
 
   ngOnInit(): void {

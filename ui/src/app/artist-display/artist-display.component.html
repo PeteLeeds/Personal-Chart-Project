@@ -1,5 +1,15 @@
 <h1>{{artistInfo.name}}</h1>
 
+<div class="top-right">
+    <div class="dropdown">
+        <p class="fake-link">Options</p>
+        <div class="dropdown-content">
+            <div class="dropdown-option" (click)="enterEditMode()">Edit Details</div>
+            <div class="dropdown-option" (click)="markDuplicate()">Mark as Duplicate</div>
+        </div>
+    </div>
+</div>
+
 <h2>Songs:</h2>
 <div>
     Selected Series:
@@ -34,3 +44,5 @@
 </ng-container>
 
 <ng-template #loading>Loading...</ng-template>
+
+<mark-duplicate-modal #markDuplicateModal></mark-duplicate-modal>

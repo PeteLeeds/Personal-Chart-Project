@@ -43,4 +43,26 @@ export class ArtistDb {
     public async getArtistCount() {
         return this.db.collection(ARTIST_COLLECTION).countDocuments();
     }
+
+    public async searchArtists(name: string) {
+        console.log('search artists', name)
+        const artists = await this.db.collection(ARTIST_COLLECTION)
+            .aggregate([
+                {"$match":
+                    {"name": {"$regex": new RegExp(name), "$options": 'i'}}
+                },
+                {"$limit": 10}
+            ])
+        return artists.toArray()
+    }
+
+    public async mergeArtists(fromId: string, toId: string) {
+        // Replace artist id in all relevant songs
+        this.db.collection(SONG_COLLECTION).updateMany(
+            { "artistIds": new ObjectId(fromId) }, 
+            { "$set": { "artistIds.$": new ObjectId(toId) } }
+        )
+        // Delete 'from' artist
+        return this.db.collection(ARTIST_COLLECTION).deleteOne({ '_id': new ObjectId(fromId) })
+    }
 }
