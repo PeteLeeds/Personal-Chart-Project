@@ -69,7 +69,7 @@ export class SongRouter {
          */
         router.get('/search', async (req, res) => {
             console.log('search for song')
-            res.json(await this.getDb(res as unknown as Record<string, Record<string, unknown>>).songDb.searchSong(req.query.title as string, req.query.artist as string)
+            res.json(await this.getDb(res as unknown as Record<string, Record<string, unknown>>).songDb.searchSong(req.query.title as string, req.query.artist as string, parseInt(req.query.count as string))
             )
         })
 

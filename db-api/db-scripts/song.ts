@@ -58,7 +58,7 @@ export class SongDb {
         return this.db.collection(SONG_COLLECTION).findOne({ $and: [{ artistDisplay }, { title }] })
     }
 
-    public async searchSong(title: string, artist: string) {
+    public async searchSong(title: string, artist: string, count: number) {
         console.log('search song', title, artist)
         const songs = await this.db.collection(SONG_COLLECTION)
             .aggregate([
@@ -66,7 +66,7 @@ export class SongDb {
                     {"title": {"$regex": new RegExp(title), "$options": 'i'}},
                     {"artistDisplay": {"$regex": new RegExp(artist), "$options": 'i'}}
                 ]}},
-                {"$limit": 10}
+                {"$limit": count}
             ])
         return songs.toArray()
     }

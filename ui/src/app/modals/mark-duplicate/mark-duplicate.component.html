@@ -1,13 +1,6 @@
 <custom-modal #modal [modalConfig]="modalConfig">
-    <b>Please search for the song this is a duplicate of:</b>
-    <div *ngIf="type === 'song'">
-        Title: 
-        <input type="text" [(ngModel)]="title" (input)="search()" />
-    </div>
-    <div>
-        Artist: 
-        <input type="text" [(ngModel)]="artist" (input)="search()" />
-    </div>
+    <b>Please search for the {{options.type}} this is a duplicate of:</b>
+    <search [options]="searchOptions" (changeEvent)="setSuggestions($event)"></search>
     <div (click)="selectItem(item)" 
         [ngClass]="item._id === selectedId ? 'bold' : 'fake-link'" 
         *ngFor="let item of suggestions">

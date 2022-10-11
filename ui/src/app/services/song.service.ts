@@ -55,8 +55,8 @@ export class SongService {
     )
   }
 
-  public searchSongs(title?: string, artist?: string): Observable<Song[]> {
-    return this.httpClient.get<Song[]>(`${BASE_URL}/song/search?title=${title}&artist=${artist}`)
+  public searchSongs(title: string, artist: string, count: number): Observable<Song[]> {
+    return this.httpClient.get<Song[]>(`${BASE_URL}/song/search?title=${title}&artist=${artist}&count=${count}`)
   }
 
   public mergeSongs(fromId: string, toId: string) {

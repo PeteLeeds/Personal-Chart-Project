@@ -25,7 +25,7 @@ import { ArtistComponent } from './artist/artist.component';
 import { ArtistDisplayComponent } from './artist-display/artist-display.component';
 import { ArtistSelectorComponent } from './shared/artist-selector.commponent';
 import { MarkDuplicateComponent } from './modals/mark-duplicate/mark-duplicate.component';
-
+import { SearchComponent } from './shared/search/search.component'
 
 @NgModule({
   declarations: [
@@ -43,7 +43,8 @@ import { MarkDuplicateComponent } from './modals/mark-duplicate/mark-duplicate.c
     ArtistComponent,
     ArtistDisplayComponent,
     ArtistSelectorComponent,
-    MarkDuplicateComponent
+    MarkDuplicateComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,

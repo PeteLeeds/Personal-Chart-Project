@@ -44,14 +44,14 @@ export class ArtistDb {
         return this.db.collection(ARTIST_COLLECTION).countDocuments();
     }
 
-    public async searchArtists(name: string) {
+    public async searchArtists(name: string, count: number) {
         console.log('search artists', name)
         const artists = await this.db.collection(ARTIST_COLLECTION)
             .aggregate([
                 {"$match":
                     {"name": {"$regex": new RegExp(name), "$options": 'i'}}
                 },
-                {"$limit": 10}
+                {"$limit": count}
             ])
         return artists.toArray()
     }
