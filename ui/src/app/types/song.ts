@@ -19,6 +19,7 @@ export interface CheckedSong {
 
 export interface NewSong extends CheckedSong {
     artists?: string[];
+    artistDisplay?: string;
     title?: string;
 }
 

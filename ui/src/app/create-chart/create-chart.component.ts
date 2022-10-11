@@ -118,7 +118,7 @@ export class CreateChartComponent implements OnInit {
       const songsToSend = newSongsExist ? await this.newSongsModal.open(chartSongs) : chartSongs;
       console.log("In Create Chart: ", songsToSend);
       // This bit creates the chart
-      this.chartService.createChart(this.seriesName, {...this.chartForm.value, songs: chartSongs}).subscribe(() => { 
+      this.chartService.createChart(this.seriesName, {...this.chartForm.value, songs: songsToSend}).subscribe(() => { 
         console.log('Chart Created');
         this.router.navigate(['..', this.chartForm.value.name], { relativeTo: this.activatedRoute })
       })
