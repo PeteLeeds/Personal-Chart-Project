@@ -26,6 +26,6 @@
         <textarea id="chart-text" type="text" formControlName="songs"></textarea>
     </div>
 </form>
-<p class="centre" *ngIf="checkingSongs">Checking Songs...</p>
+<p class="centre" *ngIf="checkingSongs">Checking Songs... {{songsChecked}}/{{numberOfSongs}}</p>
 
 <new-songs-modal #newSongsModal></new-songs-modal>

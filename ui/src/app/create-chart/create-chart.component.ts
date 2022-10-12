@@ -3,6 +3,7 @@ import { AbstractControl, FormControl, FormGroup, ValidatorFn } from '@angular/f
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { NewSongsComponent } from '../modals/new-songs/new-songs.component';
 import { ChartService } from '../services/chart.service';
 import { SongService } from '../services/song.service';
@@ -23,7 +24,9 @@ export class CreateChartComponent implements OnInit {
 
   public useDateAsTitle = false;
   public seriesName: string;
-  public checkingSongs = false
+  public checkingSongs = false;
+  public numberOfSongs = 0
+  public songsChecked = 0;
 
   public chartForm = new FormGroup({
     // Name should usually be equal to date
@@ -81,11 +84,18 @@ export class CreateChartComponent implements OnInit {
       this.chartForm.value.name = (this.chartForm.value.date as Date).toDateString();
     }
 
+    this.songsChecked = 0
+    this.numberOfSongs = songs.length
     const songObservables : Observable<CheckedSong>[] = []
     for (let i = 0; i < songs.length; i++) {
       const song = songs[i];
       console.log('checking', song)
-      songObservables.push(this.songService.checkIfSongExists(song, i))
+      songObservables.push(this.songService.checkIfSongExists(song, i)
+        .pipe(map(res => {
+          this.songsChecked++;
+          console.log(this.songsChecked, res)
+          return res
+        })))
     }
 
     // CHANGE THIS - I just can't be bothered to do it now
