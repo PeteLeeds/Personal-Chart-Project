@@ -53,7 +53,7 @@ export class ArtistDisplayComponent implements OnInit {
           for (const chart of Object.keys(song.charts)) {
             // Sort in ascending order so that peak is at position 0
             song.charts[chart].sort((a, b) => a.position - b.position);
-            song.peak = song.charts[chart][0].position 
+            song.charts[chart].peak = song.charts[chart][0].position
             // Then sort in date order
             song.charts[chart].sort((a, b) => a.date > b.date ? 1 : -1)
             if (!(this.chartSelectOptions.includes(chart))) {
@@ -90,7 +90,7 @@ export class ArtistDisplayComponent implements OnInit {
     for (const song of this.artistInfo.songs) {
       const chartInfo = song.charts[this.selectedSeries]
       let songString = new Date(chartInfo[0].date).getFullYear() + " " 
-                        + this.getFormattedPeak(song.peak) + " " 
+                        + this.getFormattedPeak(song.charts[this.selectedSeries].peak) + " " 
                         + this.getFormattedTitle(song.title, song.artistDisplay)
       songString += '\n'
       bbCodeString += songString
