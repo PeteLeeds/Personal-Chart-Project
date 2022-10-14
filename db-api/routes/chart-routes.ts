@@ -2,9 +2,6 @@ import { Router } from "express";
 import { Database } from "..";
 
 export class ChartRouter {
-    private static getDb(res: Record<string, Record<string, unknown>>): Database {
-        return res.locals.db as Database
-    }
 
     public static async create() {
         const router = Router()
@@ -12,7 +9,7 @@ export class ChartRouter {
             console.log('Get chart')
             // Preferably we would like it prettier than this
             res.json(
-                await this.getDb(res as unknown as Record<string, Record<string, unknown>>).seriesDb.getChart()
+                await (res.locals.db as Database).seriesDb.getChart()
             )
         })*/
 
@@ -22,7 +19,7 @@ export class ChartRouter {
         router.get('/', async (_, res) => {
             console.log('list series')
             res.json(
-                await this.getDb(res as unknown as Record<string, Record<string, unknown>>).seriesDb.listSeries().toArray()
+                await (res.locals.db as Database).seriesDb.listSeries().toArray()
             )
         })
 
@@ -32,13 +29,13 @@ export class ChartRouter {
         router.get('/:name', async (req, res) => {
             console.log('list charts')
             res.json(
-                await this.getDb(res as unknown as Record<string, Record<string, unknown>>).seriesDb.getSeriesByName(req.params.name)
+                await (res.locals.db as Database).seriesDb.getSeriesByName(req.params.name)
             )
         })
 
         router.delete('/:name', async (req, res) => {
             console.log('delete series')
-            res.json(await this.getDb(res as unknown as Record<string, Record<string, unknown>>).seriesDb.deleteSeries(req.params.name))
+            res.json(await (res.locals.db as Database).seriesDb.deleteSeries(req.params.name))
         })
 
         /**
@@ -48,7 +45,7 @@ export class ChartRouter {
             console.log('Create new chart series')
             // Preferably we would like it prettier than this
             res.json(
-                await this.getDb(res as unknown as Record<string, Record<string, unknown>>).seriesDb.newSeries(req.body)
+                await (res.locals.db as Database).seriesDb.newSeries(req.body)
             )
         })
 
@@ -59,7 +56,7 @@ export class ChartRouter {
             console.log('Create new chart')
             // Preferably we would like it prettier than this
             res.json(
-                await this.getDb(res as unknown as Record<string, Record<string, unknown>>).seriesDb.newChart(req.params.name, req.body.params)
+                await (res.locals.db as Database).seriesDb.newChart(req.params.name, req.body.params)
             )
         })
 
@@ -70,7 +67,7 @@ export class ChartRouter {
             console.log('Search new chart', req.params.name, req.params.chartName)
             // Preferably we would like it prettier than this
             res.json(
-                await (await this.getDb(res as unknown as Record<string, Record<string, unknown>>).seriesDb.getChart(req.params.name, req.params.chartName)).toArray()
+                await (await (res.locals.db as Database).seriesDb.getChart(req.params.name, req.params.chartName)).toArray()
             )
         })
 
@@ -82,7 +79,7 @@ export class ChartRouter {
             // and fetch al 
             console.log('Get previous series', req.params.chart, JSON.stringify(new Date(req.params.chart)))
             res.json(
-                (await (await this.getDb(res as unknown as Record<string, Record<string, unknown>>).seriesDb.getPreviousCharts(req.params.series, req.params.chart)).toArray())
+                (await (await (res.locals.db as Database).seriesDb.getPreviousCharts(req.params.series, req.params.chart)).toArray())
             )
         })
 
@@ -94,7 +91,7 @@ export class ChartRouter {
             // and fetch al 
             console.log('Get next series', req.params.chart, JSON.stringify(new Date(req.params.chart)))
             res.json(
-                await this.getDb(res as unknown as Record<string, Record<string, unknown>>).seriesDb.getNextChart(req.params.series, req.params.chart)
+                await (res.locals.db as Database).seriesDb.getNextChart(req.params.series, req.params.chart)
             )
         })
         return router;

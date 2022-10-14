@@ -18,14 +18,14 @@ export class SongRouter {
             }
             console.log('get song', req.url)
             res.json(
-                await this.getDb(res as unknown as Record<string, Record<string, unknown>>).songDb.getSong(id)
+                await (res.locals.db as Database).songDb.getSong(id)
             )
         })
 
         // If we call HEAD, we automatically call GET - which is why it wasn't working before
         router.head('/find', async (_, res) => {
             console.log('GET COUNT')
-            const count = (await this.getDb(res as unknown as Record<string, Record<string, unknown>>).songDb.getSongCount()).toString();
+            const count = (await (res.locals.db as Database).songDb.getSongCount()).toString();
             res.set('X-Count', count);
             res.sendStatus(200);
         })
@@ -36,7 +36,7 @@ export class SongRouter {
         router.get('/find/:details', async (req, res) => {
             console.log('get song by string');
             res.json(
-                await this.getDb(res as unknown as Record<string, Record<string, unknown>>).songDb.findSong(req.params.details)
+                await (res.locals.db as Database).songDb.findSong(req.params.details)
             )
         })
 
@@ -51,7 +51,7 @@ export class SongRouter {
                 throw new Error("SortBy or Page not defined")
             }
             res.json(
-                await this.getDb(res as unknown as Record<string, Record<string, unknown>>).songDb.getSongs(sortBy, page)
+                await (res.locals.db as Database).songDb.getSongs(sortBy, page)
             )
         })
 
@@ -60,7 +60,7 @@ export class SongRouter {
          */
         router.put('/:id', async (req, res) => {
             console.log('update song')
-            res.json(await this.getDb(res as unknown as Record<string, Record<string, unknown>>).songDb.updateSong(req.params.id, req.body)
+            res.json(await (res.locals.db as Database).songDb.updateSong(req.params.id, req.body)
             )
         })
 
@@ -69,7 +69,7 @@ export class SongRouter {
          */
         router.get('/search', async (req, res) => {
             console.log('search for song')
-            res.json(await this.getDb(res as unknown as Record<string, Record<string, unknown>>).songDb.searchSong(req.query.title as string, req.query.artist as string, parseInt(req.query.count as string))
+            res.json(await (res.locals.db as Database).songDb.searchSong(req.query.title as string, req.query.artist as string, parseInt(req.query.count as string))
             )
         })
 
@@ -78,7 +78,7 @@ export class SongRouter {
         */
         router.delete('/merge/:fromId/:toId', async (req, res) => {
             console.log('merge songs')
-            res.json(await this.getDb(res as unknown as Record<string, Record<string, unknown>>).songDb.mergeSongs(req.params.fromId, req.params.toId)
+            res.json(await (res.locals.db as Database).songDb.mergeSongs(req.params.fromId, req.params.toId)
             )
         })
 

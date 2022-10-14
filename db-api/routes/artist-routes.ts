@@ -2,9 +2,6 @@ import { Router } from "express";
 import { Database } from "..";
 
 export class ArtistRouter {
-    private static getDb(res: Record<string, Record<string, unknown>>): Database {
-        return res.locals.db as Database
-    }
 
     public static async create() {
         const router = Router()
@@ -18,7 +15,7 @@ export class ArtistRouter {
             }
             console.log('get artist', req.url)
             res.json(
-                await this.getDb(res as unknown as Record<string, Record<string, unknown>>).artistDb.getArtist(id)
+                await (res.locals.db as Database).artistDb.getArtist(id)
             )
         })
 
@@ -32,7 +29,7 @@ export class ArtistRouter {
                 throw new Error("Page not defined")
             }
             res.json(
-                await this.getDb(res as unknown as Record<string, Record<string, unknown>>).artistDb.getArtists(page)
+                await (res.locals.db as Database).artistDb.getArtists(page)
             )
         })
 
@@ -41,7 +38,7 @@ export class ArtistRouter {
         // So I've included another route here
         router.head('/count', async (_, res) => {
             console.log('GET COUNT')
-            const count = (await this.getDb(res as unknown as Record<string, Record<string, unknown>>).artistDb.getArtistCount()).toString();
+            const count = (await (res.locals.db as Database).artistDb.getArtistCount()).toString();
             res.set('X-Count', count);
             res.sendStatus(200);
         })
@@ -51,7 +48,7 @@ export class ArtistRouter {
         */
         router.get('/search', async (req, res) => {
             console.log('search for artist')
-            res.json(await this.getDb(res as unknown as Record<string, Record<string, unknown>>).artistDb.searchArtists(req.query.name as string, parseInt(req.query.count as string))
+            res.json(await (res.locals.db as Database).artistDb.searchArtists(req.query.name as string, parseInt(req.query.count as string))
             )
         })
 
@@ -60,7 +57,7 @@ export class ArtistRouter {
         */
         router.delete('/merge/:fromId/:toId', async (req, res) => {
             console.log('merge artists')
-            res.json(await this.getDb(res as unknown as Record<string, Record<string, unknown>>).artistDb.mergeArtists(req.params.fromId, req.params.toId)
+            res.json(await (res.locals.db as Database).artistDb.mergeArtists(req.params.fromId, req.params.toId)
             )
         })
 
