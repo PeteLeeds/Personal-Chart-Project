@@ -5,6 +5,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } fro
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { ClipboardModule } from 'ngx-clipboard';
  
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -59,6 +60,7 @@ import { SearchComponent } from './shared/search/search.component'
     FontAwesomeModule,
     MatSelectModule,
     MatFormFieldModule,
+    ClipboardModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
