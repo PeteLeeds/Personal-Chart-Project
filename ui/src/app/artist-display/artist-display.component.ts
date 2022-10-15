@@ -65,11 +65,21 @@ export class ArtistDisplayComponent implements OnInit {
           this.selectedSeries = this.chartSelectOptions[0];
         }
         // TODO: Will need to be reloaded if we decide to stick with loading all at once
-        this.artistInfo.songs.sort((a, b) => 
-          a.charts[this.selectedSeries][0].date > b.charts[this.selectedSeries][0].date ? 1 : -1)
+        this.artistInfo.songs.sort((a,b) => this.sortSongs(a, b))
         // This line is needed to trigger the change on the frontend
         this.artistInfo.songs = [...this.artistInfo.songs]
       }))  
+  }
+
+  private sortSongs(songA, songB): number {
+    // Sort by date, then by highest entry position
+    const song1EntryDate = songA.charts[this.selectedSeries][0].date
+    const song2EntryDate = songB.charts[this.selectedSeries][0].date
+    if (song1EntryDate === song2EntryDate) {
+      return (songA.charts[this.selectedSeries][0].position - songB.charts[this.selectedSeries][0].position)
+    } else {
+      return (song1EntryDate > song2EntryDate ? 1 : -1)
+    }
   }
 
   public ngOnInit(): void {
