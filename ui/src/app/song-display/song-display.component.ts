@@ -1,13 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ClipboardService } from 'ngx-clipboard';
 import { of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { MarkDuplicateComponent } from '../modals/mark-duplicate/mark-duplicate.component';
 import { ChartService } from '../services/chart.service';
 import { SongService } from '../services/song.service';
 import { Chart } from '../types/chart';
-import { Song } from '../types/song';
+import { Song, SongInChart } from '../types/song';
+
+const DAY_LENGTH = 24 * 60 * 60 * 1000
 
 interface ChartRun {
   run: string[];
@@ -25,8 +28,8 @@ export class SongDisplayComponent implements OnInit {
   private subscriptions: Subscription[] = []
   private activatedRoute: ActivatedRoute;
   private songService: SongService;
+  private clipboardService: ClipboardService
   private router: Router;
-
 
   public songInfo: Song;
   public selectedSeries = "";
@@ -46,10 +49,12 @@ export class SongDisplayComponent implements OnInit {
 
   constructor(activatedRoute: ActivatedRoute, 
               songService: SongService,
-              router: Router) {
+              router: Router,
+              clipboardService: ClipboardService) {
     this.activatedRoute = activatedRoute;
     this.songService = songService;
-    this.router = router
+    this.router = router;
+    this.clipboardService = clipboardService;
   }
 
   ngOnInit(): void {
@@ -132,5 +137,78 @@ export class SongDisplayComponent implements OnInit {
       }
     }
     return false
+  }
+
+  public copyChartRun() {
+    const chartRuns = this.getChartRuns(this.songInfo.charts[this.selectedSeries])
+    console.log('runs', chartRuns)
+    let bbCodeChartRun = ''
+    for (let i = 0; i < chartRuns.length; i++) {
+      const lineOfChartRun = this.getBbCodeChartRun(chartRuns[i], i !== 0)
+      bbCodeChartRun += `${bbCodeChartRun.length !== 0 ? '\n' : ''}${lineOfChartRun}`
+    }
+    this.clipboardService.copyFromContent(bbCodeChartRun)
+  }
+
+  private getChartRuns(charts: SongInChart[]): SongInChart[][] {
+    const runs = []
+    let currentRun = []
+    for (let i = 0; i < charts.length; i++) {
+      if (i === 0) {
+        // Doing this here to prevent an error when passed an empty array
+        currentRun.push(charts[i])
+        continue;
+      }
+      else {
+        console.log(new Date(charts[i].date), new Date(charts[i - 1].date).getTime() + (7 * DAY_LENGTH))
+        if (new Date(charts[i].date) > new Date(new Date(charts[i - 1].date).getTime() + (7 * DAY_LENGTH))) {
+          runs.push(currentRun)
+          currentRun = [charts[i]]
+        } else {
+          currentRun.push(charts[i])
+        }
+      }
+    }
+    if (currentRun.length > 0) {
+      runs.push(currentRun)
+    }
+    return runs
+  }
+
+  private getBbCodeChartRun(charts: SongInChart[], reEntry = false): string {
+    const formattedDate = this.formatDate(new Date(charts[0].date))
+    let bbCodeString = `[b]${reEntry ? 'R' : 'N'}E[/b] (${formattedDate}) `
+    let currentColour = ''
+    for (const chart of charts) {
+      const positionColour = this.getPositionColour(chart.position)
+      if (currentColour !== positionColour) {
+        bbCodeString += `${currentColour && '[/color]'}[color=${positionColour}]`
+        currentColour = positionColour
+      }
+      console.log('peak', this.songInfo)
+      if (chart.position === this.peak) {
+        bbCodeString += `[b]${chart.position}[/b]-`
+      }
+      else {
+        bbCodeString += `${chart.position}-`
+      }
+    }
+    bbCodeString += 'xx[/color]'
+    return bbCodeString;
+  }
+
+  private formatDate(date: Date): string {
+    return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+  }
+
+  private getPositionColour(pos: number) {
+    if (pos === 1) {
+      return '#FF0000'
+    } else if (pos <= 10) {
+      return '#0000FF'
+    } else if (pos <= 40) {
+      return '#000000'
+    }
+    return '#708090'
   }
 }

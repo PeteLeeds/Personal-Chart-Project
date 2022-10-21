@@ -29,4 +29,9 @@ export interface ExistingSong {
     exists: boolean;
 }
 
+export interface SongInChart {
+    date: string;
+    position: number;
+}
+
 export type FormattedSong = NewSong | ExistingSong
