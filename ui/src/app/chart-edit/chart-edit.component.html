@@ -1,0 +1,19 @@
+<h1>Edit Chart</h1>
+<form [formGroup]="chartForm" (ngSubmit)="onSubmit()">
+    <div class="input-option">
+        <label for="chart-name">Chart Name: </label>
+        <input id="chart-name" type="text" formControlName="name">
+        <input type="checkbox" [(ngModel)]="useDateAsTitle" (change)="onCheckboxChange()"
+            [ngModelOptions]="{standalone: true}">
+        Use date as title
+    </div>
+    <div class="input-option">
+        <label>Chart Date:
+            <input [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3" placeholder="Date Time" formControlName="date">
+            <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+        </label>
+    </div>
+
+    <td><button type="submit" class="submit-chart" [disabled]="!chartForm.valid">Submit</button></td>
+
+</form>

@@ -77,7 +77,7 @@ export class ChartRouter {
         router.get('/:series/prev/:chart', async (req, res) => {
             // The best thing we can do here is set a 'start date' and 'end date'
             // and fetch al 
-            console.log('Get previous series', req.params.chart, JSON.stringify(new Date(req.params.chart)))
+            console.log('Get previous series', req.params.chart)
             res.json(
                 (await (await (res.locals.db as Database).seriesDb.getPreviousCharts(req.params.series, req.params.chart)).toArray())
             )
@@ -89,11 +89,34 @@ export class ChartRouter {
         router.get('/:series/next/:chart', async (req, res) => {
             // The best thing we can do here is set a 'start date' and 'end date'
             // and fetch al 
-            console.log('Get next series', req.params.chart, JSON.stringify(new Date(req.params.chart)))
+            console.log('Get next series', req.params.chart)
             res.json(
                 await (res.locals.db as Database).seriesDb.getNextChart(req.params.series, req.params.chart)
             )
         })
+
+        /**
+        * Given a chart in a series, return the date relating to that chart
+        */
+        router.get('/:series/date/:chart', async (req, res) => {
+            console.log('Get chart date', req.params.chart)
+            res.json(
+                await (res.locals.db as Database).seriesDb.getChartDate(req.params.series, req.params.chart)
+            )
+        })
+
+
+        /**
+        * Update the details of a given chart in a series
+        */
+        router.put('/:series/:chart', async (req, res) => {
+            console.log('Update chart', req.params.chart)
+            res.json(
+                await (res.locals.db as Database).seriesDb.updateChart(req.params.series, req.params.chart, req.body)
+            )
+        })
+
+
         return router;
     }
 }

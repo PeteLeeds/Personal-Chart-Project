@@ -54,8 +54,7 @@ export class ChartDisplayComponent implements OnInit {
             this.seriesName = params.series
             this.chartName = params.name
             return forkJoin({
-              // TODO: Doesn't work - chartName doesn't have to be a date
-              songs: this.chartService.getChart(this.seriesName, this.chartName),
+              songs: this.chartService.getChartSongs(this.seriesName, this.chartName),
               prevCharts: this.chartService.getPreviousCharts(this.seriesName, this.chartName),
               nextChart: this.chartService.getNextChart(this.seriesName, this.chartName)
             })

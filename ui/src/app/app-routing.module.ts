@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ArtistDisplayComponent } from './artist-display/artist-display.component';
 import { ArtistComponent } from './artist/artist.component';
 import { ChartDisplayComponent } from './chart-display/chart-display.component';
+import { ChartEditComponent } from './chart-edit/chart-edit.component';
 import { ChartSelectComponent } from './chart-select/chart-select.component';
 import { CreateChartComponent } from './create-chart/create-chart.component';
 import { SeriesSelectComponent } from './series-select/series-select.component';
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'series/:series/chart', component: ChartSelectComponent },
   { path: 'series/:series/chart/new', component: CreateChartComponent },
   { path: 'series/:series/chart/:name', component: ChartDisplayComponent },
+  { path: 'series/:series/chart/:name/edit', component: ChartEditComponent },
   { path: 'song', component: SongComponent },
   { path: 'song/:id', component: SongDisplayComponent },
   { path: 'artist', component: ArtistComponent },

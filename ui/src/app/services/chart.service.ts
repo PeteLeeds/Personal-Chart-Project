@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { ChartParams } from '../types/chart';
+import { Chart, ChartParams } from '../types/chart';
 import { Song } from '../types/song';
 import { Series } from '../types/series';
 
@@ -39,7 +39,7 @@ export class ChartService {
     return this.httpClient.post(`${BASE_URL}/series/${seriesName}/chart`, {params})
   }
 
-  public getChart(seriesName: string, chartName: string): Observable<Song[]> {
+  public getChartSongs(seriesName: string, chartName: string): Observable<Song[]> {
     return this.httpClient.get<Song[]>(`${BASE_URL}/series/${seriesName}/chart/${chartName}`)
   }
 
@@ -49,5 +49,13 @@ export class ChartService {
 
   public getNextChart(seriesName: string, chartName: string): Observable<string> {
     return this.httpClient.get<string>(`${BASE_URL}/series/${seriesName}/next/${chartName}`)
+  }
+
+  public getChartDate(seriesName: string, chartName: string): Observable<string> {
+    return this.httpClient.get<string>(`${BASE_URL}/series/${seriesName}/date/${chartName}`)
+  }
+
+  public updateChart(seriesName: string, chartName: string, newChartData: Chart) {
+    return this.httpClient.put<string>(`${BASE_URL}/series/${seriesName}/${chartName}`, newChartData)
   }
 }

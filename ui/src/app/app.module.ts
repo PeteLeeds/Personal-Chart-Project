@@ -27,6 +27,7 @@ import { ArtistDisplayComponent } from './artist-display/artist-display.componen
 import { ArtistSelectorComponent } from './shared/artist-selector.commponent';
 import { MarkDuplicateComponent } from './modals/mark-duplicate/mark-duplicate.component';
 import { SearchComponent } from './shared/search/search.component'
+import { ChartEditComponent } from './chart-edit/chart-edit.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { SearchComponent } from './shared/search/search.component'
     ArtistSelectorComponent,
     MarkDuplicateComponent,
     SearchComponent,
+    ChartEditComponent,
   ],
   imports: [
     BrowserModule,

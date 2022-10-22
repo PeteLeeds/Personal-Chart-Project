@@ -42,7 +42,7 @@ export class SeriesDb {
     }
 
     public async newChart(seriesName: string, params: ChartParams): Promise<unknown> {
-        const newSongs : Song[] = [];
+        const newSongs: Song[] = [];
         const existing = await this.db.collection(CHART_COLLECTION).findOne({ $and: [{ "name": seriesName }, { "charts.name": params.name }] })
         if (existing) {
             throw new Error('Chart names within a series must be unique')
@@ -135,10 +135,10 @@ export class SeriesDb {
             // Will almost certainly need to change this to include other chart info
             // (best implementation would probably be to add series-specific info as a new var
             //  before unwinding it all)
-            {$unwind: '$chartInfo'},
-            {$addFields: {position: '$chartInfo.position'}},
-            {$project: {chartInfo: 0}},
-            {$sort: {'position': 1}}
+            { $unwind: '$chartInfo' },
+            { $addFields: { position: '$chartInfo.position' } },
+            { $project: { chartInfo: 0 } },
+            { $sort: { 'position': 1 } }
         ])
     }
 
@@ -146,20 +146,20 @@ export class SeriesDb {
     // instead of using the actual chart date. We need to fix this.
     public async getPreviousCharts(series: string, chart: string): Promise<AggregationCursor<unknown>> {
         const chartDateArray = await (this.db.collection(CHART_COLLECTION).aggregate([
-            {$match: {name: series}},
-            {$unwind: "$charts"},
-            {$replaceRoot: {newRoot: "$charts"}},
-            {$match: {name: chart}},
+            { $match: { name: series } },
+            { $unwind: "$charts" },
+            { $replaceRoot: { newRoot: "$charts" } },
+            { $match: { name: chart } },
         ]).toArray())
         const chartDate = chartDateArray[0].date
         console.log('get previous', JSON.stringify(chart));
         console.log('DATE', chartDate)
         const aggregateDb = [
-            {$match: {name: series}},
-            {$unwind: "$charts"},
-            {$replaceRoot: {newRoot: "$charts"}},
-            {$match: {date: {$lte: chartDate}}},
-            {$sort: {date: -1}},
+            { $match: { name: series } },
+            { $unwind: "$charts" },
+            { $replaceRoot: { newRoot: "$charts" } },
+            { $match: { date: { $lte: chartDate } } },
+            { $sort: { date: -1 } },
         ]
         console.log((await this.db.collection(CHART_COLLECTION).aggregate(aggregateDb).toArray()).length)
         console.log(JSON.stringify(aggregateDb))
@@ -169,20 +169,20 @@ export class SeriesDb {
 
     public async getNextChart(series: string, chart: string): Promise<AggregationCursor<unknown>> {
         const chartDateArray = await (this.db.collection(CHART_COLLECTION).aggregate([
-            {$match: {name: series}},
-            {$unwind: "$charts"},
-            {$replaceRoot: {newRoot: "$charts"}},
-            {$match: {name: chart}},
+            { $match: { name: series } },
+            { $unwind: "$charts" },
+            { $replaceRoot: { newRoot: "$charts" } },
+            { $match: { name: chart } },
         ]).toArray())
         const chartDate = chartDateArray[0].date
         console.log('get next', JSON.stringify(chart));
         const aggregateDb = [
-            {$match: {name: series}},
-            {$unwind: "$charts"},
-            {$replaceRoot: {newRoot: "$charts"}},
-            {$match: {date: {$gt: chartDate}}},
-            {$sort: {date: 1}},
-            {$limit: 1},
+            { $match: { name: series } },
+            { $unwind: "$charts" },
+            { $replaceRoot: { newRoot: "$charts" } },
+            { $match: { date: { $gt: chartDate } } },
+            { $sort: { date: 1 } },
+            { $limit: 1 },
             // Would be nice to convert this into an array of strings
         ]
         console.log((await this.db.collection(CHART_COLLECTION).aggregate(aggregateDb).toArray()).length)
@@ -196,16 +196,53 @@ export class SeriesDb {
         // First delete any song info about the series
         console.log("Deleting chart info")
         await this.db.collection(SONG_COLLECTION).updateMany(
-            { },
+            {},
             { $unset: { [`charts.${seriesName}`]: "" } }
-         )
+        )
         console.log("Deleting song info")
         // Then delete any songs which relied only on this series
-        this.db.collection(SONG_COLLECTION).find({$or: [{charts: {}}, { charts: { $exists: false}}]}).forEach((val) => console.log(val))
-        await this.db.collection(SONG_COLLECTION).deleteMany({$or: [{charts: {}}, { charts: { $exists: false}}]})
+        this.db.collection(SONG_COLLECTION).find({ $or: [{ charts: {} }, { charts: { $exists: false } }] }).forEach((val) => console.log(val))
+        await this.db.collection(SONG_COLLECTION).deleteMany({ $or: [{ charts: {} }, { charts: { $exists: false } }] })
         // TODO: Also delete artists which don't have any songs
         // Then delete the series itself
         console.log("Deleting series")
-        return this.db.collection(CHART_COLLECTION).deleteOne({"name": seriesName})
+        return this.db.collection(CHART_COLLECTION).deleteOne({ "name": seriesName })
+    }
+
+    public async getChartDate(seriesName: string, chartName: string): Promise<string> {
+        const result = await this.db.collection(CHART_COLLECTION).aggregate(
+            [
+                {
+                    '$match': {
+                        'name': seriesName
+                    }
+                }, {
+                    '$unwind': {
+                        'path': '$charts'
+                    }
+                }, {
+                    '$replaceRoot': {
+                        'newRoot': '$charts'
+                    }
+                }, {
+                    '$match': {
+                        'name': chartName
+                    }
+                }
+            ]
+        ).toArray()
+        return result[0].date
+    }
+
+    public async updateChart(seriesName: string, chartName: string, newChartData: Record<string, unknown>): Promise<unknown> {
+        console.log('updating', seriesName, chartName, newChartData)
+        // First, update the chart
+        await this.db.collection(CHART_COLLECTION).updateOne({name: seriesName, 'charts.name': chartName}, {'$set': {'charts.$': newChartData}})
+        // Next, update the songs containing that chart
+        await this.db.collection(SONG_COLLECTION).updateMany(
+            {[`charts.${seriesName}.chart`]: chartName},
+            {'$set': {[`charts.${seriesName}.$.chart`]: newChartData.name}}
+        )
+        return;
     }
 }

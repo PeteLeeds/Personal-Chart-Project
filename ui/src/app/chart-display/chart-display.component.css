@@ -1,3 +1,15 @@
 table, th, td{
     border: 1px solid blue
 }
+
+.fake-link {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
+.top-right {
+    position:absolute;
+    top: 0px;
+    right: 0px;
+}
