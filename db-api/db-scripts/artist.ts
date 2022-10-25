@@ -1,4 +1,5 @@
 import { Db, ObjectId } from "mongodb";
+import { ArtistQueryParams } from "../types/query-params";
 import { getSongChartPipeline } from "./common/add-chart-dates";
 
 const SONG_COLLECTION = 'songs'
@@ -30,30 +31,21 @@ export class ArtistDb {
         return artist
     }
 
-    public async getArtists(page: number): Promise<unknown> {
-        const artist = await this.db.collection(ARTIST_COLLECTION)
+    public getArtists(params: ArtistQueryParams): Promise<unknown> {
+        const artist = this.db.collection(ARTIST_COLLECTION)
         .aggregate([
-            { "$sort": {"name": 1} }, 
-            { "$skip": page * 20 },
-            { "$limit": 20}
+            ...params.sortBy ? [{ "$sort": { [params.sortBy]: 1 } }] : [],
+            ... params.name ? [{"$match":
+                {"name": {"$regex": new RegExp(params.name), "$options": 'i'}}
+            }] : [],
+            ...params.pageNumber ? [{ "$skip": parseInt(params.pageNumber) * 20 }] : [],
+            ...params.limit ? [{ "$limit": parseInt(params.limit) }] : [],
         ]);
         return artist.toArray()
     }
 
     public async getArtistCount() {
         return this.db.collection(ARTIST_COLLECTION).countDocuments();
-    }
-
-    public async searchArtists(name: string, count: number) {
-        console.log('search artists', name)
-        const artists = await this.db.collection(ARTIST_COLLECTION)
-            .aggregate([
-                {"$match":
-                    {"name": {"$regex": new RegExp(name), "$options": 'i'}}
-                },
-                {"$limit": count}
-            ])
-        return artists.toArray()
     }
 
     public async mergeArtists(fromId: string, toId: string) {

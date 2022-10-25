@@ -37,7 +37,7 @@ export class ArtistComponent implements OnInit {
 
   public reloadArtists() {
     forkJoin({
-      artists: this.artistService.getArtists(this.pageNumber - 1),
+      artists: this.artistService.getArtists(this.pageNumber - 1, 20),
       artistCount: this.artistService.getArtistCount()
     }).subscribe(res => {
       this.artists = res.artists;

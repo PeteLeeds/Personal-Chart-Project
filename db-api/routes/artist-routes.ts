@@ -24,12 +24,8 @@ export class ArtistRouter {
          */
         router.get('/find', async (req, res) => {
             console.log('get multiple artists');
-            const page = parseInt(req.query.page as string)
-            if (!page && !(page == 0)) {
-                throw new Error("Page not defined")
-            }
             res.json(
-                await (res.locals.db as Database).artistDb.getArtists(page)
+                await (res.locals.db as Database).artistDb.getArtists(req.query)
             )
         })
 
@@ -41,15 +37,6 @@ export class ArtistRouter {
             const count = (await (res.locals.db as Database).artistDb.getArtistCount()).toString();
             res.set('X-Count', count);
             res.sendStatus(200);
-        })
-
-        /** 
-        * Search for an artist given name string
-        */
-        router.get('/search', async (req, res) => {
-            console.log('search for artist')
-            res.json(await (res.locals.db as Database).artistDb.searchArtists(req.query.name as string, parseInt(req.query.count as string))
-            )
         })
 
         /** 

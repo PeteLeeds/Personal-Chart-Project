@@ -22,8 +22,8 @@ export class ArtistService {
             (`${BASE_URL}/artist?id=${id}${seriesName ? `&seriesName=${seriesName}` : ''}`);
     }
 
-    public getArtists(page: number): Observable<Artist[]> {
-        return this.httpClient.get<Artist[]>(`${BASE_URL}/artist/find?page=${page}`);
+    public getArtists(page: number, limit: number): Observable<Artist[]> {
+        return this.httpClient.get<Artist[]>(`${BASE_URL}/artist/find?pageNumber=${page}&limit=${limit}`);
     }
 
     public getArtistCount(): Observable<number> {
@@ -38,7 +38,7 @@ export class ArtistService {
       }
 
     public searchArtists(nameString: string, count: number): Observable<Artist[]> {
-        return this.httpClient.get<Artist[]>(`${BASE_URL}/artist/search?name=${nameString}&count=${count}`)
+        return this.httpClient.get<Artist[]>(`${BASE_URL}/artist/find?name=${nameString}&limit=${count}`)
     }
 
     public mergeArtists(fromId: string, toId: string): Observable<Artist[]> {
