@@ -44,14 +44,9 @@ export class SongRouter {
          * Get a list of songs based on parameters
          */
         router.get('/find', async (req, res) => {
-            console.log('get multiple songs');
-            const sortBy = req.query.sortBy as string;
-            const page = parseInt(req.query.page as string)
-            if (!sortBy || (!page && !(page == 0))) {
-                throw new Error("SortBy or Page not defined")
-            }
+            console.log('get multiple songs', req.query);
             res.json(
-                await (res.locals.db as Database).songDb.getSongs(sortBy, page)
+                await (res.locals.db as Database).songDb.getSongs(req.query)
             )
         })
 
@@ -61,15 +56,6 @@ export class SongRouter {
         router.put('/:id', async (req, res) => {
             console.log('update song')
             res.json(await (res.locals.db as Database).songDb.updateSong(req.params.id, req.body)
-            )
-        })
-
-        /** 
-         * Search for a song given artist and title strings
-         */
-        router.get('/search', async (req, res) => {
-            console.log('search for song')
-            res.json(await (res.locals.db as Database).songDb.searchSong(req.query.title as string, req.query.artist as string, parseInt(req.query.count as string))
             )
         })
 

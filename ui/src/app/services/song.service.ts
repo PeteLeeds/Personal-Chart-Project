@@ -36,8 +36,8 @@ export class SongService {
     }), catchError(() => of({ songString, pos, exists: false })))
   }
 
-  public getSongs(sortBy: string, page: number): Observable<Song[]> {
-    return this.httpClient.get<Song[]>(`${BASE_URL}/song/find?sortBy=${sortBy}&page=${page}`);
+  public getSongs(sortBy: string, page: number, count: number): Observable<Song[]> {
+    return this.httpClient.get<Song[]>(`${BASE_URL}/song/find?sortBy=${sortBy}&pageNumber=${page}&limit=${count}`);
   }
 
   public getSongCount(): Observable<number> {
@@ -56,7 +56,7 @@ export class SongService {
   }
 
   public searchSongs(title: string, artist: string, count: number): Observable<Song[]> {
-    return this.httpClient.get<Song[]>(`${BASE_URL}/song/search?title=${title}&artist=${artist}&count=${count}`)
+    return this.httpClient.get<Song[]>(`${BASE_URL}/song/find?title=${title}&artist=${artist}&limit=${count}`)
   }
 
   public mergeSongs(fromId: string, toId: string) {

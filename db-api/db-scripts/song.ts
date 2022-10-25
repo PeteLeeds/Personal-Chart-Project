@@ -2,6 +2,7 @@ import { Db, ObjectId } from "mongodb";
 import { Song } from "../types/song";
 import { updateArtists } from "./common/update-artists";
 import { getSongChartPipeline } from "./common/add-chart-dates";
+import { SongQueryParams } from "../types/query-params";
 
 const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
@@ -36,12 +37,16 @@ export class SongDb {
         return song[0]
     }
 
-    public async getSongs(sortBy: string, page: number): Promise<unknown> {
+    public async getSongs(params: SongQueryParams): Promise<unknown> {
         const song = await this.db.collection(SONG_COLLECTION)
             .aggregate([
-                { "$sort": { [sortBy]: 1 } },
-                { "$skip": page * 20 },
-                { "$limit": 20 }
+                ...params.sortBy ? [{ "$sort": { [params.sortBy]: 1 } }] : [],
+                {"$match": {"$and": [
+                    ...[params.title ? {"title": {"$regex": new RegExp(params.title), "$options": 'i'}} : {}],
+                    ...[params.artist ?  {"artistDisplay": {"$regex": new RegExp(params.artist), "$options": 'i'}} : {}]
+                ]}},
+                ...params.pageNumber ? [{ "$skip": parseInt(params.pageNumber) * 20 }] : [],
+                ...params.limit ? [{ "$limit": parseInt(params.limit) }] : [],
             ]);
         return song.toArray()
     }
@@ -56,19 +61,6 @@ export class SongDb {
         const artistDisplay = details.slice(0, indexOfFirstHyphen);
         const title = details.slice(indexOfFirstHyphen + 3);
         return this.db.collection(SONG_COLLECTION).findOne({ $and: [{ artistDisplay }, { title }] })
-    }
-
-    public async searchSong(title: string, artist: string, count: number) {
-        console.log('search song', title, artist)
-        const songs = await this.db.collection(SONG_COLLECTION)
-            .aggregate([
-                {"$match": {"$and": [
-                    {"title": {"$regex": new RegExp(title), "$options": 'i'}},
-                    {"artistDisplay": {"$regex": new RegExp(artist), "$options": 'i'}}
-                ]}},
-                {"$limit": count}
-            ])
-        return songs.toArray()
     }
 
     public async updateSong(id: string, newData: Record<string, unknown>) {

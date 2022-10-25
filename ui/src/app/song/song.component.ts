@@ -28,7 +28,7 @@ export class SongComponent implements OnInit {
 
   public reloadSongs() {
     forkJoin({
-      songs: this.songService.getSongs(this.sortBy, this.pageNumber - 1),
+      songs: this.songService.getSongs(this.sortBy, this.pageNumber - 1, 20),
       songCount: this.songService.getSongCount()
     }).subscribe(res => {
       this.songs = res.songs;
