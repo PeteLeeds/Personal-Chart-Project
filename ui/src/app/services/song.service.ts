@@ -23,12 +23,16 @@ export class SongService {
 
   // May need an appendParams() type if we're going to end up doing lots of similar things
   public checkIfSongExists(songString: string, pos: number): Observable<CheckedSong> {
+    let httpSongString = songString
+    const httpCodeReplacementArray = [['/', '%2F'], ['?', '%3F']]
     // Slashes don't just 'work' as the HTML interprets them as a different URL
-    while (songString.includes('/')) {
-      let slashCheckIndex = songString.indexOf('/');
-      songString = songString.substring(0, slashCheckIndex) + "%2F" + songString.substring(slashCheckIndex + 1)
+    for (const codeReplacement of httpCodeReplacementArray) {
+      while (httpSongString.includes(codeReplacement[0])) {
+        let indexToReplace = httpSongString.indexOf(codeReplacement[0]);
+        httpSongString = httpSongString.substring(0, indexToReplace) + codeReplacement[1] + httpSongString.substring(indexToReplace + 1)
+      }
     }
-    return this.httpClient.get<Song>(`${BASE_URL}/song/find/${songString}`).pipe(map((val: Song) => {
+    return this.httpClient.get<Song>(`${BASE_URL}/song/find/${httpSongString}`).pipe(map((val: Song) => {
       if (val) {
         return { song: val, pos, exists: true }
       }
