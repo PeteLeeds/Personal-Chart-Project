@@ -1,4 +1,5 @@
 <p>Number of artists: {{artistCount}}</p>
+<search [options]="searchOptions" (changeEvent)="setDisplayedArtists($event)"></search>
 <div *ngIf="pageNumber > 1" class="fake-link" (click)="decPageNumber()">Previous Page</div>
 <div *ngIf="artistCount && artistCount > pageNumber * 20" class="fake-link" (click)="incPageNumber()">Next Page</div>
 <!--Currently no need for sort as artists only have a name-->

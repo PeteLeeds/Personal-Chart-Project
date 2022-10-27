@@ -16,6 +16,10 @@ export class ArtistComponent implements OnInit {
   public pageNumber = 1;
   public artists: Artist[];
 
+  public searchOptions = {
+    type: 'artist',
+    returnCount: 20
+  }
 
   constructor(artistService: ArtistService) {
     this.artistService = artistService;
@@ -35,9 +39,13 @@ export class ArtistComponent implements OnInit {
     this.reloadArtists();
   }
 
+  public setDisplayedArtists(artists: Artist[]) {
+    this.artists = artists
+  }
+
   public reloadArtists() {
     forkJoin({
-      artists: this.artistService.getArtists(this.pageNumber - 1, 20),
+      artists: this.artistService.getArtists(this.pageNumber - 1, 'name', 20),
       artistCount: this.artistService.getArtistCount()
     }).subscribe(res => {
       this.artists = res.artists;

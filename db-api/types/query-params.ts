@@ -10,5 +10,5 @@ export interface SongQueryParams extends BaseQueryParams {
 }
 
 export interface ArtistQueryParams extends BaseQueryParams {
-    name: string;
+    name?: string;
 }
