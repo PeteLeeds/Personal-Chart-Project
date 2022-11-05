@@ -6,6 +6,7 @@ import { DeleteSeriesComponent } from '../modals/delete-series/delete-series.com
 import { ModalTemplateComponent } from '../modals/modal-template/modal-template.component';
 import { ModalConfig } from '../modals/modal.config';
 import { ChartService } from '../services/chart.service';
+import { Chart } from '../types/chart';
 import { Series } from '../types/series';
 
 @Component({
@@ -20,6 +21,7 @@ export class ChartSelectComponent implements OnInit {
   private subscriptions: Subscription[] = []
   private router: Router;
   public chartList = []
+  public pageNumber = 1;
   public seriesName: string
 
   public modalConfig: ModalConfig = { modalTitle: 'Create new Series', dismissButtonLabel: 'dismiss', closeButtonLabel: 'close' }
@@ -31,16 +33,29 @@ export class ChartSelectComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.subscriptions.push(
-      this.activatedRoute.params.pipe(mergeMap(params => {
-        if (params.series) {
-          this.seriesName = params.series
-          return this.chartService.getSeriesByName(params.series)
-        }
-        return of([])
-      })).subscribe((series: Series) => {
-        this.chartList = series.charts.sort((a, b) => a.date > b.date ? 1 : -1)
-      }))
+    this.reloadSeries()
+  }
+
+  public incPageNumber(): void {
+    this.pageNumber++;
+    this.reloadSeries();
+  }
+
+  public decPageNumber(): void {
+    this.pageNumber--;
+    this.reloadSeries();
+  }
+
+  private reloadSeries(): void {
+    this.activatedRoute.params.pipe(mergeMap(params => {
+      if (params.series) {
+        this.seriesName = params.series
+        return this.chartService.getChartsInSeries(params.series, this.pageNumber - 1)
+      }
+      return of([])
+    })).subscribe((charts: Chart[]) => {
+      this.chartList = charts.sort((a, b) => a.date > b.date ? 1 : -1)
+    })
   }
 
   public async openModal() {

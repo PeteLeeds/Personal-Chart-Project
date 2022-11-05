@@ -29,8 +29,16 @@ export class SeriesDb {
         return this.db.collection(SONG_COLLECTION).find().toArray()
     }*/
 
-    public getSeriesByName(seriesName: string) {
-        return this.db.collection(CHART_COLLECTION).findOne({ name: seriesName })
+    public getChartsInSeries(seriesName: string, page: number) {
+        console.log(seriesName, page)
+        return this.db.collection(CHART_COLLECTION).aggregate([
+            { '$match': { name: seriesName } },
+            {'$unwind': '$charts'},
+            {'$replaceRoot': {'newRoot': '$charts'}},
+            {'$sort': {'date': 1}},
+            {'$skip': page * 20},
+            {'$limit': 20}
+        ]).toArray()
     }
 
     public newSeries(params: Record<string, unknown>): Promise<unknown> {
@@ -237,11 +245,11 @@ export class SeriesDb {
     public async updateChart(seriesName: string, chartName: string, newChartData: Record<string, unknown>): Promise<unknown> {
         console.log('updating', seriesName, chartName, newChartData)
         // First, update the chart
-        await this.db.collection(CHART_COLLECTION).updateOne({name: seriesName, 'charts.name': chartName}, {'$set': {'charts.$': newChartData}})
+        await this.db.collection(CHART_COLLECTION).updateOne({ name: seriesName, 'charts.name': chartName }, { '$set': { 'charts.$': newChartData } })
         // Next, update the songs containing that chart
         await this.db.collection(SONG_COLLECTION).updateMany(
-            {[`charts.${seriesName}.chart`]: chartName},
-            {'$set': {[`charts.${seriesName}.$.chart`]: newChartData.name}}
+            { [`charts.${seriesName}.chart`]: chartName },
+            { '$set': { [`charts.${seriesName}.$.chart`]: newChartData.name } }
         )
         return;
     }

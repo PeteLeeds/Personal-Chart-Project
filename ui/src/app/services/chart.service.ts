@@ -22,8 +22,8 @@ export class ChartService {
     return this.httpClient.get<Series[]>(`${BASE_URL}/series/`)
   }
 
-  public getSeriesByName(name: string): Observable<Series> {
-    return this.httpClient.get<Series>(`${BASE_URL}/series/${name}`)
+  public getChartsInSeries(name: string, page: number): Observable<Series> {
+    return this.httpClient.get<Series>(`${BASE_URL}/series/${name}?page=${page}`)
   }
 
   public createSeries(name: string): Observable<unknown> {
