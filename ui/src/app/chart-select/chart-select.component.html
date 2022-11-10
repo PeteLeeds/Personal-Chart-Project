@@ -1,4 +1,5 @@
 <h1>{{seriesName}}</h1>
+<a class="right" routerLink="new">Upload new chart</a>
 <h2>Select a Chart</h2>
 
 <div *ngIf="pageNumber > 1" class="fake-link" (click)="decPageNumber()">Previous Page</div>
@@ -8,7 +9,6 @@
     <a [routerLink]=[chart.name]>{{chart.name}}</a>
 </p>
 
-<a routerLink="new">Upload new chart</a>
 <p class="fake-link" (click)="openModal()">Delete Series</p>
 
 <delete-series-modal #deleteSeriesModal></delete-series-modal>

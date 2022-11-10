@@ -3,3 +3,7 @@
     color: blue;
     text-decoration: underline;
 }
+
+.right {
+    float: right
+}
