@@ -1,7 +1,8 @@
 <a routerLink="../"><h1>{{seriesName}}</h1></a>
 <h2>{{chartName}}</h2>
 <div class="top-right">
-    <a routerLink="./edit">Edit Details</a>
+    <p><a routerLink="./edit">Edit Details</a></p>
+    <p><a [routerLink]="['..', 'new']">Upload New Chart</a></p>
 </div>
 <ng-container *ngIf="chartData; else loading">
     <a *ngIf="lastChart" [routerLink]="['..', lastChart]">Previous</a>
