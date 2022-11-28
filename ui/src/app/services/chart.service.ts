@@ -34,6 +34,10 @@ export class ChartService {
     return this.httpClient.delete(`${BASE_URL}/series/${seriesName}`)
   }
 
+  public deleteChart(seriesName: string, chartName: string) {
+    return this.httpClient.delete(`${BASE_URL}/series/${seriesName}/${chartName}`)
+  }
+
   public createChart(seriesName: string, params: ChartParams): Observable<unknown> {
     console.log('params passed', params)
     return this.httpClient.post(`${BASE_URL}/series/${seriesName}/chart`, {params})

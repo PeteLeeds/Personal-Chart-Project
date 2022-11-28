@@ -116,6 +116,16 @@ export class ChartRouter {
             )
         })
 
+        /**
+        * Delete a given chart in a series
+        */
+        router.delete('/:series/:chart', async (req, res) => {
+            console.log('Delete chart', req.params.chart)
+            res.json(
+                await (res.locals.db as Database).seriesDb.deleteChart(req.params.series, req.params.chart)
+            )
+        })
+
 
         return router;
     }

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable, of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { createJSDocAuthorTag } from 'typescript';
+import { DeleteSeriesComponent } from '../modals/delete-series/delete-series.component';
 import { ChartService } from '../services/chart.service'
 import { Song } from '../types/song';
 
@@ -14,10 +15,12 @@ import { Song } from '../types/song';
 // We probably want a ChartSelectComponent at the top level, and this below it
 // And pass the name of the chart to this.
 export class ChartDisplayComponent implements OnInit {
+  @ViewChild('deleteSeriesModal') private deleteSeriesModal: DeleteSeriesComponent;
 
   private chartService: ChartService;
   private subscriptions: Subscription[] = [];
   private activatedRoute: ActivatedRoute;
+  private router: Router;
 
   public chartData: Record<string, unknown>[]
   public seriesName: string;
@@ -26,9 +29,10 @@ export class ChartDisplayComponent implements OnInit {
   public lastChart: string;
   public nextChart: string;
 
-  public constructor(chartService: ChartService, activatedRoute: ActivatedRoute) {
+  public constructor(chartService: ChartService, activatedRoute: ActivatedRoute, router: Router) {
     this.chartService = chartService;
     this.activatedRoute = activatedRoute;
+    this.router = router;
   }
 
   // Idea is to store the chart run in the song
@@ -93,6 +97,13 @@ export class ChartDisplayComponent implements OnInit {
         console.log('There was an error', err)
       })
     )
+  }
+
+  public async openModal() {
+    console.log('delete series modal', this.deleteSeriesModal)
+    await this.deleteSeriesModal.open(this.seriesName, this.chartName)
+    // When modal closes, navigate to 'series' page
+    this.router.navigate(['..'], { relativeTo: this.activatedRoute })
   }
 
   public ngOnDestroy(): void {

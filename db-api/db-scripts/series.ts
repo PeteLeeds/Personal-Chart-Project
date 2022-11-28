@@ -217,6 +217,33 @@ export class SeriesDb {
         return this.db.collection(CHART_COLLECTION).deleteOne({ "name": seriesName })
     }
 
+    public async deleteChart(seriesName: string, chartName: string) {
+        // First delete any song info about the series
+        console.log("Deleting chart info")
+        await this.db.collection(SONG_COLLECTION).updateMany(
+            {},
+            { '$pull': { [`charts.${seriesName}`]: {chart: chartName} }}
+        )
+        // Then delete any song series which only contained this chart
+        console.log('Deleting series info')
+        await this.db.collection(SONG_COLLECTION).updateMany(
+            {[`charts.${seriesName}`]: {'$size': 0}},
+            { '$unset': { [`charts.${seriesName}`]: "" } }
+        )
+        // Then delete any songs which relied only on this series
+        console.log("Deleting song info")
+        this.db.collection(SONG_COLLECTION).find({ $or: [{ charts: {} }, { charts: { $exists: false } }] }).forEach((val) => console.log(val))
+        await this.db.collection(SONG_COLLECTION).deleteMany({ $or: [{ charts: {} }, { charts: { $exists: false } }] })
+        // TODO: Also delete artists which don't have any songs
+        // Then delete the chart itself
+        console.log("Deleting chart")
+        return this.db.collection(CHART_COLLECTION).updateMany(
+            { "name": seriesName }, 
+            { '$pull': { 'charts': { 'name': chartName}  }}
+        )
+    }
+
+
     public async getChartDate(seriesName: string, chartName: string): Promise<string> {
         const result = await this.db.collection(CHART_COLLECTION).aggregate(
             [

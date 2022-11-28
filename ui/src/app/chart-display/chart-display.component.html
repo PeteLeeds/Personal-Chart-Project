@@ -2,6 +2,7 @@
 <h2>{{chartName}}</h2>
 <div class="top-right">
     <p><a routerLink="./edit">Edit Details</a></p>
+    <p (click)="openModal()" class="fake-link">Delete Chart</p>
     <p><a [routerLink]="['..', 'new']">Upload New Chart</a></p>
 </div>
 <ng-container *ngIf="chartData; else loading">
@@ -33,5 +34,7 @@
         </ng-container>
     </table>
 </ng-container>
+
+<delete-series-modal #deleteSeriesModal></delete-series-modal>
 
 <ng-template #loading>Loading...</ng-template>
