@@ -9,6 +9,7 @@ import { CreateChartComponent } from './create-chart/create-chart.component';
 import { SeriesSelectComponent } from './series-select/series-select.component';
 import { SongDisplayComponent } from './song-display/song-display.component';
 import { SongComponent } from './song/song.component';
+import { TotalsComponent } from './totals/totals.component';
 
 const routes: Routes = [
   // Can't have 'children' unless we want the parent displayed also!
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'song/:id', component: SongDisplayComponent },
   { path: 'artist', component: ArtistComponent },
   { path: 'artist/:id', component: ArtistDisplayComponent },
+  { path: 'totals', component: TotalsComponent },
 ];
 
 @NgModule({

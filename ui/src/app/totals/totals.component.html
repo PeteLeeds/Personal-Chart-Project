@@ -1,0 +1,24 @@
+<h1>Cumulative Total Calculator</h1>
+<form [formGroup]="totalsForm" (ngSubmit)="onSubmit()">
+    <div>
+        <label>From: 
+            <input [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3" placeholder="Date Time" formControlName="from">
+            <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+        </label>
+    </div>
+    <div>
+        <label>To: 
+            <input [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" placeholder="Date Time" formControlName="to">
+            <owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
+        </label>
+    </div>
+    <div>
+        <label>Include full chart runs (including those starting/ending outside dates shown)</label>
+        <input type="checkbox" checked="true" formControlName="includeFullChartRun">
+    </div>
+    <div>
+        <label>Return top:</label>
+        <input type="text" value="100" formControlName="numberOfResults">
+    </div>
+    <td><button type="submit" [disabled]="!totalsForm.valid">Submit</button></td>
+</form>

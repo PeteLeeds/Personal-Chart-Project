@@ -28,6 +28,7 @@ import { ArtistSelectorComponent } from './shared/artist-selector.commponent';
 import { MarkDuplicateComponent } from './modals/mark-duplicate/mark-duplicate.component';
 import { SearchComponent } from './shared/search/search.component'
 import { ChartEditComponent } from './chart-edit/chart-edit.component';
+import { TotalsComponent } from './totals/totals.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { ChartEditComponent } from './chart-edit/chart-edit.component';
     MarkDuplicateComponent,
     SearchComponent,
     ChartEditComponent,
+    TotalsComponent
   ],
   imports: [
     BrowserModule,
