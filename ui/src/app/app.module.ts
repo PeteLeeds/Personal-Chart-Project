@@ -13,7 +13,7 @@ import { ChartDisplayComponent } from './chart-display/chart-display.component';
 import { SeriesSelectComponent } from './series-select/series-select.component';
 import { ModalTemplateComponent } from './modals/modal-template/modal-template.component';
 import { CreateSeriesComponent } from './modals/create-series/create-series.component';
-import { DeleteSeriesComponent } from './modals/delete-series/delete-series.component';
+import { DeleteItemComponent } from './modals/delete-series/delete-item.component';
 import { NewSongsComponent } from './modals/new-songs/new-songs.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -37,7 +37,7 @@ import { ChartEditComponent } from './chart-edit/chart-edit.component';
     SeriesSelectComponent,
     ModalTemplateComponent,
     CreateSeriesComponent,
-    DeleteSeriesComponent,
+    DeleteItemComponent,
     CreateChartComponent,
     NewSongsComponent,
     SongDisplayComponent,

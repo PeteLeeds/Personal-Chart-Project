@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable, of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { createJSDocAuthorTag } from 'typescript';
-import { DeleteSeriesComponent } from '../modals/delete-series/delete-series.component';
+import { DeleteItemComponent } from '../modals/delete-series/delete-item.component';
 import { ChartService } from '../services/chart.service'
 import { Song } from '../types/song';
 
@@ -15,7 +15,7 @@ import { Song } from '../types/song';
 // We probably want a ChartSelectComponent at the top level, and this below it
 // And pass the name of the chart to this.
 export class ChartDisplayComponent implements OnInit {
-  @ViewChild('deleteSeriesModal') private deleteSeriesModal: DeleteSeriesComponent;
+  @ViewChild('deleteItemModal') private deleteItemModal: DeleteItemComponent;
 
   private chartService: ChartService;
   private subscriptions: Subscription[] = [];
@@ -100,8 +100,8 @@ export class ChartDisplayComponent implements OnInit {
   }
 
   public async openModal() {
-    console.log('delete series modal', this.deleteSeriesModal)
-    await this.deleteSeriesModal.open(this.seriesName, this.chartName)
+    console.log('delete item modal', this.deleteItemModal)
+    await this.deleteItemModal.open(this.seriesName, this.chartName)
     // When modal closes, navigate to 'series' page
     this.router.navigate(['..'], { relativeTo: this.activatedRoute })
   }

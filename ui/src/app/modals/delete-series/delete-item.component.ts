@@ -4,11 +4,11 @@ import { ModalTemplateComponent } from '../modal-template/modal-template.compone
 import { ModalConfig } from '../modal.config';
 
 @Component({
-  selector: 'delete-series-modal',
-  templateUrl: './delete-series.component.html',
-  styleUrls: ['./delete-series.component.css']
+  selector: 'delete-item-modal',
+  templateUrl: './delete-item.component.html',
+  styleUrls: ['./delete-item.component.css']
 })
-export class DeleteSeriesComponent implements OnInit {
+export class DeleteItemComponent implements OnInit {
   @ViewChild('modal') private baseModal: ModalTemplateComponent;
 
   public seriesName = '';

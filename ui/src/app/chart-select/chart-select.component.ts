@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators'
-import { DeleteSeriesComponent } from '../modals/delete-series/delete-series.component';
+import { DeleteItemComponent } from '../modals/delete-series/delete-item.component';
 import { ModalTemplateComponent } from '../modals/modal-template/modal-template.component';
 import { ModalConfig } from '../modals/modal.config';
 import { ChartService } from '../services/chart.service';
@@ -15,7 +15,7 @@ import { Series } from '../types/series';
   styleUrls: ['./chart-select.component.css']
 })
 export class ChartSelectComponent implements OnInit {
-  @ViewChild('deleteSeriesModal') private deleteSeriesModal: DeleteSeriesComponent;
+  @ViewChild('deleteItemModal') private deleteItemModal: DeleteItemComponent;
   private chartService: ChartService
   private activatedRoute: ActivatedRoute
   private subscriptions: Subscription[] = []
@@ -59,8 +59,8 @@ export class ChartSelectComponent implements OnInit {
   }
 
   public async openModal() {
-    console.log('delete series modal', this.deleteSeriesModal)
-    await this.deleteSeriesModal.open(this.seriesName)
+    console.log('delete series modal', this.deleteItemModal)
+    await this.deleteItemModal.open(this.seriesName)
     // When modal closes, navigate to 'series' page
     this.router.navigate(['../..'], { relativeTo: this.activatedRoute })
   }
