@@ -103,4 +103,34 @@ export class SongDb {
         await this.db.collection(SONG_COLLECTION).updateOne({ '_id': new ObjectId(toId) }, {'$set': to})
         return this.db.collection(SONG_COLLECTION).deleteOne({ '_id': new ObjectId(fromId) })
     }
+
+    public getLeaderboard(options: Record<string, string>) {
+        console.log(options.includeFullChartRun, typeof options.includeFullChartRun)
+        return this.db.collection(SONG_COLLECTION).aggregate([
+            ...getSongChartPipeline(options.series),
+            {'$match': {[`charts.${options.series}.date`]: {'$gte': new Date(options.from).toISOString(), '$lte': new Date(options.to).toISOString()}}},
+            //{'$addFields': {totalPoints: {'$sum': {'$subtract': [100, `$charts.${options.series}.position`]}}}},
+            {'$addFields': {totalPoints: {'$reduce': {
+                input: `$charts.${options.series}`,
+                initialValue: 0,
+                in: {'$add': 
+                    ['$$value', 
+                        {'$subtract': 
+                            [101, 
+                            options.includeFullChartRun === 'true'
+                                ? '$$this.position' 
+                                : {'$cond': [
+                                    {'$and': [{'$gte': ['$$this.date', new Date(options.from).toISOString()]}, {'$lte': ['$$this.date', new Date(options.to).toISOString()]}]},
+                                    '$$this.position',
+                                    101
+                                ]}
+                            ]
+                        }
+                    ]
+                }
+            }}}},
+            {'$sort': {'totalPoints': -1}},
+            {'$limit': parseInt(options.numberOfResults)}
+        ])
+    }
 }

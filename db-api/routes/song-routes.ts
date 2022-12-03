@@ -68,6 +68,12 @@ export class SongRouter {
             )
         })
 
+        router.get('/totals', async(req, res) => {
+            console.log('get leaderboard')
+            res.json(await (res.locals.db as Database).songDb.getLeaderboard(req.query as Record<string, string>).toArray()
+            )
+        })
+
 
         return router;
     }

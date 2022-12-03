@@ -17,6 +17,16 @@ export class SongService {
     this.httpClient = httpClient;
   }
 
+  private getQueryString(params: Record<string, string>) {
+    let queryString = ''
+    Object.entries(params).forEach(([key, value]) => {
+      console.log('keys', key, value)
+      queryString += queryString.length !== 0 ? '&' : ''
+      queryString += `${key}=${value}`
+    });
+    return queryString
+  }
+
   public getSongById(songId: string, seriesName?: string): Observable<Song> {
     return this.httpClient.get<Song>(`${BASE_URL}/song?id=${songId}${seriesName ? `&seriesName=${seriesName}` : ''}`)
   }
@@ -67,5 +77,9 @@ export class SongService {
     const url = `${BASE_URL}/song/merge/${fromId}/${toId}`
     console.log('merge songs', url)
     return this.httpClient.delete(url)
+  }
+
+  public getLeaderboard(options: Record<string, string>) {
+    return this.httpClient.get<Song[]>(`${BASE_URL}/song/totals?${this.getQueryString(options)}`)
   }
 }

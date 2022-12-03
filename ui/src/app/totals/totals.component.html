@@ -1,6 +1,14 @@
 <h1>Cumulative Total Calculator</h1>
 <form [formGroup]="totalsForm" (ngSubmit)="onSubmit()">
     <div>
+        <label>Series:</label>
+        <select formControlName="series">
+            <ng-container *ngFor="let series of seriesList">
+                <option>{{series.name}}</option>
+            </ng-container>
+        </select>
+    </div>
+    <div>
         <label>From: 
             <input [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3" placeholder="Date Time" formControlName="from">
             <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
@@ -22,3 +30,25 @@
     </div>
     <td><button type="submit" [disabled]="!totalsForm.valid">Submit</button></td>
 </form>
+
+<table *ngIf="leaderboard.length > 0">
+    <tr>
+        <th>Pos</th>
+        <th>Artist</th>
+        <th>Title</th>
+        <th>Points</th>
+    </tr>
+    <!--Either need to fetch all this info separately on the server and calculate on the client
+        Or calculate on the server-->
+    <!--Last Week: Given a chart, return the immediately preceding chart and get the position for that
+        Peak: Given a chart, get all preceding charts and find the highest value within that range
+        Weeks: Given a chart, get all preceding charts and find the number that appear-->
+    <ng-container *ngFor="let song of leaderboard; let i = index">
+        <tr>
+            <td>{{i + 1}}</td>
+            <td>{{song.artistDisplay}}</td>
+            <td><a [routerLink]="['/song', song._id]">{{song.title}}</a></td>
+            <td>{{song.totalPoints}}</td>
+        </tr>
+    </ng-container>
+</table>

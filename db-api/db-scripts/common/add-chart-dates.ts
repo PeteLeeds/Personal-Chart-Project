@@ -75,7 +75,8 @@ export function getSongChartPipeline(seriesName: string) {
         }
     }, {
         '$project': {
-            'tempcharts': 0
+            'tempcharts': 0,
+            'tempchartswithdate': 0
         }
     }]
 }
