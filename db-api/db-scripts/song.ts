@@ -105,11 +105,10 @@ export class SongDb {
     }
 
     public getLeaderboard(options: Record<string, string>) {
-        console.log(options.includeFullChartRun, typeof options.includeFullChartRun)
+        console.log(options)
         return this.db.collection(SONG_COLLECTION).aggregate([
             ...getSongChartPipeline(options.series),
             {'$match': {[`charts.${options.series}.date`]: {'$gte': new Date(options.from).toISOString(), '$lte': new Date(options.to).toISOString()}}},
-            //{'$addFields': {totalPoints: {'$sum': {'$subtract': [100, `$charts.${options.series}.position`]}}}},
             {'$addFields': {totalPoints: {'$reduce': {
                 input: `$charts.${options.series}`,
                 initialValue: 0,
@@ -129,6 +128,23 @@ export class SongDb {
                     ]
                 }
             }}}},
+            // Add extra points if required
+            // NOTE: This doesn't work if the final chart isn't on the exact end date given. Can be sorted with a simple request to the series db.
+            ...options.estimateFuturePoints === 'true' ? [
+            {'$addFields': {lastChart: {'$filter': {
+                input: `$charts.${options.series}`,
+                as: "chart",
+                cond: { '$eq': [ "$$chart.date", new Date(options.to).toISOString() ] }
+            }}}},
+            {'$addFields': {lastChartObject: {'$arrayElemAt': ['$lastChart', 0]}}},
+            {'$set': {'totalPoints': {
+                '$cond': [
+                    {'$eq': [{'$size': '$lastChart'}, 1]}, 
+                    {'$add': ['$totalPoints', {'$floor': {'$pow': [2, {'$divide': [1050, {'$add': [100, '$lastChartObject.position']}]}]}}]}, 
+                    '$totalPoints'
+                ]
+            }}},
+            {'$project': {lastChart: 0, lastChartObject: 0}}] : [],
             {'$sort': {'totalPoints': -1}},
             {'$limit': parseInt(options.numberOfResults)}
         ])

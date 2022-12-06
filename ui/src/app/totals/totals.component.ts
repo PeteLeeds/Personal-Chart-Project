@@ -25,6 +25,7 @@ export class TotalsComponent {
     to: new FormControl(''),
     includeFullChartRun: new FormControl(true),
     numberOfResults: new FormControl(100),
+    estimateFuturePoints: new FormControl(true)
   });
 
   public constructor(songService: SongService, chartService: ChartService) {
