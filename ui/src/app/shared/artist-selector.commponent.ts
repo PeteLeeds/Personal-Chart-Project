@@ -26,7 +26,6 @@ export class ArtistSelectorComponent {
 
   public ngOnChanges(changes: SimpleChanges) {
     console.log('CHANGES', changes)
-    // Probably done something wrong here - check
     this.modifiedArtists = changes.artists.currentValue as unknown as unknown[]
   }
 

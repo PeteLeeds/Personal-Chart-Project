@@ -5,13 +5,6 @@ export class ChartRouter {
 
     public static async create() {
         const router = Router()
-        /*router.get('/testChart', async (_, res) => {
-            console.log('Get chart')
-            // Preferably we would like it prettier than this
-            res.json(
-                await (res.locals.db as Database).seriesDb.getChart()
-            )
-        })*/
 
         /**
          * List existing chart series
@@ -43,7 +36,6 @@ export class ChartRouter {
          */
         router.post('/', async (req, res) => {
             console.log('Create new chart series')
-            // Preferably we would like it prettier than this
             res.json(
                 await (res.locals.db as Database).seriesDb.newSeries(req.body)
             )
@@ -54,7 +46,6 @@ export class ChartRouter {
          */
         router.post('/:name/chart', async (req, res) => {
             console.log('Create new chart')
-            // Preferably we would like it prettier than this
             res.json(
                 await (res.locals.db as Database).seriesDb.newChart(req.params.name, req.body.params)
             )
@@ -75,8 +66,6 @@ export class ChartRouter {
          * Given a chart in a series, return the previous set of charts in that series
          */
         router.get('/:series/prev/:chart', async (req, res) => {
-            // The best thing we can do here is set a 'start date' and 'end date'
-            // and fetch al 
             console.log('Get previous series', req.params.chart)
             res.json(
                 (await (await (res.locals.db as Database).seriesDb.getPreviousCharts(req.params.series, req.params.chart)).toArray())
@@ -87,8 +76,6 @@ export class ChartRouter {
         * Given a chart in a series, return the previous set of charts in that series
         */
         router.get('/:series/next/:chart', async (req, res) => {
-            // The best thing we can do here is set a 'start date' and 'end date'
-            // and fetch al 
             console.log('Get next series', req.params.chart)
             res.json(
                 await (res.locals.db as Database).seriesDb.getNextChart(req.params.series, req.params.chart)

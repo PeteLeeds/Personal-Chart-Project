@@ -64,7 +64,6 @@ export class ArtistDisplayComponent implements OnInit {
         if (initialLoad) {
           this.selectedSeries = this.chartSelectOptions[0];
         }
-        // TODO: Will need to be reloaded if we decide to stick with loading all at once
         this.artistInfo.songs.sort((a,b) => this.sortSongs(a, b))
         // This line is needed to trigger the change on the frontend
         this.artistInfo.songs = [...this.artistInfo.songs]

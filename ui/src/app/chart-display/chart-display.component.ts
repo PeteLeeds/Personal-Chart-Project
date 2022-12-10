@@ -12,8 +12,7 @@ import { Song } from '../types/song';
   templateUrl: './chart-display.component.html',
   styleUrls: ['./chart-display.component.css']
 })
-// We probably want a ChartSelectComponent at the top level, and this below it
-// And pass the name of the chart to this.
+
 export class ChartDisplayComponent implements OnInit {
   @ViewChild('deleteItemModal') private deleteItemModal: DeleteItemComponent;
 
@@ -35,22 +34,7 @@ export class ChartDisplayComponent implements OnInit {
     this.router = router;
   }
 
-  // Idea is to store the chart run in the song
-  // and then format it client-side to determine the number of weeks.
-  // We can store multiple runs for multiple charts in the song
-  // If we need to we can lookup the chart name as there will be very few charts compared to songs
-
   public ngOnInit(): void {
-    /*const chartInfo = {songs: this.activatedRoute.params.pipe(mergeMap(params => {
-      if (params.series && params.name) {
-        this.seriesName = params.series
-        this.chartName = params.name
-        return this.chartService.getChart(this.seriesName, this.chartName)
-      }
-      return of([])
-    })),
-    prevCharts: this.chartService.getPreviousCharts(this.seriesName, this.chartName)
-    }*/
 
     this.subscriptions.push(
     this.activatedRoute.params.pipe(mergeMap(params => {
@@ -77,14 +61,9 @@ export class ChartDisplayComponent implements OnInit {
           // Index '1' is correct here as '0' will be the current chart
           const currentSeries = song.charts[this.seriesName]
           console.log('b', currentSeries, prevChartNames)
-          // Here's our issue - no previous chart dates. So prevChartDates needs to include names as well as dates.
           const charts = currentSeries.filter(chart => prevChartNames.includes(chart.chart));
           const lastChartRecord = currentSeries.find(chart => chart.chart === prevChartNames[1])
           charts.sort((a, b) => a.position - b.position);
-          console.log('DISPLAY', song, lastChartRecord, charts);
-          console.log(charts)
-          console.log(charts[0])
-          console.log(charts[0].position)
           return {
             ...song,
             lastWeek: lastChartRecord?.position,

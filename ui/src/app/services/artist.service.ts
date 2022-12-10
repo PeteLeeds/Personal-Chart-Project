@@ -28,8 +28,6 @@ export class ArtistService {
 
     public getArtistCount(): Observable<number> {
         console.log('get artist count')
-        // Page number here is superfluous - only used to prevent an error in the code
-        // There may be a better way of doing this
         return this.httpClient.head(`${BASE_URL}/artist/count`, {observe: 'response'})
           .pipe(
             // + operator converts string to number

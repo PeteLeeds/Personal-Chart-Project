@@ -40,14 +40,12 @@ export class MarkDuplicateComponent implements OnInit {
       type: this.type,
       returnCount: 10
     }
-    console.log(this.id)
     return this.baseModal.open();
   }
 
   public modalConfig: ModalConfig = {
     modalTitle: 'Create Series',
     dismissButtonLabel: 'Close',
-    // An 'x' in the corner should eventually be sufficient
     closeButtonLabel: 'Mark Duplicate',
     onClose: () => new Promise<string>((resolve) => {
       const subscription = this.type === 'song'
@@ -61,13 +59,11 @@ export class MarkDuplicateComponent implements OnInit {
   }
 
   public setSuggestions(suggestions) {
-    console.log(suggestions)
     this.suggestions = suggestions
   }
 
   public selectItem(song: Song): void {
     this.selectedId = song._id
-    console.log(this.selectedId)
   }
 
   ngOnInit(): void {

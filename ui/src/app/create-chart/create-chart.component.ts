@@ -29,10 +29,6 @@ export class CreateChartComponent implements OnInit {
   public songsChecked = 0;
 
   public chartForm = new FormGroup({
-    // Name should usually be equal to date
-    // Either name or date should be compulsory
-    // Potentially options for either text box or enter songs manually
-    // Entering songs manually would need a selection box. Potentially when artist is entered, find all the songs for that artist.
     name: new FormControl({ value: '', disabled: this.useDateAsTitle }),
     date: new FormControl(''),
     songs: new FormControl('', this.hyphenValidator()),
@@ -89,16 +85,13 @@ export class CreateChartComponent implements OnInit {
     const songObservables : Observable<CheckedSong>[] = []
     for (let i = 0; i < songs.length; i++) {
       const song = songs[i];
-      console.log('checking', song)
       songObservables.push(this.songService.checkIfSongExists(song, i)
         .pipe(map(res => {
           this.songsChecked++;
-          console.log(this.songsChecked, res)
           return res
         })))
     }
 
-    // CHANGE THIS - I just can't be bothered to do it now
     var chartSongs: FormattedSong[] = []
 
     forkJoin(songObservables).subscribe(async songs => {
@@ -122,7 +115,6 @@ export class CreateChartComponent implements OnInit {
       for (const song of chartSongs) {
         delete song.pos;
       }
-      console.log(chartSongs);
       const newSongsExist = chartSongs.filter(song => !song.exists).length != 0;
       this.checkingSongs = false
       const songsToSend = newSongsExist ? await this.newSongsModal.open(chartSongs) : chartSongs;

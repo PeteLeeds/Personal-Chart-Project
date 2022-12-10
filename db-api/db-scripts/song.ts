@@ -20,8 +20,6 @@ export class SongDb {
         console.log('initialised Song class')
     }
 
-    // TODO: We need to be able to create a pipeline to add dates to charts
-    // We ought to have this somewhere common as I think a lot of pages will need it
     public async getSong(songId: string, seriesName?: string): Promise<unknown> {
         // If series name is not defined, find the first series the song has appeared in
         if (!seriesName) {
@@ -105,7 +103,6 @@ export class SongDb {
     }
 
     public getLeaderboard(options: Record<string, string>) {
-        console.log(options)
         return this.db.collection(SONG_COLLECTION).aggregate([
             ...getSongChartPipeline(options.series),
             {'$match': {[`charts.${options.series}.date`]: {'$gte': new Date(options.from).toISOString(), '$lte': new Date(options.to).toISOString()}}},

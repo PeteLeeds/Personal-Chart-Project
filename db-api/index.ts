@@ -48,11 +48,6 @@ class App {
             next()
         })
 
-        app.get('/', (_, res) => {
-            console.log('here!!!');
-            res.send('it is working')
-        });
-
         app.use('/database', await ServerRouter.create())
         app.use(Express.json())
 

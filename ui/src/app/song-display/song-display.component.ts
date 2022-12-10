@@ -60,10 +60,6 @@ export class SongDisplayComponent implements OnInit {
     this.reloadSongDetails(true)
   }
 
-  // (I can't remember what the below comments mean)
-  // If we have the start and end dates of all the charts, we can get a range
-  // If there are any gaps of more than 1 month, we can check if the next chart is actually the one given
-
   public reloadSongDetails(initialLoad = false) {
     this.subscriptions.push(
       this.activatedRoute.params.pipe(mergeMap(params => {
@@ -73,7 +69,6 @@ export class SongDisplayComponent implements OnInit {
         return of([])
       })).subscribe((song: Song) => {
         this.songInfo = song;
-        console.log(this.songInfo);
         this.chartSelectOptions = Object.keys(this.songInfo.charts)
         if (initialLoad) {
           this.selectedSeries = this.chartSelectOptions[0];
@@ -82,7 +77,6 @@ export class SongDisplayComponent implements OnInit {
         this.peak = [...song.charts[this.selectedSeries]]
           .sort((a, b) => a.position - b.position)[0]
           .position
-        console.log(this.songInfo.charts[this.selectedSeries])
         this.songInfo.charts[this.selectedSeries].sort((a, b) => new Date(a.date) > new Date(b.date) ? 1 : -1)
         this.chartRuns = song.charts[this.selectedSeries].map(chart => {
           return { run: chart, endReached: false }
@@ -102,7 +96,6 @@ export class SongDisplayComponent implements OnInit {
   }
 
   public enterEditMode() {
-    // It thinks the artists are a list of strings when actually they're a list of objects
     this.artistNames = this.songInfo.artists.map(artist => (artist as unknown as Record<string, unknown>).name)
     this.editMode = true
   }

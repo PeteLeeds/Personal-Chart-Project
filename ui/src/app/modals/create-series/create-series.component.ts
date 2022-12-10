@@ -25,7 +25,6 @@ export class CreateSeriesComponent implements OnInit {
   public modalConfig: ModalConfig = {
     modalTitle: 'Create Series',
     dismissButtonLabel: 'Close',
-    // An 'x' in the corner should eventually be sufficient
     closeButtonLabel: 'Create',
     onClose: () => new Promise<string>((resolve) => {
       console.log('create', this.seriesName);

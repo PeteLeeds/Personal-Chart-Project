@@ -44,7 +44,6 @@ export class TotalsComponent {
   public onSubmit(): void {
     this.seriesBeingUsed = this.totalsForm.controls['series'].value
     this.songService.getLeaderboard(this.totalsForm.value).subscribe(res => this.leaderboard = res)
-    console.log(this.totalsForm)
   }
 
   public export(): void {
@@ -69,7 +68,6 @@ export class TotalsComponent {
       useTextFile: false,
       useBom: true,
       useKeysAsHeaders: true,
-      // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
     };
 
     const csvExporter = new ExportToCsv(options);

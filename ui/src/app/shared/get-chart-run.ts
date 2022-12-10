@@ -12,7 +12,6 @@ function getChartRuns(charts: SongInChart[]): SongInChart[][] {
             continue;
         }
         else {
-            console.log(new Date(charts[i].date), new Date(charts[i - 1].date).getTime() + (13 * DAY_LENGTH))
             if (new Date(charts[i].date) > new Date(new Date(charts[i - 1].date).getTime() + (13 * DAY_LENGTH))) {
                 runs.push(currentRun)
                 currentRun = [charts[i]]

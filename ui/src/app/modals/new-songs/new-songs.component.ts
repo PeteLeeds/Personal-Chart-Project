@@ -39,7 +39,6 @@ export class NewSongsComponent implements OnInit {
 
   public updateArtists(song: Record<string, string[]>, event: string[]) {
     song.artists = event
-    console.log(this.chartSongs)
   }
 
 }

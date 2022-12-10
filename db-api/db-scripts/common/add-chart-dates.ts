@@ -1,8 +1,6 @@
 // Adds date of each chart to chart
-// TODO: Replace charts.Peter's Charts with an option for each chart.
 
 export function getSongChartPipeline(seriesName: string) {
-    //seriesName = "Peter's Charts"
     console.log('Series name', seriesName)
     return [{
         '$unwind': {
