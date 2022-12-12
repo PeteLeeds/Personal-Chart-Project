@@ -1,13 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClipboardService } from 'ngx-clipboard';
-import { forkJoin, of, Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { MarkDuplicateComponent } from '../modals/mark-duplicate/mark-duplicate.component';
 import { ArtistService } from '../services/artist.service';
-import { SongService } from '../services/song.service';
 import { Artist } from '../types/artist';
-import { Song } from '../types/song';
 
 @Component({
   selector: 'app-artist-display',

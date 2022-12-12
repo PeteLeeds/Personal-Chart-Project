@@ -3,11 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators'
 import { DeleteItemComponent } from '../modals/delete-series/delete-item.component';
-import { ModalTemplateComponent } from '../modals/modal-template/modal-template.component';
 import { ModalConfig } from '../modals/modal.config';
 import { ChartService } from '../services/chart.service';
 import { Chart } from '../types/chart';
-import { Series } from '../types/series';
 
 @Component({
   selector: 'app-chart-select',

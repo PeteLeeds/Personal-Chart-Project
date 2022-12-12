@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { ArtistService } from '../services/artist.service';
-import { SongService } from '../services/song.service';
 import { Artist } from '../types/artist';
-import { SearchOptions } from '../types/search-options';
 
 @Component({
   selector: 'app-artist',

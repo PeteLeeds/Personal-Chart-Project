@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CreateSeriesComponent } from '../modals/create-series/create-series.component';
-import { ModalTemplateComponent } from '../modals/modal-template/modal-template.component';
 import { ModalConfig } from '../modals/modal.config';
 import { ChartService } from '../services/chart.service';
 

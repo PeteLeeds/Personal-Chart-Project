@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ChartService } from 'src/app/services/chart.service';
 import { ModalTemplateComponent } from '../modal-template/modal-template.component';
 import { ModalConfig } from '../modal.config';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { FormattedSong } from 'src/app/types/song';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'new-songs-modal',

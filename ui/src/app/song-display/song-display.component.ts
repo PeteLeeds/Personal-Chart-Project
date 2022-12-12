@@ -5,11 +5,9 @@ import { ClipboardService } from 'ngx-clipboard';
 import { of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { MarkDuplicateComponent } from '../modals/mark-duplicate/mark-duplicate.component';
-import { ChartService } from '../services/chart.service';
 import { SongService } from '../services/song.service';
 import { getFullChartRun } from '../shared/get-chart-run';
-import { Chart } from '../types/chart';
-import { Song, SongInChart } from '../types/song';
+import { Song } from '../types/song';
 
 interface ChartRun {
   run: string[];

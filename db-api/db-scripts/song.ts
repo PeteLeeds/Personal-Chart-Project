@@ -1,5 +1,4 @@
 import { Db, ObjectId } from "mongodb";
-import { Song } from "../types/song";
 import { updateArtists } from "./common/update-artists";
 import { getSongChartPipeline } from "./common/add-chart-dates";
 import { SongQueryParams } from "../types/query-params";

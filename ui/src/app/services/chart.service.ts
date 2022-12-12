@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Chart, ChartParams } from '../types/chart';
 import { Song } from '../types/song';
 import { Series } from '../types/series';

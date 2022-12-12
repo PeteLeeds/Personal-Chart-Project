@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ArtistService } from 'src/app/services/artist.service';
-import { ChartService } from 'src/app/services/chart.service';
 import { SongService } from 'src/app/services/song.service';
 import { SearchOptions } from 'src/app/types/search-options';
 import { Song } from 'src/app/types/song';

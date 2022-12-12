@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, Observable, of, Subscription } from 'rxjs';
+import { forkJoin, of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { createJSDocAuthorTag } from 'typescript';
 import { DeleteItemComponent } from '../modals/delete-series/delete-item.component';
 import { ChartService } from '../services/chart.service'
 import { Song } from '../types/song';
