@@ -31,7 +31,6 @@ export class SongService {
     return this.httpClient.get<Song>(`${BASE_URL}/song?id=${songId}${seriesName ? `&seriesName=${seriesName}` : ''}`)
   }
 
-  // May need an appendParams() type if we're going to end up doing lots of similar things
   public checkIfSongExists(songString: string, pos: number): Observable<CheckedSong> {
     let httpSongString = songString
     const httpCodeReplacementArray = [['/', '%2F'], ['?', '%3F']]

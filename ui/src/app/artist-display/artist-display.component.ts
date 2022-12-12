@@ -46,7 +46,6 @@ export class ArtistDisplayComponent implements OnInit {
         return of({})
       })).subscribe((artist: Artist) => {
         this.artistInfo = artist;
-        console.log(this.artistInfo);
         this.chartSelectOptions = [];
         // Get distinct set of series this artist appears in
         for (const song of this.artistInfo.songs) {
