@@ -1,7 +1,10 @@
 .top-navbar {
     padding: 5px;
+    display: flex;
+    align-items: center;
 }
 
 a {
     background-color: 0000FF;
+    padding: 10px;
 }
