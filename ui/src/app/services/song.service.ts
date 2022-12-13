@@ -33,7 +33,7 @@ export class SongService {
 
   public checkIfSongExists(songString: string, pos: number): Observable<CheckedSong> {
     let httpSongString = songString
-    const httpCodeReplacementArray = [['/', '%2F'], ['?', '%3F']]
+    const httpCodeReplacementArray = [['/', '%2F'], ['?', '%3F'], ['\\', '%5C']]
     // Slashes don't just 'work' as the HTML interprets them as a different URL
     for (const codeReplacement of httpCodeReplacementArray) {
       while (httpSongString.includes(codeReplacement[0])) {
