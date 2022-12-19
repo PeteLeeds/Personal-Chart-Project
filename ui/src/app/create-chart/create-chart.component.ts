@@ -132,10 +132,14 @@ export class CreateChartComponent implements OnInit {
     let artistsAdded = false
     for (const conjunction of conjunctions) {
       if (artistDisplay.includes(conjunction)) {
-        const startPos = artistDisplay.indexOf("(" + conjunction) + conjunction.length + 1
-        const endPos = artistDisplay.includes(")", startPos) ? title.indexOf(")", startPos) : artistDisplay.length - 1
-        const featuredArtist = artistDisplay.slice(startPos, endPos)
-        artistList.push(artistDisplay.slice(0, startPos - 1).trim())
+        const startOfConjunction = artistDisplay.includes("(" + conjunction) 
+                                ? artistDisplay.indexOf("(" + conjunction)
+                                : artistDisplay.indexOf(conjunction)
+        const startOfArtist = startOfConjunction + conjunction.length 
+                                + (artistDisplay.includes("(" + conjunction) ? 1 : 0)
+        const endPos = artistDisplay.includes(")", startOfArtist) ? title.indexOf(")", startOfArtist) : undefined
+        const featuredArtist = artistDisplay.slice(startOfArtist, endPos)
+        artistList.push(artistDisplay.slice(0, startOfConjunction - 1).trim())
         artistList.push(featuredArtist.trim())
         artistsAdded = true
         // More than one conjunction would confuse this simple system too much
