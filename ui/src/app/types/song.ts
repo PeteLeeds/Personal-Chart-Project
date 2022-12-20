@@ -1,9 +1,10 @@
+import { Artist } from './artist';
 import { Chart } from './chart'
 
 export interface Song {
     _id: string;
     title: string;
-    artists?: string[];
+    artists?: Artist[];
     artistDisplay: string;
     charts: Record<string, Chart>[];
     peak?: number;

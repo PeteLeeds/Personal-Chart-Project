@@ -2,10 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClipboardService } from 'ngx-clipboard';
-import { of, Subscription } from 'rxjs';
+import { forkJoin, of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { MarkDuplicateComponent } from '../modals/mark-duplicate/mark-duplicate.component';
+import { ArtistService } from '../services/artist.service';
 import { SongService } from '../services/song.service';
+import { getChartHistory } from '../shared/get-chart-history';
 import { getFullChartRun } from '../shared/get-chart-run';
 import { Song } from '../types/song';
 
@@ -25,7 +27,8 @@ export class SongDisplayComponent implements OnInit {
   private subscriptions: Subscription[] = []
   private activatedRoute: ActivatedRoute;
   private songService: SongService;
-  private clipboardService: ClipboardService
+  private artistService: ArtistService;
+  private clipboardService: ClipboardService;
   private router: Router;
 
   public songInfo: Song;
@@ -46,17 +49,19 @@ export class SongDisplayComponent implements OnInit {
 
   constructor(activatedRoute: ActivatedRoute, 
               songService: SongService,
+              artistService: ArtistService,
               router: Router,
               clipboardService: ClipboardService) {
     this.activatedRoute = activatedRoute;
     this.songService = songService;
+    this.artistService = artistService;
     this.router = router;
     this.clipboardService = clipboardService;
   }
 
-  ngOnInit(): void {
-    this.reloadSongDetails(true)
-  }
+   ngOnInit(): void {
+     this.reloadSongDetails(true)
+   }
 
   public reloadSongDetails(initialLoad = false) {
     this.subscriptions.push(
@@ -66,6 +71,7 @@ export class SongDisplayComponent implements OnInit {
         }
         return of([])
       })).subscribe((song: Song) => {
+        // TODO: the below line is breaking the test!
         this.songInfo = song;
         this.chartSelectOptions = Object.keys(this.songInfo.charts)
         if (initialLoad) {
@@ -132,5 +138,22 @@ export class SongDisplayComponent implements OnInit {
   public copyChartRun() {
     const bbCodeChartRun = getFullChartRun(this.songInfo.charts[this.selectedSeries])
     this.clipboardService.copyFromContent(bbCodeChartRun)
+  }
+
+  public copyDisplay() {
+    let display = '[color=#000000][size=5][b]#xx[/b] (xxpts)[/size][/color]'
+    display += `\n\n[size=4][b]${this.songInfo.artistDisplay}[/b][/size]\n[i][size=3][b]${this.songInfo.title}[/b][/size][/i]`
+    display += `\n-\n[size=4][b]Chart Statistics[/b][/size]\n\n${getFullChartRun(this.songInfo.charts[this.selectedSeries])}\n\n`
+    display += `[size=4][b]Video[/b][/size]\n\n[youtube][/youtube]\n\n[size=4][b]Commentary[/b][/size]\n\n`
+    const artistObservables = this.songInfo.artists.map(artist => this.artistService.getArtistById(artist._id))
+    forkJoin(artistObservables).subscribe(async artists => {
+      let chartHistories = ''
+      for (const artist of artists) {
+        chartHistories += getChartHistory(artist, this.selectedSeries)
+        chartHistories += '\n\n'
+      }
+      display += `[size=4][b]Top 100 Chart History[/b][/size]\n\n[size=1]${chartHistories}[/size]`
+      this.clipboardService.copyFromContent(display)
+    })
   }
 }
