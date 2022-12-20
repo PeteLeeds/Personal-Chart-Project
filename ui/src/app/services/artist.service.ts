@@ -16,9 +16,9 @@ export class ArtistService {
         this.httpClient = httpClient;
     }
 
-    public getArtistById(id: string, seriesName?: string): Observable<Artist[]> {
+    public getArtistById(id: string, seriesName?: string): Observable<Artist> {
         console.log('get artist by id')
-        return this.httpClient.get<Artist[]>
+        return this.httpClient.get<Artist>
             (`${BASE_URL}/artist?id=${id}${seriesName ? `&seriesName=${seriesName}` : ''}`);
     }
 
