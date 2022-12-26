@@ -71,7 +71,6 @@ export class SongDisplayComponent implements OnInit {
         }
         return of([])
       })).subscribe((song: Song) => {
-        // TODO: the below line is breaking the test!
         this.songInfo = song;
         this.chartSelectOptions = Object.keys(this.songInfo.charts)
         if (initialLoad) {

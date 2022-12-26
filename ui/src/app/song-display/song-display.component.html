@@ -71,7 +71,7 @@
         </mat-select>
     </mat-form-field>-->
     </div>
-    <ng-container *ngIf="songInfo?.charts[selectedSeries]; else loading">
+    <ng-container *ngIf="songInfo?.charts && songInfo?.charts[selectedSeries]; else loading">
         <table>
             <tr>
                 <th>Chart</th>
