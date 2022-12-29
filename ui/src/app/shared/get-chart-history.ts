@@ -37,8 +37,8 @@ for (const string of collaborationStrings) {
 
 export function sortSongs(songA, songB, selectedSeries): number {
     // Sort by date, then by highest entry position
-    const song1EntryDate = songA.charts[selectedSeries][0].date
-    const song2EntryDate = songB.charts[selectedSeries][0].date
+    const song1EntryDate = songA.charts[selectedSeries].sort((a, b) => a.date > b.date ? 1 : -1)[0].date
+    const song2EntryDate = songB.charts[selectedSeries].sort((a, b) => a.date > b.date ? 1 : -1)[0].date
     if (song1EntryDate === song2EntryDate) {
       return (songA.charts[selectedSeries][0].position - songB.charts[selectedSeries][0].position)
     } else {
@@ -47,12 +47,14 @@ export function sortSongs(songA, songB, selectedSeries): number {
   }
 
 export function getChartHistory(artistInfo: Artist, selectedSeries: string) {
-    artistInfo.songs.sort((a,b) => sortSongs(a, b, selectedSeries))
+    const songs = JSON.parse(JSON.stringify(artistInfo.songs))
+    songs.sort((a,b) => sortSongs(a, b, selectedSeries))
     let bbCodeString = `[b]${artistInfo.name}[/b]\n[size=1]`
-    for (const song of artistInfo.songs) {
+    for (const song of songs) {
       const chartInfo = song.charts[selectedSeries]
       song.charts[selectedSeries].sort((a, b) => a.position - b.position);
       song.charts[selectedSeries].peak = song.charts[selectedSeries][0].position
+      song.charts[selectedSeries].sort((a, b) => a.date > b.date ? 1 : -1)
       let songString = new Date(chartInfo[0].date).getFullYear() + " " 
                         + getFormattedPeak(song.charts[selectedSeries].peak) + " " 
                         + getFormattedTitle(song.title, song.artistDisplay, artistInfo.name)
