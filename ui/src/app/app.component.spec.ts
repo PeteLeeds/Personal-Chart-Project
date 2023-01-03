@@ -1,15 +1,44 @@
-import { TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Router, Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+
+@Component({
+  template: `Series`,
+})
+class TestSeriesSelectComponent {}
+
+@Component({
+  template: `Song`,
+})
+class TestSongComponent {}
+
+@Component({
+  template: `Artist`,
+})
+class TestArtistComponent {}
+
+@Component({
+  template: `Totals`,
+})
+class TestTotalsComponent {}
+
+export const routes: Routes = [
+  { path: '', component: AppComponent },
+  { path: 'series', component: TestSeriesSelectComponent },
+  { path: 'song', component: TestSongComponent },
+  { path: 'artist', component: TestArtistComponent },
+  { path: 'totals', component: TestTotalsComponent }
+];
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
+      imports: [RouterTestingModule.withRoutes(routes)],
       declarations: [
-        AppComponent
+        AppComponent,
+        TestSeriesSelectComponent,
       ],
     }).compileComponents();
   });
@@ -32,4 +61,19 @@ describe('AppComponent', () => {
     const compiled = fixture.nativeElement;
     expect(compiled.querySelector('h1').textContent).toContain('Chart Site');
   });
+
+  it('should route correctly', fakeAsync(() => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement;
+    const buttons = compiled.querySelectorAll('a')
+    const pages = ['Series', 'Song', 'Artist', 'Totals']
+
+    buttons.forEach((button, index) => {
+      button.click()
+      tick(1)
+      const component = fixture.nativeElement.querySelector('ng-component')
+      expect(component.textContent).withContext(`route to ${pages[index]}`).toContain(pages[index])
+    })
+  }));
 });
