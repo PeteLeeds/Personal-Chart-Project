@@ -6,8 +6,8 @@
     <p><a [routerLink]="['..', 'new']">Upload New Chart</a></p>
 </div>
 <ng-container *ngIf="chartData; else loading">
-    <a *ngIf="lastChart" [routerLink]="['..', lastChart]">Previous</a>
-    <a *ngIf="nextChart" [routerLink]="['..', nextChart]">Next</a>
+    <a id="prev-chart" *ngIf="lastChart" [routerLink]="['..', lastChart]">Previous</a>
+    <a id="next-chart" *ngIf="nextChart" [routerLink]="['..', nextChart]">Next</a>
     <table>
         <tr>
             <th>Pos</th>

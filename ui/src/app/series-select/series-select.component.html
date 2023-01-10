@@ -1,7 +1,7 @@
 <h1>Select a Series</h1>
 
 <p *ngFor="let series of seriesList">
-    <a [routerLink]="['/series', series.name, 'chart']">{{series.name}}</a>
+    <a [routerLink]="[series.name, 'chart']">{{series.name}}</a>
 </p>
 
 <!--This should probably be a modal-->

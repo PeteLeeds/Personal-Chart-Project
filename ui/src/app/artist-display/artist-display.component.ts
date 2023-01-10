@@ -51,7 +51,7 @@ export class ArtistDisplayComponent implements OnInit {
           for (const chart of Object.keys(song.charts)) {
             // Sort in ascending order so that peak is at position 0
             song.charts[chart].sort((a, b) => a.position - b.position);
-            song.charts[chart].peak = song.charts[chart][0].position
+            song.peak = song.charts[chart][0].position
             // Then sort in date order
             song.charts[chart].sort((a, b) => a.date > b.date ? 1 : -1)
             if (!(this.chartSelectOptions.includes(chart))) {

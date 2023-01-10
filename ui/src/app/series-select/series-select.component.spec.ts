@@ -12,7 +12,7 @@ import { SeriesSelectComponent } from './series-select.component';
 class TestChartDisplayComponent {}
 
 const routes: Routes = [
-  { path: 'series/:id/chart', component: TestChartDisplayComponent }
+  { path: 'series/:id/chart', component: TestChartDisplayComponent },
 ];
 
 describe('SeriesSelectComponent', () => {
@@ -28,16 +28,21 @@ describe('SeriesSelectComponent', () => {
         getSeries: of([{id: '0', name: 'Test Series', charts: []}])
       }
     );
+
+    @Component({
+      selector: 'create-series-modal',
+    })
+    class MockCreateSeriesComponent {
+      public open = () => {return 'Test Series'}
+    }
+    
     await TestBed.configureTestingModule({
-      declarations: [ SeriesSelectComponent ],
+      declarations: [ SeriesSelectComponent, MockCreateSeriesComponent ],
       imports: [ HttpClientTestingModule, RouterTestingModule.withRoutes(routes) ],
       providers: [{provide: ChartService, useValue: mockChartService}]
     })
     .compileComponents();
     router = TestBed.inject(Router);
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(SeriesSelectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -58,6 +63,15 @@ describe('SeriesSelectComponent', () => {
     link.click()
     tick(1)
     const calledUrl = navigateSpy.calls.first().args[0].toString()
-    expect(calledUrl).toContain('/series/Test%20Series/chart');
+    expect(calledUrl).toContain('/Test%20Series/chart');
+  }));
+
+  it('should create series using modal', fakeAsync(() => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const link = fixture.nativeElement.querySelector('p.fake-link')
+    link.click()
+    tick(1)
+    const calledUrl = navigateSpy.calls.first().args[0].toString()
+    expect(calledUrl).toContain('/Test%20Series/chart');
   }));
 });

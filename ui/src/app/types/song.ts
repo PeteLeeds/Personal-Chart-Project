@@ -6,7 +6,7 @@ export interface Song {
     title: string;
     artists?: Artist[];
     artistDisplay: string;
-    charts: Record<string, Chart>[];
+    charts: Record<string, SongInChart[]>;
     peak?: number;
 }
 
@@ -31,7 +31,8 @@ export interface ExistingSong {
 }
 
 export interface SongInChart {
-    date: string;
+    chart?: string
+    date?: string;
     position: number;
 }
 

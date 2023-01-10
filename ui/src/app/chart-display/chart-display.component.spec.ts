@@ -1,28 +1,131 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router, Routes, UrlSegment } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { BehaviorSubject, of } from 'rxjs';
+import { ChartService } from '../services/chart.service';
 
 import { ChartDisplayComponent } from './chart-display.component';
 
 describe('ChartDisplayComponent', () => {
   let component: ChartDisplayComponent;
   let fixture: ComponentFixture<ChartDisplayComponent>;
+  let mockChartService: ChartService;
+  let router: Router;
+
+  class ActivatedRouterMock {
+    public params = of({series: 'Test Series', name: 'Test Chart'});
+    public url = new BehaviorSubject([
+      new UrlSegment('series', {}), 
+      new UrlSegment('Test Series', {}),
+      new UrlSegment('chart', {}),
+      new UrlSegment('Test Chart', {}),
+    ])
+    public snapshot = new ActivatedRouteSnapshot();
+  }
+
+  @Component({})
+  class TestSongComponent {}
+
+  @Component({})
+  class TestSeriesComponent {}
+
+  @Component({})
+  class TestChartComponent {}
+
+  const routes: Routes = [
+    { path: 'song/:id', component: TestSongComponent },
+    { path: 'series/:id', component: TestSeriesComponent },
+    { path: 'series/:id/chart/:id', component: TestChartComponent },
+  ];
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule, RouterTestingModule ],
-      declarations: [ ChartDisplayComponent ]
-    })
-    .compileComponents();
-  });
+    mockChartService = jasmine.createSpyObj<ChartService>(
+      'ChartService',
+      {
+        getChartSongs: of([
+          {
+            _id: '0', title: 'Song 1', artistDisplay: 'Artist 1',
+            charts: { 'Test Series': [{ 'chart': 'Test Chart', 'position': 1 }] }
+          },
+          {
+            _id: '1', title: 'Song 2', artistDisplay: 'Artist 2',
+            charts: { 'Test Series': [{ 'chart': 'Test Chart', 'position': 2 }] }
+          },
+          {
+            _id: '2', title: 'Song 3', artistDisplay: 'Artist 3',
+            charts: { 'Test Series': [{ 'chart': 'Test Chart', 'position': 3 }] }
+          }
+        ]),
+        getPreviousCharts: of([{'name': 'Test Chart'}, {'name': 'Test Previous Chart'}]),
+        getNextChart: of('Test Next Chart')
+      }
+    );
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ChartDisplayComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes(routes)],
+      declarations: [ChartDisplayComponent],
+      providers: [
+        {provide: ChartService, useValue: mockChartService},
+        {provide: ActivatedRoute, useValue: new ActivatedRouterMock()},
+      ]})
+      .compileComponents();
+      router = TestBed.inject(Router);
+      fixture = TestBed.createComponent(ChartDisplayComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should display songs in correct order', () => {
+    console.log('TITLES elem', fixture.nativeElement)
+    const songTitles = fixture.nativeElement.querySelectorAll('table a')
+    songTitles.forEach((item, index) => expect(item.textContent).toContain(`Song ${index + 1}`))
+  });
+
+  it('should route to correct song page on click', fakeAsync(() => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const link = fixture.nativeElement.querySelector('table a')
+    console.log('LINKY CORRECT', link)
+    link.click()
+    tick(1)
+    const calledUrl = navigateSpy.calls.first().args[0].toString()
+    expect(calledUrl).toContain('/song/0');
+  }))
+
+  it('should route back to series on click', fakeAsync(() => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const link = fixture.nativeElement.querySelector('a h1')
+    link.click()
+    tick(1)
+    const calledUrl = navigateSpy.calls.first().args[0].toString()
+    expect(calledUrl).toContain('/series/Test Series/chart/');
+  }))
+
+  it('should route to next chart correctly', fakeAsync(() => {
+    console.log('URL', router.url)
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const link = fixture.nativeElement.querySelector('#next-chart')
+    console.log('LINKY', link)
+    link.click()
+    tick(1)
+    const calledUrl = navigateSpy.calls.first().args[0].toString()
+    console.log('CALLS', navigateSpy.calls.first())
+    expect(calledUrl).toContain('/series/Test Series/chart/Test Next Chart');
+  }))
+
+  it('should route to previous chart correctly', fakeAsync(() => {
+    console.log('URL', router.url)
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const link = fixture.nativeElement.querySelector('#prev-chart')
+    link.click()
+    tick(1)
+    const calledUrl = navigateSpy.calls.first().args[0].toString()
+    console.log('CALLS', navigateSpy.calls.first())
+    expect(calledUrl).toContain('/series/Test Series/chart/Test Next Chart');
+  }))
 });

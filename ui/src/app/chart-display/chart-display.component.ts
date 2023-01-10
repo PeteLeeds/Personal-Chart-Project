@@ -34,6 +34,7 @@ export class ChartDisplayComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    console.log('ROUTE URL', this.activatedRoute.url)
 
     this.subscriptions.push(
     this.activatedRoute.params.pipe(mergeMap(params => {
@@ -53,13 +54,11 @@ export class ChartDisplayComponent implements OnInit {
         // Set songs and song stats
         const prevCharts = res.prevCharts;
         const songs = res.songs;
-        console.log('prev charts', prevCharts)
         const prevChartNames = prevCharts.map(chart => chart.name);
-        console.log('prev charts', prevCharts)
         this.chartData = songs.map((song: Song) => {
+          console.log('song', song)
           // Index '1' is correct here as '0' will be the current chart
           const currentSeries = song.charts[this.seriesName]
-          console.log('b', currentSeries, prevChartNames)
           const charts = currentSeries.filter(chart => prevChartNames.includes(chart.chart));
           const lastChartRecord = currentSeries.find(chart => chart.chart === prevChartNames[1])
           charts.sort((a, b) => a.position - b.position);
@@ -70,6 +69,7 @@ export class ChartDisplayComponent implements OnInit {
             peak: charts[0].position,
           }
         });
+        console.log('chart data', this.chartData)
       },
       (err) => {
         console.log('There was an error', err)
