@@ -49,11 +49,6 @@ export class ArtistDisplayComponent implements OnInit {
         // Get distinct set of series this artist appears in
         for (const song of this.artistInfo.songs) {
           for (const chart of Object.keys(song.charts)) {
-            // Sort in ascending order so that peak is at position 0
-            song.charts[chart].sort((a, b) => a.position - b.position);
-            song.peak = song.charts[chart][0].position
-            // Then sort in date order
-            song.charts[chart].sort((a, b) => a.date > b.date ? 1 : -1)
             if (!(this.chartSelectOptions.includes(chart))) {
               this.chartSelectOptions.push(chart);
             }
@@ -61,6 +56,16 @@ export class ArtistDisplayComponent implements OnInit {
         }
         if (initialLoad) {
           this.selectedSeries = this.chartSelectOptions[0];
+        }
+        for (const song of this.artistInfo.songs) {
+          if (!song.charts[this.selectedSeries]) {
+            continue;
+          }
+          // Sort in ascending order so that peak is at position 0
+          song.charts[this.selectedSeries].sort((a, b) => a.position - b.position);
+          song.peak = song.charts[this.selectedSeries][0].position
+          // Then sort in date order
+          song.charts[this.selectedSeries].sort((a, b) => a.date > b.date ? 1 : -1)          
         }
         this.artistInfo.songs.sort((a,b) => sortSongs(a, b, this.selectedSeries))
         // This line is needed to trigger the change on the frontend
