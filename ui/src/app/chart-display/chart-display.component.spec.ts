@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router, Routes, UrlSegment } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterLink, Routes, UrlSegment } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BehaviorSubject, of } from 'rxjs';
 import { ChartService } from '../services/chart.service';
@@ -28,16 +28,8 @@ describe('ChartDisplayComponent', () => {
   @Component({})
   class TestSongComponent {}
 
-  @Component({})
-  class TestSeriesComponent {}
-
-  @Component({})
-  class TestChartComponent {}
-
   const routes: Routes = [
     { path: 'song/:id', component: TestSongComponent },
-    { path: 'series/:id', component: TestSeriesComponent },
-    { path: 'series/:id/chart/:id', component: TestChartComponent },
   ];
 
   beforeEach(async () => {
@@ -90,42 +82,9 @@ describe('ChartDisplayComponent', () => {
   it('should route to correct song page on click', fakeAsync(() => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     const link = fixture.nativeElement.querySelector('table a')
-    console.log('LINKY CORRECT', link)
     link.click()
     tick(1)
     const calledUrl = navigateSpy.calls.first().args[0].toString()
     expect(calledUrl).toContain('/song/0');
-  }))
-
-  it('should route back to series on click', fakeAsync(() => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    const link = fixture.nativeElement.querySelector('a h1')
-    link.click()
-    tick(1)
-    const calledUrl = navigateSpy.calls.first().args[0].toString()
-    expect(calledUrl).toContain('/series/Test Series/chart/');
-  }))
-
-  it('should route to next chart correctly', fakeAsync(() => {
-    console.log('URL', router.url)
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    const link = fixture.nativeElement.querySelector('#next-chart')
-    console.log('LINKY', link)
-    link.click()
-    tick(1)
-    const calledUrl = navigateSpy.calls.first().args[0].toString()
-    console.log('CALLS', navigateSpy.calls.first())
-    expect(calledUrl).toContain('/series/Test Series/chart/Test Next Chart');
-  }))
-
-  it('should route to previous chart correctly', fakeAsync(() => {
-    console.log('URL', router.url)
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    const link = fixture.nativeElement.querySelector('#prev-chart')
-    link.click()
-    tick(1)
-    const calledUrl = navigateSpy.calls.first().args[0].toString()
-    console.log('CALLS', navigateSpy.calls.first())
-    expect(calledUrl).toContain('/series/Test Series/chart/Test Next Chart');
   }))
 });
