@@ -3,3 +3,22 @@
     color: blue;
     text-decoration: underline;
 }
+
+.select-option {
+    background-color: #eaeaea;
+    margin: 1rem 0;
+    padding: 0.25rem 1rem;
+}
+
+.select-option:hover {
+    background-color: #c3c1c1;
+}
+
+.select-option p {
+    color: black;
+    font-size: large;
+}
+
+a {
+    text-decoration: none;
+}

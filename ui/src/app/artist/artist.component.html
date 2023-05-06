@@ -3,6 +3,10 @@
 <div *ngIf="pageNumber > 1" class="fake-link" (click)="decPageNumber()">Previous Page</div>
 <div *ngIf="artistCount && artistCount > pageNumber * 20" class="fake-link" (click)="incPageNumber()">Next Page</div>
 <!--Currently no need for sort as artists only have a name-->
-<p *ngFor="let artist of artists">
-    <a [routerLink]="['/artist', artist._id]">{{artist.name}}</a>
-</p>
+<ng-container *ngFor="let artist of artists">
+    <a [routerLink]="['/artist', artist._id]">
+        <div class="select-option">
+            <p>{{artist.name}}</p>
+        </div>
+    </a>
+</ng-container>
