@@ -1,8 +1,13 @@
 <h1>Select a Series</h1>
 
-<p *ngFor="let series of seriesList">
-    <a [routerLink]="[series.name, 'chart']">{{series.name}}</a>
-</p>
+
+<ng-container *ngFor="let series of seriesList">
+    <a [routerLink]="[series.name, 'chart']">
+        <div class="select-option">
+            <p>{{series.name}}</p>
+        </div>
+    </a>
+</ng-container>
 
 <!--This should probably be a modal-->
 <p class="fake-link" (click)="openModal()">Create new series</p>
