@@ -9,6 +9,12 @@
         </ng-container>
     </select>
 </div>
-<p *ngFor="let song of songs">
-    <a [routerLink]="['/song', song._id]">{{song.artistDisplay}} - {{song.title}}</a>
-</p>
+
+<ng-container *ngFor="let song of songs">
+    <a [routerLink]="['/song', song._id]">
+        <div class="select-option">
+            <div><b>{{song.title}}</b></div>
+            <div><i>{{song.artistDisplay}}</i></div>
+        </div>
+    </a>
+</ng-container>
