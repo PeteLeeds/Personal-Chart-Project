@@ -2,9 +2,25 @@
     padding: 5px;
     display: flex;
     align-items: center;
+    background-color: #949191;
+}
+
+li {
+    float: left;
+}
+
+li a:hover {
+    background-color: #111;
+}
+
+ul {
+    list-style-type: none;
 }
 
 a {
-    background-color: 0000FF;
+    background-color: #949191;
+    text-decoration: none;
+    color: white;
     padding: 10px;
+    display: block;
 }
