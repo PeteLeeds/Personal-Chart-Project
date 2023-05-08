@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ChartService } from '../services/chart.service';
 import { SongService } from '../services/song.service';
 import { ExportToCsv } from 'export-to-csv';
@@ -21,8 +21,8 @@ export class TotalsComponent {
 
   public totalsForm = new FormGroup({
     series: new FormControl(''),
-    from: new FormControl(''),
-    to: new FormControl(''),
+    from: new FormControl('', Validators.required),
+    to: new FormControl('', Validators.required),
     includeFullChartRun: new FormControl(true),
     numberOfResults: new FormControl(100),
     estimateFuturePoints: new FormControl(true)
