@@ -3,41 +3,48 @@
     <div (click)="openModal()" title="Delete Chart"><fa-icon [icon]="faTrash" class="fa-lg"></fa-icon></div>
     <a [routerLink]="['..', 'new']" title="Upload New Chart"><fa-icon [icon]="faPlus" class="fa-lg"></fa-icon></a>
 </div>
-<a routerLink="../">
-    <h1>{{seriesName}}</h1>
-</a>
-<h2>{{chartName}}</h2>
-<ng-container *ngIf="chartData; else loading">
-    <div class="row">
-        <a class="button" id="prev-chart" *ngIf="lastChart" [routerLink]="['..', lastChart]">Previous</a>
-        <a class="button" id="next-chart" *ngIf="nextChart" [routerLink]="['..', nextChart]">Next</a>
-    </div>
-    <table>
-        <tr>
-            <th>Pos</th>
-            <th>Last Week</th>
-            <th>Artist</th>
-            <th>Title</th>
-            <th>Peak</th>
-            <th>Weeks</th>
-        </tr>
-        <!--Either need to fetch all this info separately on the server and calculate on the client
-            Or calculate on the server-->
-        <!--Last Week: Given a chart, return the immediately preceding chart and get the position for that
-            Peak: Given a chart, get all preceding charts and find the highest value within that range
-            Weeks: Given a chart, get all preceding charts and find the number that appear-->
-        <ng-container *ngFor="let song of chartData">
+<div class="centre">
+    <a routerLink="../">
+        <h1>{{seriesName}}</h1>
+    </a>
+    <h2>{{chartName}}</h2>
+    <ng-container *ngIf="chartData; else loading">
+        <div class="row">
+            <a class="button" id="prev-chart" *ngIf="lastChart" [routerLink]="['..', lastChart]">Previous</a>
+            <a class="button" id="next-chart" *ngIf="nextChart" [routerLink]="['..', nextChart]">Next</a>
+        </div>
+        <table>
             <tr>
-                <td>{{song.position}}</td>
-                <td>{{song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NEW')}}</td>
-                <td>{{song.artistDisplay}}</td>
-                <td><a [routerLink]="['/song', song._id]">{{song.title}}</a></td>
-                <td>{{song.peak}}</td>
-                <td>{{song.weeksOn}}</td>
+                <th>Pos</th>
+                <th>Last Week</th>
+                <th>Song</th>
+                <th>Peak</th>
+                <th>Weeks</th>
             </tr>
-        </ng-container>
-    </table>
-</ng-container>
+            <!--Either need to fetch all this info separately on the server and calculate on the client
+                Or calculate on the server-->
+            <!--Last Week: Given a chart, return the immediately preceding chart and get the position for that
+                Peak: Given a chart, get all preceding charts and find the highest value within that range
+                Weeks: Given a chart, get all preceding charts and find the number that appear-->
+            <ng-container *ngFor="let song of chartData">
+                <tr class="select-option">
+                    <td class="center">{{song.position}}</td>
+                    <td class="center">{{song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NEW')}}</td>
+                    <td>
+                        <a [routerLink]="['/song', song._id]">
+                            <div class="song-title">
+                                <div><b>{{song.title}}</b></div>
+                                <div><i>{{song.artistDisplay}}</i></div>
+                            </div>
+                        </a>
+                    </td>
+                    <td class="center">{{song.peak}}</td>
+                    <td class="center">{{song.weeksOn}}</td>
+                </tr>
+            </ng-container>
+        </table>
+    </ng-container>
+</div>
 
 <delete-item-modal #deleteItemModal></delete-item-modal>
 
