@@ -8,8 +8,10 @@
 </a>
 <h2>{{chartName}}</h2>
 <ng-container *ngIf="chartData; else loading">
-    <a id="prev-chart" *ngIf="lastChart" [routerLink]="['..', lastChart]">Previous</a>
-    <a id="next-chart" *ngIf="nextChart" [routerLink]="['..', nextChart]">Next</a>
+    <div class="row">
+        <a class="button" id="prev-chart" *ngIf="lastChart" [routerLink]="['..', lastChart]">Previous</a>
+        <a class="button" id="next-chart" *ngIf="nextChart" [routerLink]="['..', nextChart]">Next</a>
+    </div>
     <table>
         <tr>
             <th>Pos</th>

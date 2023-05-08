@@ -2,12 +2,6 @@ table, th, td{
     border: 1px solid blue
 }
 
-.fake-link {
-    cursor: pointer;
-    color: blue;
-    text-decoration: underline;
-}
-
 .right {
     float: right;
 }
@@ -25,4 +19,19 @@ fa-icon {
 
 fa-icon:hover {
     background-color: lightgrey;
+}
+
+.button {
+    color: white;
+    padding: 0.4rem 0;
+    background-color: black;
+    width: 7.5rem;
+    margin: 0 0.5rem 0 0;
+    text-align: center;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: rgb(46, 46, 46);
+    cursor: pointer;
 }
