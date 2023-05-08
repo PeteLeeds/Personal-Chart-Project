@@ -5,9 +5,13 @@
 <div *ngIf="pageNumber > 1" class="fake-link" (click)="decPageNumber()">Previous Page</div>
 <div  class="fake-link" (click)="incPageNumber()">Next Page</div>
 
-<p *ngFor="let chart of chartList">
-    <a [routerLink]=[chart.name]>{{chart.name}}</a>
-</p>
+<ng-container *ngFor="let chart of chartList">
+    <a [routerLink]=[chart.name]>
+        <div class="select-option">
+            <p>{{chart.name}}</p>
+        </div>
+    </a>
+</ng-container>
 
 <p class="fake-link" (click)="openModal()">Delete Series</p>
 
