@@ -1,3 +1,8 @@
+<a class="right" routerLink="new">
+    <div class="button" (click)="openModal()">
+        Create new series
+    </div>
+</a>
 <h1>Select a Series</h1>
 
 
@@ -8,8 +13,5 @@
         </div>
     </a>
 </ng-container>
-
-<!--This should probably be a modal-->
-<p class="fake-link" (click)="openModal()">Create new series</p>
 
 <create-series-modal #createSeriesModal></create-series-modal>

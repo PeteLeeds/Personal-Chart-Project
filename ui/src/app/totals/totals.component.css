@@ -1,3 +1,18 @@
 table, th, td{
     border: 1px solid blue
 }
+
+button {
+    color: white;
+    padding: 0.4rem;
+    background-color: black;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: rgb(46, 46, 46)
+}
+
+button:disabled {
+    color: grey
+}

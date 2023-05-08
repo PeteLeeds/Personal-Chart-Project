@@ -1,9 +1,15 @@
 <h1>{{seriesName}}</h1>
-<a class="right" routerLink="new">Upload new chart</a>
+<a class="right" routerLink="new">
+    <div class="button">
+        Upload new chart
+    </div>
+</a>
 <h2>Select a Chart</h2>
 
-<div *ngIf="pageNumber > 1" class="fake-link" (click)="decPageNumber()">Previous Page</div>
-<div  class="fake-link" (click)="incPageNumber()">Next Page</div>
+<div class="row">
+    <div *ngIf="pageNumber > 1" class="button" (click)="decPageNumber()">Previous Page</div>
+    <div  class="button" (click)="incPageNumber()">Next Page</div>
+</div>
 
 <ng-container *ngFor="let chart of chartList">
     <a [routerLink]=[chart.name]>
@@ -13,6 +19,6 @@
     </a>
 </ng-container>
 
-<p class="fake-link" (click)="openModal()">Delete Series</p>
+<p class="button" (click)="openModal()">Delete Series</p>
 
 <delete-item-modal #deleteItemModal></delete-item-modal>

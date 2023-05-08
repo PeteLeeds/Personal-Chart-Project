@@ -1,6 +1,4 @@
 <p>Number of songs: {{songCount}}</p>
-<div *ngIf="pageNumber > 1" class="fake-link" (click)="decPageNumber()">Previous Page</div>
-<div *ngIf="songCount && songCount > pageNumber * 20" class="fake-link" (click)="incPageNumber()">Next Page</div>
 <div>
     <b>Sort By:</b>
     <select [(ngModel)]="sortBy" (change)="reloadSongs()">
@@ -8,6 +6,10 @@
             <option>{{option}}</option>
         </ng-container>
     </select>
+</div>
+<div class="row">
+    <div *ngIf="pageNumber > 1" class="button" (click)="decPageNumber()">Previous Page</div>
+    <div *ngIf="songCount && songCount > pageNumber * 20" class="button" (click)="incPageNumber()">Next Page</div>    
 </div>
 
 <ng-container *ngFor="let song of songs">

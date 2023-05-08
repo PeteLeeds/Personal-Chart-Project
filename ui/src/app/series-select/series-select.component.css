@@ -1,7 +1,10 @@
-.fake-link {
-    cursor: pointer;
-    color: blue;
-    text-decoration: underline;
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+    margin: 1rem;
 }
 
 .select-option {
@@ -21,4 +24,14 @@
 
 a {
     text-decoration: none;
+}
+
+.button {
+    color: white;
+    padding: 0.4rem;
+    background-color: black;
+}
+
+.button:hover {
+    background-color: rgb(46, 46, 46)
 }
