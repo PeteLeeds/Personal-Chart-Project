@@ -1,10 +1,12 @@
-<a routerLink="../"><h1>{{seriesName}}</h1></a>
-<h2>{{chartName}}</h2>
-<div class="top-right">
-    <p><a routerLink="./edit">Edit Details</a></p>
-    <p (click)="openModal()" class="fake-link">Delete Chart</p>
-    <p><a [routerLink]="['..', 'new']">Upload New Chart</a></p>
+<div class="row right">
+    <a routerLink="./edit" title="Edit Details"><fa-icon [icon]="faPenSquare" class="fa-lg"></fa-icon></a>
+    <div (click)="openModal()" title="Delete Chart"><fa-icon [icon]="faTrash" class="fa-lg"></fa-icon></div>
+    <a [routerLink]="['..', 'new']" title="Upload New Chart"><fa-icon [icon]="faPlus" class="fa-lg"></fa-icon></a>
 </div>
+<a routerLink="../">
+    <h1>{{seriesName}}</h1>
+</a>
+<h2>{{chartName}}</h2>
 <ng-container *ngIf="chartData; else loading">
     <a id="prev-chart" *ngIf="lastChart" [routerLink]="['..', lastChart]">Previous</a>
     <a id="next-chart" *ngIf="nextChart" [routerLink]="['..', nextChart]">Next</a>

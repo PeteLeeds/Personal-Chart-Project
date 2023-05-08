@@ -8,8 +8,21 @@ table, th, td{
     text-decoration: underline;
 }
 
-.top-right {
-    position:absolute;
-    top: 0px;
-    right: 0px;
+.right {
+    float: right;
+}
+
+.row {
+    display: flex;
+    margin: 1rem 0;
+}
+
+fa-icon {
+    color: grey;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+fa-icon:hover {
+    background-color: lightgrey;
 }

@@ -5,6 +5,7 @@ import { mergeMap } from 'rxjs/operators';
 import { DeleteItemComponent } from '../modals/delete-series/delete-item.component';
 import { ChartService } from '../services/chart.service'
 import { Song } from '../types/song';
+import { faPenSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-chart-display',
@@ -26,6 +27,10 @@ export class ChartDisplayComponent implements OnInit {
 
   public lastChart: string;
   public nextChart: string;
+
+  faPlus = faPlus;
+  faTrash = faTrash;
+  faPenSquare = faPenSquare;
 
   public constructor(chartService: ChartService, activatedRoute: ActivatedRoute, router: Router) {
     this.chartService = chartService;
