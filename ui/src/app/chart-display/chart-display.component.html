@@ -28,8 +28,8 @@
                 Weeks: Given a chart, get all preceding charts and find the number that appear-->
             <ng-container *ngFor="let song of chartData">
                 <tr class="select-option">
-                    <td class="center">{{song.position}}</td>
-                    <td class="center">{{song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NEW')}}</td>
+                    <td class="text-center">{{song.position}}</td>
+                    <td class="text-center">{{song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NEW')}}</td>
                     <td>
                         <a [routerLink]="['/song', song._id]">
                             <div class="song-title">
@@ -38,8 +38,8 @@
                             </div>
                         </a>
                     </td>
-                    <td class="center">{{song.peak}}</td>
-                    <td class="center">{{song.weeksOn}}</td>
+                    <td class="text-center">{{song.peak}}</td>
+                    <td class="text-center">{{song.weeksOn}}</td>
                 </tr>
             </ng-container>
         </table>
