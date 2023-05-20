@@ -144,7 +144,13 @@ export class SeriesDb {
             // Find all the songs in this chart
             {
                 $match: {
-                    [`charts.${series}.chart`]: chartName
+                    [`charts.${series}`]: {
+                        $elemMatch:
+                        {
+                            chart: chartName,
+                            position: {$ne: -1}
+                        }
+                    }
                 }
             },
             // Remove all chart info for the songs besides the specified chart

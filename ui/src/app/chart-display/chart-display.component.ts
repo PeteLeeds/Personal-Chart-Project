@@ -64,8 +64,11 @@ export class ChartDisplayComponent implements OnInit {
           console.log('song', song)
           // Index '1' is correct here as '0' will be the current chart
           const currentSeries = song.charts[this.seriesName]
-          const charts = currentSeries.filter(chart => prevChartNames.includes(chart.chart));
-          const lastChartRecord = currentSeries.find(chart => chart.chart === prevChartNames[1])
+          const charts = currentSeries.filter(
+              chart => prevChartNames.includes(chart.chart) && chart.position != -1
+          );
+          console.log('CHARTS ', charts)
+          const lastChartRecord = charts.find(chart => chart.chart === prevChartNames[1])
           charts.sort((a, b) => a.position - b.position);
           return {
             ...song,
