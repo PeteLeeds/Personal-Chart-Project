@@ -111,7 +111,7 @@ export class SeriesDb {
                         [`charts.${seriesName}`]: {$elemMatch:
                             {
                                 chart: previousChart.name,
-                                position: {$ne: -1}
+                                position: {$ne: DROPOUT}
                             }
                         }
                     },
@@ -148,7 +148,7 @@ export class SeriesDb {
                         $elemMatch:
                         {
                             chart: chartName,
-                            position: {$ne: -1}
+                            position: {$ne: DROPOUT}
                         }
                     }
                 }
