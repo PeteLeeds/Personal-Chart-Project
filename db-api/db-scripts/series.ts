@@ -6,6 +6,8 @@ const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
 const CHART_COLLECTION = 'series'
 
+const DROPOUT = -1
+
 // Probably need to move this into a file common to ui and db-api
 export interface ChartParams {
     name: string;
@@ -49,20 +51,30 @@ export class SeriesDb {
     }
 
     public async newChart(seriesName: string, params: ChartParams): Promise<unknown> {
-        const newSongs: Song[] = [];
         const existing = await this.db.collection(CHART_COLLECTION).findOne({ $and: [{ "name": seriesName }, { "charts.name": params.name }] })
         if (existing) {
             throw new Error('Chart names within a series must be unique')
         }
-
+        const nextChart = await this.getNextChartByDate(seriesName, params.date)
         // Update each required song.
         let position = 1;
         for (const song of params.songs) {
+            const newChartPositions = [{ chart: params.name, position }]
             if (song.id) {
                 // Update chart position of song (series + chart)
+                // If the song isn't in the following chart, mark it as a 'dropout' in that chart
+                if (nextChart) {
+                    const songObject = await this.db.collection(SONG_COLLECTION).findOne({_id: new ObjectId(song.id as ObjectId)})
+                    const nextChartInSong = songObject.charts[seriesName].find(
+                        (chart: Record<string, string>) => chart.chart === nextChart
+                    )
+                    if (nextChartInSong.length === 0) {
+                        newChartPositions.push({chart: nextChart, position: DROPOUT})
+                    }
+                }
                 await this.db.collection(SONG_COLLECTION).updateOne(
                     { _id: new ObjectId(song.id as ObjectId) },
-                    { $push: { [`charts.${seriesName}`]: { chart: params.name, position } } }
+                    { $push: { [`charts.${seriesName}`]: {$each: newChartPositions }} }
                 )
             }
             else {
@@ -74,16 +86,42 @@ export class SeriesDb {
                 for (const artist of artists as string[]) {
                     artistIds.push(await updateArtists(this.db.collection(ARTIST_COLLECTION), artist))
                 }
+                if (nextChart) {
+                    newChartPositions.push({chart: nextChart, position: DROPOUT})
+                }
                 // Insert the new song
                 const newSong = await this.db.collection(SONG_COLLECTION).insertOne({
                     title,
                     artistIds,
                     artistDisplay,
-                    charts: { [seriesName]: [{ chart: params.name, position }] }
+                    charts: { [seriesName]: newChartPositions }
                 })
-                newSongs.push(...newSong.ops)
+                song.id = newSong.insertedId
             }
             position++;
+        }
+        // Find dropouts from the last chart and mark them as such
+        const songIds = params.songs.map(song => new ObjectId(song.id as ObjectId))
+        const previousCharts = await (await this.getPreviousChartsByDate(seriesName, params.date)).toArray()
+        const previousChart = previousCharts[0]
+        if (previousChart) {
+            await this.db.collection(SONG_COLLECTION).updateMany(
+                {
+                    $and: [{
+                        [`charts.${seriesName}`]: {$elemMatch:
+                            {
+                                chart: previousChart.name,
+                                position: {$ne: -1}
+                            }
+                        }
+                    },
+                    {
+                        _id: {$nin: songIds}
+                    }
+                    ]
+                },
+                { $push: { [`charts.${seriesName}`]: {chart: params.name, position: DROPOUT} } }
+            )
         }
         // Insert the chart
         return this.db.collection(CHART_COLLECTION).updateOne({ name: seriesName },
@@ -137,6 +175,10 @@ export class SeriesDb {
         ]).toArray())
         const chartDate = chartDateArray[0].date
         console.log('get previous', JSON.stringify(chart));
+        return this.getPreviousChartsByDate(series, chartDate)
+    }
+
+    public async getPreviousChartsByDate(series: string, chartDate: Date) {
         const aggregateDb = [
             { $match: { name: series } },
             { $unwind: "$charts" },
@@ -156,6 +198,10 @@ export class SeriesDb {
         ]).toArray())
         const chartDate = chartDateArray[0].date
         console.log('get next', JSON.stringify(chart));
+        return this.getNextChartByDate(series, chartDate)
+    }
+
+    public async getNextChartByDate(series: string, chartDate: Date) {
         const aggregateDb = [
             { $match: { name: series } },
             { $unwind: "$charts" },
