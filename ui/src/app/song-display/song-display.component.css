@@ -1,5 +1,11 @@
-table, th, td{
-    border: 1px solid blue
+.infobox {
+  background-color: lightgray;
+  font-size: large;
+  margin: 0.5rem
+}
+
+.infobox td {
+  border-spacing: 5rem
 }
 
 mat-select {
@@ -13,7 +19,10 @@ mat-select {
 }
 
 .container {
-    position: relative;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .fake-link {
@@ -24,6 +33,47 @@ mat-select {
 
 .peak {
   background-color: #D7E5F0;
+}
+
+.song-header {
+  display: flex;
+}
+
+.text-center {
+  text-align: center;
+}
+
+#song-square {
+  min-height: 10rem;
+  max-height: 10rem;
+  min-width: 10rem;
+  max-width: 10rem;
+  border: 1px solid black;
+  margin: 0.5rem;
+}
+
+#song-details {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  text-align: left;
+}
+
+.xlarge {
+  font-size: x-large;
+}
+
+.xxlarge {
+  font-size: xx-large;
+}
+
+.artist-link {
+  margin: 0 0.25rem;
+  color: black;
+}
+
+.artist-link:hover {
+  text-decoration: none;
 }
 
 /* Dropdown Button */

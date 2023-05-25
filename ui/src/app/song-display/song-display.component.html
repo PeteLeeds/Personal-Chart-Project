@@ -1,29 +1,31 @@
 <div class="container">
-    <h1>{{songInfo?.artistDisplay}} - {{songInfo?.title}}</h1>
+    <div class="song-header text-center">
+        <div id="song-square"></div>
+        <div id="song-details">
+            <div class="xlarge"><i>{{songInfo?.artistDisplay}}</i></div>
+            <div class="xxlarge"><b>{{songInfo?.title}}</b></div>
+            <div class="xlarge">Artists: 
+                <span *ngFor="let artist of songInfo?.artists">
+                    <a class="artist-link" [routerLink]="['/artist', artist._id]">{{artist.name}}</a>
+                </span>
+            </div>
+        </div>
+    </div>
     <!-- This is displayed if just looking at the song page -->
+    <h2>Chart Stats</h2>
     <div *ngIf="!editMode">
-        <table>
-            <tr>
-                <td>Title</td>
-                <td>{{songInfo?.title || ''}}</td>
-            </tr>
-            <tr>
-                <td>Artist(s)</td>
-                <td>
-                    <p *ngFor="let artist of songInfo?.artists || []">
-                        <a [routerLink]="['/artist', artist._id]">{{artist.name}}</a>
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>Weeks on Chart</td>
-                <td>{{weeksOn}}</td>
-            </tr>
-            <tr>
-                <td>Peak Position</td>
-                <td>{{peak}}</td>
-            </tr>
-        </table>
+        <div class="infobox text-center">
+            <table>
+                <tr>
+                    <td>Weeks on Chart</td>
+                    <td>Peak Position</td>
+                </tr>
+                <tr>
+                    <td>{{weeksOn}}</td>
+                    <td>{{peak}}</td>
+                </tr>
+            </table>
+        </div>
     </div>
     <!-- This is displayed when song details are being edited -->
     <div *ngIf="editMode">
