@@ -7,6 +7,8 @@ import { ChartService } from '../services/chart.service'
 import { Song } from '../types/song';
 import { faPenSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
+const DROPOUT = -1
+
 @Component({
   selector: 'app-chart-display',
   templateUrl: './chart-display.component.html',
@@ -64,8 +66,11 @@ export class ChartDisplayComponent implements OnInit {
           console.log('song', song)
           // Index '1' is correct here as '0' will be the current chart
           const currentSeries = song.charts[this.seriesName]
-          const charts = currentSeries.filter(chart => prevChartNames.includes(chart.chart));
-          const lastChartRecord = currentSeries.find(chart => chart.chart === prevChartNames[1])
+          const charts = currentSeries.filter(
+              chart => prevChartNames.includes(chart.chart) && chart.position != DROPOUT
+          );
+          console.log('CHARTS ', charts)
+          const lastChartRecord = charts.find(chart => chart.chart === prevChartNames[1])
           charts.sort((a, b) => a.position - b.position);
           return {
             ...song,

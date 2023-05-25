@@ -5,6 +5,7 @@ import { SongQueryParams } from "../types/query-params";
 
 const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
+const DROPOUT = -1
 
 export class SongDb {
 
@@ -110,6 +111,12 @@ export class SongDb {
                 initialValue: 0,
                 in: {'$add': 
                     ['$$value', 
+                    {'$cond': [
+                        {$eq: [
+                            '$$this.position',
+                            DROPOUT
+                        ]},
+                        0,
                         {'$subtract': 
                             [101, 
                             options.includeFullChartRun === 'true'
@@ -121,7 +128,7 @@ export class SongDb {
                                 ]}
                             ]
                         }
-                    ]
+                    ]}]
                 }
             }}}},
             // Add extra points if required

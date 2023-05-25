@@ -8,6 +8,8 @@ import { ArtistService } from '../services/artist.service';
 import { getChartHistory, sortSongs } from '../shared/get-chart-history';
 import { Artist } from '../types/artist';
 
+const DROPOUT = -1
+
 @Component({
   selector: 'app-artist-display',
   templateUrl: './artist-display.component.html',
@@ -61,6 +63,7 @@ export class ArtistDisplayComponent implements OnInit {
           if (!song.charts[this.selectedSeries]) {
             continue;
           }
+          song.charts[this.selectedSeries] = song.charts[this.selectedSeries].filter(chart => chart.position != DROPOUT)
           // Sort in ascending order so that peak is at position 0
           song.charts[this.selectedSeries].sort((a, b) => a.position - b.position);
           song.peak = song.charts[this.selectedSeries][0].position
