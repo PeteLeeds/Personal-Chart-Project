@@ -5,6 +5,7 @@ import { SongQueryParams } from "../types/query-params";
 
 const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
+const DROPOUT = -1
 
 export class SongDb {
 
@@ -113,7 +114,7 @@ export class SongDb {
                     {'$cond': [
                         {$eq: [
                             '$$this.position',
-                            -1
+                            DROPOUT
                         ]},
                         0,
                         {'$subtract': 
