@@ -110,6 +110,12 @@ export class SongDb {
                 initialValue: 0,
                 in: {'$add': 
                     ['$$value', 
+                    {'$cond': [
+                        {$eq: [
+                            '$$this.position',
+                            -1
+                        ]},
+                        0,
                         {'$subtract': 
                             [101, 
                             options.includeFullChartRun === 'true'
@@ -121,7 +127,7 @@ export class SongDb {
                                 ]}
                             ]
                         }
-                    ]
+                    ]}]
                 }
             }}}},
             // Add extra points if required
