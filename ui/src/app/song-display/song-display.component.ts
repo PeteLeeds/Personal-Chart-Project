@@ -78,7 +78,6 @@ export class SongDisplayComponent implements OnInit {
         this.songInfo.charts[this.selectedSeries].sort((a, b) => new Date(a.date) > new Date(b.date) ? 1 : -1)
         // Break up chart runs based on dropouts
         this.chartRuns = song.charts[this.selectedSeries].reduce((prevValue, current) => {
-          console.log('prev', prevValue, prevValue[-1])
           if (current.position == -1) {
             if (prevValue[prevValue.length - 1].length > 0) {
               prevValue.push([])
@@ -88,6 +87,9 @@ export class SongDisplayComponent implements OnInit {
           prevValue[prevValue.length - 1].push(current)
           return prevValue
         }, [[]])
+        if (this.chartRuns[this.chartRuns.length - 1].length === 0) {
+          this.chartRuns.pop()
+        }
         console.log(JSON.stringify(this.chartRuns))
         song.charts[this.selectedSeries] = song.charts[this.selectedSeries].filter(chart => chart.position != -1)
         this.weeksOn = song.charts[this.selectedSeries].length;
@@ -96,7 +98,6 @@ export class SongDisplayComponent implements OnInit {
           .position
         this.songInfo.charts[this.selectedSeries].sort((a, b) => new Date(a.date) > new Date(b.date) ? 1 : -1)
         this.songDetailsForm.setValue({ title: song.title, artistDisplay: song.artistDisplay });
-        console.log(JSON.stringify(this.chartRuns))
       }))
   }
 
