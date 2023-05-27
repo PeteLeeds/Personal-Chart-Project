@@ -5,7 +5,8 @@
                 <fa-icon [icon]="faMusic" class="fa-lg"></fa-icon>
             </div>
         </div>
-        <div id="song-details">
+        <!-- This is displayed if just looking at the song page -->
+        <div id="song-details" *ngIf="!editMode">
             <div class="xlarge"><i>{{songInfo?.artistDisplay}}</i></div>
             <div class="xxlarge"><b>{{songInfo?.title}}</b></div>
             <div class="xlarge">Artists: 
@@ -14,10 +15,34 @@
                 </span>
             </div>
         </div>
+        <!-- This is displayed when song details are being edited -->
+        <div *ngIf="editMode">
+            <div>
+                <form [formGroup]="songDetailsForm">
+        
+                    <label for="title">Title Section: </label>
+                    <input id="title" type="text" formControlName="title"><br>
+        
+                    <label for="artist-display">Artist Section: </label>
+                    <input id="artist-display" type="text" formControlName="artistDisplay">
+                    <artist-selector [artists]="artistNames" (artistsChangeEvent)="updateArtists($event)">
+                    </artist-selector>
+                </form>
+                <button (click)="updateSongDetails()">Save</button>
+                <button (click)="exitEditMode()">Cancel</button>
+            </div>
+        </div>
     </div>
-    <!-- This is displayed if just looking at the song page -->
+    <div>
+        Selected Series:
+        <select *ngIf="chartSelectOptions" [(ngModel)]="selectedSeries" (click)="reloadSongDetails()">
+            <ng-container *ngFor="let chart of chartSelectOptions">
+                <option>{{chart}}</option>
+            </ng-container>
+        </select>
+    </div>
     <h2>Chart Stats</h2>
-    <div *ngIf="!editMode">
+    <div>
         <div class="infobox text-center">
             <table>
                 <tr>
@@ -31,23 +56,6 @@
             </table>
         </div>
     </div>
-    <!-- This is displayed when song details are being edited -->
-    <div *ngIf="editMode">
-        <div>
-            <form [formGroup]="songDetailsForm">
-
-                <label for="title">Title Section: </label>
-                <input id="title" type="text" formControlName="title"><br>
-
-                <label for="artist-display">Artist Section: </label>
-                <input id="artist-display" type="text" formControlName="artistDisplay">
-                <artist-selector [artists]="artistNames" (artistsChangeEvent)="updateArtists($event)">
-                </artist-selector>
-            </form>
-            <button (click)="updateSongDetails()">Save</button>
-            <button (click)="exitEditMode()">Cancel</button>
-        </div>
-    </div>
     <div class="top-right">
         <div class="dropdown">
             <p class="fake-link">Options</p>
@@ -59,14 +67,6 @@
         </div>
     </div>
     <h2>Chart Run:</h2>
-    <div>
-        Selected Series:
-        <select *ngIf="chartSelectOptions" [(ngModel)]="selectedSeries" (click)="reloadSongDetails()">
-            <ng-container *ngFor="let chart of chartSelectOptions">
-                <option>{{chart}}</option>
-            </ng-container>
-        </select>
-    </div>
     <ng-container *ngIf="songInfo?.charts && songInfo?.charts[selectedSeries]; else loading">
         <div *ngFor="let run of chartRuns; let i = index">
             <p>Chart run {{i + 1}}</p>
