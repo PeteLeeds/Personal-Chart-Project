@@ -48,7 +48,7 @@ mat-select {
   max-height: 10rem;
   min-width: 10rem;
   max-width: 10rem;
-  border: 1px solid black;
+  background-color:lightgray;
   margin: 0.5rem;
 }
 
@@ -74,6 +74,16 @@ mat-select {
 
 .artist-link:hover {
   text-decoration: none;
+}
+
+.fa-lg {
+  font-size: 5rem;
+  color:grey
+}
+
+#center-music-note {
+  margin-top: 2rem;
+  margin-right: 0.5rem
 }
 
 /* Dropdown Button */

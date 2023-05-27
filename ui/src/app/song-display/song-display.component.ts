@@ -10,6 +10,7 @@ import { SongService } from '../services/song.service';
 import { getChartHistory } from '../shared/get-chart-history';
 import { getFullChartRun } from '../shared/get-chart-run';
 import { Song } from '../types/song';
+import { faMusic } from '@fortawesome/free-solid-svg-icons';
 
 interface ChartRun {
   run: string[];
@@ -40,6 +41,8 @@ export class SongDisplayComponent implements OnInit {
 
   public peak = 0;
   public weeksOn = 0;
+
+  public faMusic = faMusic;
 
   public songDetailsForm = new FormGroup({
     title: new FormControl(''),

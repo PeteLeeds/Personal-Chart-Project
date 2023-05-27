@@ -1,6 +1,10 @@
 <div class="container">
     <div class="song-header text-center">
-        <div id="song-square"></div>
+        <div id="song-square">
+            <div id="center-music-note">
+                <fa-icon [icon]="faMusic" class="fa-lg"></fa-icon>
+            </div>
+        </div>
         <div id="song-details">
             <div class="xlarge"><i>{{songInfo?.artistDisplay}}</i></div>
             <div class="xxlarge"><b>{{songInfo?.title}}</b></div>
