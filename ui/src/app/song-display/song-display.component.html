@@ -66,22 +66,22 @@
             </div>
         </div>
     </div>
-    <h2>Chart Run:</h2>
+    <h2>Chart History</h2>
     <ng-container *ngIf="songInfo?.charts && songInfo?.charts[selectedSeries]; else loading">
         <div *ngFor="let run of chartRuns; let i = index">
-            <p>Chart run {{i + 1}}</p>
-            <table>
-                <tr>
-                    <th>Chart</th>
-                    <th>Pos</th>
-                </tr>
-                <ng-container *ngFor="let val of run">
-                    <tr [class.peak]="val.position === peak">
-                        <td><a [routerLink]="['/series', selectedSeries, 'chart', val.chart]">{{val.chart}}</a></td>
-                        <td>{{val.position}}</td>
-                    </tr>
-                </ng-container>
-            </table>
+            <div class="text-center">
+                <p class="run-header">Chart run {{i + 1}}</p>
+                <p>{{run[0].chart}} - {{run[run.length - 1].chart}}</p>
+            </div>
+            <div class="chart-run-container">
+                <a *ngFor="let val of run" class="position-link"
+                    [routerLink]="['/series', selectedSeries, 'chart', val.chart]">
+                    <div class="position" [class.peak]="val.position === peak">
+                        <span class="tooltiptext">{{val.chart}}</span>
+                        <p><b>{{val.position}}</b></p>
+                    </div>
+                </a>
+            </div>
         </div>
         <button (click)="copyChartRun()">Copy BBCode To Clipboard</button>
     </ng-container>

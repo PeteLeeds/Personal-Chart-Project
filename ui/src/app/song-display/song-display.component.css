@@ -27,10 +27,6 @@
     text-decoration: underline;
 }
 
-.peak {
-  background-color: #D7E5F0;
-}
-
 .song-header {
   display: flex;
 }
@@ -80,6 +76,58 @@
 #center-music-note {
   margin-top: 2rem;
   margin-right: 0.5rem
+}
+
+.run-header {
+  font-size: large;
+  margin-bottom: -1rem;
+}
+
+.position {
+  height: 3.5rem;
+  width: 3.5rem;
+  background-color: rgb(169, 167, 167);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.25rem
+}
+
+.position:hover {
+  background-color: rgb(135, 134, 134);
+}
+
+.position:hover .tooltiptext {
+  visibility: visible;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  position: absolute;
+  background-color: black;
+  color: white;
+  padding: 0.5rem;
+  margin-bottom: 6rem;
+  border-radius: 10%;
+}
+
+.position-link {
+  text-decoration: none;
+}
+
+.position p {
+  color: black;
+}
+
+.peak {
+  background-color: #D7E5F0;
+}
+
+.chart-run-container {
+  margin: 0.5rem 5rem;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 /* Dropdown Button */
