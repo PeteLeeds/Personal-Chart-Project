@@ -8,10 +8,6 @@
   border-spacing: 5rem
 }
 
-mat-select {
-    background-color: green;
-}
-
 .top-right {
     position:absolute;
     top: 0px;

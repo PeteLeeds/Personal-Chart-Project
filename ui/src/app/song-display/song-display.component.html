@@ -67,16 +67,6 @@
             </ng-container>
         </select>
     </div>
-    <div *ngIf="chartSelectOptions">
-        <!--<mat-form-field appearance="fill">
-        <mat-label>Favorite food</mat-label>
-        <mat-select>
-            <mat-option *ngFor="let key of chartSelectOptions">
-                {{key}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>-->
-    </div>
     <ng-container *ngIf="songInfo?.charts && songInfo?.charts[selectedSeries]; else loading">
         <div *ngFor="let run of chartRuns; let i = index">
             <p>Chart run {{i + 1}}</p>
