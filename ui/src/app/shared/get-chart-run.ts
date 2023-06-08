@@ -1,29 +1,24 @@
 import { SongInChart } from "../types/song";
 
-const DAY_LENGTH = 24 * 60 * 60 * 1000
+const DROPOUT = -1
 
-function getChartRuns(charts: SongInChart[]): SongInChart[][] {
-    const runs = []
-    let currentRun = []
-    for (let i = 0; i < charts.length; i++) {
-        if (i === 0) {
-            // Doing this here to prevent an error when passed an empty array
-            currentRun.push(charts[i])
-            continue;
+/* Break up chart runs based on dropouts */
+export function getChartRuns(charts: SongInChart[]): SongInChart[][] {
+    charts.sort((a, b) => new Date(a.date) > new Date(b.date) ? 1 : -1)
+    const chartRuns = charts.reduce((prevValue, current) => {
+        if (current.position == DROPOUT) {
+          if (prevValue[prevValue.length - 1].length > 0) {
+            prevValue.push([])
+          }
+          return prevValue
         }
-        else {
-            if (new Date(charts[i].date) > new Date(new Date(charts[i - 1].date).getTime() + (13 * DAY_LENGTH))) {
-                runs.push(currentRun)
-                currentRun = [charts[i]]
-            } else {
-                currentRun.push(charts[i])
-            }
-        }
-    }
-    if (currentRun.length > 0) {
-        runs.push(currentRun)
-    }
-    return runs
+        prevValue[prevValue.length - 1].push(current)
+        return prevValue
+      }, [[]])
+      if (chartRuns[chartRuns.length - 1].length === 0) {
+        chartRuns.pop()
+      }
+    return chartRuns
 }
 
 function getBbCodeChartRun(charts: SongInChart[], peak: number, reEntry = false): string {
@@ -47,13 +42,18 @@ function getBbCodeChartRun(charts: SongInChart[], peak: number, reEntry = false)
     return bbCodeString;
 }
 
-export function getFullChartRun(charts: SongInChart[]) {
-    charts.sort((a, b) => new Date(a.date) > new Date(b.date) ? 1 : -1)
-    const peak = JSON.parse(JSON.stringify(charts))
-    .sort((a, b) => a.position - b.position)[0]
-    .position
-    const chartRuns = getChartRuns(charts)
-    console.log('runs', chartRuns)
+export function getFullChartRun(chartRuns: SongInChart[][]) {
+    let peak = 101;
+    for (const chartRun of chartRuns) {
+        for (const chart of chartRun) {
+            if (chart.position < peak) {
+                peak = chart.position
+            }
+            if (peak == 1) {
+                break;
+            }
+        }
+    }
     let bbCodeChartRun = ''
     for (let i = 0; i < chartRuns.length; i++) {
         const lineOfChartRun = getBbCodeChartRun(chartRuns[i], peak, i !== 0)

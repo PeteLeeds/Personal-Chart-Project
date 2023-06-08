@@ -8,14 +8,11 @@ import { MarkDuplicateComponent } from '../modals/mark-duplicate/mark-duplicate.
 import { ArtistService } from '../services/artist.service';
 import { SongService } from '../services/song.service';
 import { getChartHistory } from '../shared/get-chart-history';
-import { getFullChartRun } from '../shared/get-chart-run';
+import { getChartRuns, getFullChartRun } from '../shared/get-chart-run';
 import { Song } from '../types/song';
 import { faMusic } from '@fortawesome/free-solid-svg-icons';
 
-interface ChartRun {
-  run: string[];
-  endReached: boolean;
-}
+const DROPOUT = -1
 
 @Component({
   selector: 'app-song-display',
@@ -78,23 +75,8 @@ export class SongDisplayComponent implements OnInit {
         if (initialLoad) {
           this.selectedSeries = this.chartSelectOptions[0];
         }
-        this.songInfo.charts[this.selectedSeries].sort((a, b) => new Date(a.date) > new Date(b.date) ? 1 : -1)
-        // Break up chart runs based on dropouts
-        this.chartRuns = song.charts[this.selectedSeries].reduce((prevValue, current) => {
-          if (current.position == -1) {
-            if (prevValue[prevValue.length - 1].length > 0) {
-              prevValue.push([])
-            }
-            return prevValue
-          }
-          prevValue[prevValue.length - 1].push(current)
-          return prevValue
-        }, [[]])
-        if (this.chartRuns[this.chartRuns.length - 1].length === 0) {
-          this.chartRuns.pop()
-        }
-        console.log(JSON.stringify(this.chartRuns))
-        song.charts[this.selectedSeries] = song.charts[this.selectedSeries].filter(chart => chart.position != -1)
+        this.chartRuns = getChartRuns(song.charts[this.selectedSeries])
+        song.charts[this.selectedSeries] = song.charts[this.selectedSeries].filter(chart => chart.position != DROPOUT)
         this.weeksOn = song.charts[this.selectedSeries].length;
         this.peak = [...song.charts[this.selectedSeries]]
           .sort((a, b) => a.position - b.position)[0]
@@ -151,14 +133,14 @@ export class SongDisplayComponent implements OnInit {
   }
 
   public copyChartRun() {
-    const bbCodeChartRun = getFullChartRun(this.songInfo.charts[this.selectedSeries])
+    const bbCodeChartRun = getFullChartRun(this.chartRuns)
     this.clipboardService.copyFromContent(bbCodeChartRun)
   }
 
   public copyDisplay() {
     let display = '[color=#000000][size=5][b]#xx[/b] (xxpts)[/size][/color]'
     display += `\n\n[size=4][b]${this.songInfo.artistDisplay}[/b][/size]\n[i][size=3][b]${this.songInfo.title}[/b][/size][/i]`
-    display += `\n-\n[size=4][b]Chart Statistics[/b][/size]\n\n${getFullChartRun(this.songInfo.charts[this.selectedSeries])}\n\n`
+    display += `\n-\n[size=4][b]Chart Statistics[/b][/size]\n\n${getFullChartRun(this.chartRuns)}\n\n`
     display += `[size=4][b]Video[/b][/size]\n\n[youtube][/youtube]\n\n[size=4][b]Commentary[/b][/size]\n\n`
     const artistObservables = this.songInfo.artists.map(artist => this.artistService.getArtistById(artist._id))
     forkJoin(artistObservables).subscribe(async artists => {
