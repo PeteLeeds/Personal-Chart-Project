@@ -7,6 +7,7 @@ import { MarkDuplicateComponent } from '../modals/mark-duplicate/mark-duplicate.
 import { ArtistService } from '../services/artist.service';
 import { getChartHistory, sortSongs } from '../shared/get-chart-history';
 import { Artist } from '../types/artist';
+import { faGuitar } from '@fortawesome/free-solid-svg-icons';
 
 const DROPOUT = -1
 
@@ -27,6 +28,8 @@ export class ArtistDisplayComponent implements OnInit {
   public artistInfo: Artist;
   public selectedSeries = "";
   public chartSelectOptions: string[];
+
+  public faGuitar = faGuitar
 
   constructor(artistService: ArtistService, 
               activatedRoute: ActivatedRoute, 

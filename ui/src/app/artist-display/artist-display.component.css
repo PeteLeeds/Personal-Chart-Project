@@ -4,14 +4,92 @@
     text-decoration: underline;
 }
 
-table, th, td{
-    border: 1px solid blue
-}
-
 .top-right {
     position:absolute;
     top: 0px;
     right: 0px;
+}
+
+#artist-details {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  text-align: left;
+}
+
+#artist-square {
+  min-height: 10rem;
+  max-height: 10rem;
+  min-width: 10rem;
+  max-width: 10rem;
+  background-color:lightgray;
+  margin: 0.5rem;
+}
+
+.xxlarge {
+  font-size: 3rem;
+}
+
+.artist-header {
+  display: flex;
+}
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text-center {
+  text-align: center;
+  align-items: center;
+}
+
+.fa-lg {
+  font-size: 5rem;
+  color:grey
+}
+
+#center-guitar {
+  margin-top: 2rem;
+  margin-right: 0.5rem
+}
+
+table tr:nth-child(odd) {
+  background-color: lightgrey;
+}
+
+table tr:nth-child(even) {
+  background-color: rgb(169, 167, 167);
+}
+
+table .table-item:hover {
+  background-color: rgb(135, 134, 134);
+}
+
+table th {
+  background-color: black;
+  color: white;
+  padding: 0.25rem 0.5rem;
+}
+
+td a {
+  text-decoration: none;
+  color: black;
+}
+
+.song-title div {
+  font-size: large;
+}
+
+.song-title {
+  margin: 1rem 0;
+  padding: 0 1rem;
+}
+
+.pad {
+  padding: 0 1rem;
 }
 
 /* Dropdown Button */

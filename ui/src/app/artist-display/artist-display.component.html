@@ -1,48 +1,64 @@
-<h1>{{artistInfo.name}}</h1>
-
-<div class="top-right">
-    <div class="dropdown">
-        <p class="fake-link">Options</p>
-        <div class="dropdown-content">
-            <div class="dropdown-option" (click)="enterEditMode()">Edit Details</div>
-            <div class="dropdown-option" (click)="markDuplicate()">Mark as Duplicate</div>
+<div class="container">
+    <div class="artist-header text-center">
+        <div id="artist-square">
+            <div id="center-guitar">
+                <fa-icon [icon]="faGuitar" class="fa-lg"></fa-icon>
+            </div>
+        </div>
+        <!-- This is displayed if just looking at the song page -->
+        <div id="artist-details" *ngIf="!editMode">
+            <div class="xxlarge"><b>{{artistInfo?.name}}</b></div>
         </div>
     </div>
-</div>
+    <div class="top-right">
+        <div class="dropdown">
+            <p class="fake-link">Options</p>
+            <div class="dropdown-content">
+                <div class="dropdown-option" (click)="enterEditMode()">Edit Details</div>
+                <div class="dropdown-option" (click)="markDuplicate()">Mark as Duplicate</div>
+            </div>
+        </div>
+    </div>
 
-<h2>Songs:</h2>
-<div>
-    Selected Series:
-    <select *ngIf="chartSelectOptions" [(ngModel)]="selectedSeries" (click)="reloadArtist()">
-        <ng-container *ngFor="let chart of chartSelectOptions">
-            <option>{{chart}}</option>
-        </ng-container>
-    </select>
-</div>
-
-<ng-container *ngIf="artistInfo.songs; else loading">
-    <table>
-        <tr>
-            <th>Debut</th>
-            <th>Artist</th>
-            <th>Title</th>
-            <th>Weeks On</th>
-            <th>Peak</th>
-        </tr>
-        <ng-container *ngFor="let song of artistInfo.songs">
-            <ng-container *ngIf="song.charts[selectedSeries]">
-                <tr>
-                    <td><a [routerLink]="['/series', selectedSeries, 'chart', song.charts[selectedSeries][0].chart]">{{song.charts[selectedSeries][0].chart}}</a></td>
-                    <td>{{song.artistDisplay}}</td>
-                    <td><a [routerLink]="['/song', song._id]">{{song.title}}</a></td>
-                    <td>{{song.charts[selectedSeries].length}}</td>
-                    <td>{{song.peak}}</td>
-                </tr>
+    <div>
+        Selected Series:
+        <select *ngIf="chartSelectOptions" [(ngModel)]="selectedSeries" (click)="reloadArtist()">
+            <ng-container *ngFor="let chart of chartSelectOptions">
+                <option>{{chart}}</option>
             </ng-container>
-        </ng-container>
-    </table>
-    <button (click)="copyChartHistory()">Copy BBCode To Clipboard</button>
-</ng-container>
+        </select>
+    </div>
+    <h2>Songs:</h2>
+
+    <ng-container *ngIf="artistInfo.songs; else loading">
+        <table>
+            <tr>
+                <th>Debut</th>
+                <th>Song</th>
+                <th>Weeks On</th>
+                <th>Peak</th>
+            </tr>
+            <ng-container *ngFor="let song of artistInfo.songs">
+                <ng-container *ngIf="song.charts[selectedSeries]">
+                    <tr>
+                        <td class="table-item text-center pad"><a [routerLink]="['/series', selectedSeries, 'chart', song.charts[selectedSeries][0].chart]">{{song.charts[selectedSeries][0].chart}}</a></td>
+                        <td class="table-item">
+                            <a [routerLink]="['/song', song._id]">
+                                <div class="song-title">
+                                    <div><b>{{song.title}}</b></div>
+                                    <div><i>{{song.artistDisplay}}</i></div>
+                                </div>
+                            </a>
+                        </td>
+                        <td class="text-center">{{song.charts[selectedSeries].length}}</td>
+                        <td class="text-center">{{song.peak}}</td>
+                    </tr>
+                </ng-container>
+            </ng-container>
+        </table>
+        <button (click)="copyChartHistory()">Copy BBCode To Clipboard</button>
+    </ng-container>
+</div>
 
 <ng-template #loading>Loading...</ng-template>
 
