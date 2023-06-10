@@ -89,13 +89,21 @@ export class SongDb {
                 to.charts[series] = from.charts[series]
             } else {
                 for (const chart1 of from.charts[series]) {
-                    for (const chart2 of to.charts[series]) {
-                        if (chart1.chart === chart2.chart) {
+                    const duplicateChart = (to.charts[series] as Record<string, string | number>[]).find(
+                        chartObject => chartObject.chart == chart1.chart
+                    )
+                    if (duplicateChart) {
+                        if (duplicateChart.position == DROPOUT) {
+                            const indexOfDuplicateChart = to.charts[series].includes(duplicateChart)
+                            to.charts[series][indexOfDuplicateChart] = chart1
+                        }
+                        else if (chart1.position != DROPOUT) {
                             throw new Error('Cannot merge as both songs appear at different positions in the same chart')
                         }
+                    } else {
+                        to.charts[series].push(chart1)
                     }
                 }
-                to.charts[series] = [...to.charts[series], ...from.charts[series]]
             }
         }
         await this.db.collection(SONG_COLLECTION).updateOne({ '_id': new ObjectId(toId) }, {'$set': to})
