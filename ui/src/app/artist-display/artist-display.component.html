@@ -6,7 +6,7 @@
             </div>
         </div>
         <!-- This is displayed if just looking at the song page -->
-        <div id="artist-details" *ngIf="!editMode">
+        <div id="artist-details">
             <div class="xxlarge"><b>{{artistInfo?.name}}</b></div>
         </div>
     </div>
@@ -31,7 +31,7 @@
     <h2>Songs:</h2>
 
     <ng-container *ngIf="artistInfo.songs; else loading">
-        <table>
+        <table class="song-table">
             <tr>
                 <th>Debut</th>
                 <th>Song</th>

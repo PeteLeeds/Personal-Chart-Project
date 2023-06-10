@@ -14,7 +14,7 @@ const DROPOUT = -1
 @Component({
   selector: 'app-artist-display',
   templateUrl: './artist-display.component.html',
-  styleUrls: ['./artist-display.component.css']
+  styleUrls: ['../styles/song-table.css', './artist-display.component.css']
 })
 export class ArtistDisplayComponent implements OnInit {
   @ViewChild('markDuplicateModal') private markDuplicateModal: MarkDuplicateComponent;

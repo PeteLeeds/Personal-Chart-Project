@@ -38,36 +38,8 @@ fa-icon:hover {
     align-items: center;
 }
 
-table tr:nth-child(odd) {
-    background-color: lightgrey;
-}
-
-table tr:nth-child(even) {
-    background-color: rgb(169, 167, 167);
-}
-
 table tr:hover {
     background-color: rgb(135, 134, 134);
-}
-
-table th {
-    background-color: black;
-    color: white;
-    padding: 0.25rem 0.5rem;
-}
-
-.song-title {
-    margin: 1rem 0;
-    padding: 0 1rem;
-}
-
-td a {
-    text-decoration: none;
-}
-
-.song-title div {
-    color: black;
-    font-size: large;
 }
 
 .text-center {

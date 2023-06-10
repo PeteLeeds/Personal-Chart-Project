@@ -1,0 +1,27 @@
+.song-table td a {
+    text-decoration: none;
+    color: black;
+}
+
+.song-table th {
+    background-color: black;
+    color: white;
+    padding: 0.25rem 0.5rem;
+}
+
+.song-table tr:nth-child(odd) {
+    background-color: lightgrey;
+}
+
+.song-table tr:nth-child(even) {
+    background-color: rgb(169, 167, 167);
+}
+
+.song-table .song-title div {
+    font-size: large;
+}
+
+.song-table .song-title {
+    margin: 1rem 0;
+    padding: 0 1rem;
+}
