@@ -43,7 +43,7 @@ export class MarkDuplicateComponent implements OnInit {
   }
 
   public modalConfig: ModalConfig = {
-    modalTitle: 'Create Series',
+    modalTitle: 'Mark Duplicate',
     dismissButtonLabel: 'Close',
     closeButtonLabel: 'Mark Duplicate',
     onClose: () => new Promise<string>((resolve) => {

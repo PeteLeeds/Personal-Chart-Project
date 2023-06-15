@@ -1,26 +1,25 @@
 <ng-template #modal>
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">
+    <div class="grey-out">
+        <div class="modal-content">
+            <div class="modal-header">
                 {{ modalConfig.modalTitle }}
-            </h5>
-        </div>
-        <div class="modal-body">
-            <ng-content></ng-content>
-        </div>
-        <div class="modal-footer">
-            <button type="button" (click)="dismiss(modalConfig.returnVal)"
-                *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()"
-                [disabled]="modalConfig.disableDismissButton !== undefined && modalConfig.disableDismissButton()">
-                >
-                {{ modalConfig.dismissButtonLabel }}
-            </button>
-            <!-- Can't bind to *ngIf because it isn't a known property of button? -->
-            <button type="button" class="btn btn-outline-primary" (click)="close()"
-                *ngIf="modalConfig.hideCloseButton === undefined || !modalConfig.hideCloseButton()"
-                [disabled]="modalConfig.disableCloseButton !== undefined && modalConfig.disableCloseButton()">
-                {{ modalConfig.closeButtonLabel }}
-            </button>
+            </div>
+            <div class="modal-body">
+                <ng-content></ng-content>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button" (click)="dismiss(modalConfig.returnVal)"
+                    *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()"
+                    [disabled]="modalConfig.disableDismissButton !== undefined && modalConfig.disableDismissButton()">
+                    {{ modalConfig.dismissButtonLabel }}
+                </button>
+                <!-- Can't bind to *ngIf because it isn't a known property of button? -->
+                <button type="button" class="button" (click)="close()"
+                    *ngIf="modalConfig.hideCloseButton === undefined || !modalConfig.hideCloseButton()"
+                    [disabled]="modalConfig.disableCloseButton !== undefined && modalConfig.disableCloseButton()">
+                    {{ modalConfig.closeButtonLabel }}
+                </button>
+            </div>
         </div>
     </div>
 </ng-template>
