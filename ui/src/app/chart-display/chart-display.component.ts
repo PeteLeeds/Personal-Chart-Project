@@ -12,7 +12,7 @@ const DROPOUT = -1
 @Component({
   selector: 'app-chart-display',
   templateUrl: './chart-display.component.html',
-  styleUrls: [ '../styles/song-table.css', './chart-display.component.css']
+  styleUrls: [ '../styles/common-styles.css', './chart-display.component.css']
 })
 
 export class ChartDisplayComponent implements OnInit {

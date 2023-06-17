@@ -7,7 +7,7 @@ import { Song } from '../types/song';
 @Component({
   selector: 'app-song',
   templateUrl: './song.component.html',
-  styleUrls: ['./song.component.css']
+  styleUrls: ['../styles/common-styles.css', './song.component.css']
 })
 export class SongComponent implements OnInit {
 

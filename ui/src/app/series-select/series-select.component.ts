@@ -8,7 +8,7 @@ import { ChartService } from '../services/chart.service';
 @Component({
   selector: 'app-series-select',
   templateUrl: './series-select.component.html',
-  styleUrls: ['./series-select.component.css']
+  styleUrls: ['../styles/common-styles.css', './series-select.component.css']
 })
 export class SeriesSelectComponent implements OnInit {
   @ViewChild('createSeriesModal') private createSeriesModal: CreateSeriesComponent;

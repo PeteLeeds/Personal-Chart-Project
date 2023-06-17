@@ -32,7 +32,7 @@
         <label>Return top:</label>
         <input type="text" value="100" formControlName="numberOfResults">
     </div>
-    <td><button type="submit" class="button" [disabled]="!totalsForm.valid">Submit</button></td>
+    <td><button type="submit" [disabled]="!totalsForm.valid">Submit</button></td>
 </form>
 
 <div *ngIf="leaderboard.length > 0">

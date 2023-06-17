@@ -8,7 +8,7 @@ import { getChartRuns, getFullChartRun } from '../shared/get-chart-run';
 @Component({
   selector: 'totals',
   templateUrl: './totals.component.html',
-  styleUrls: ['./totals.component.css']
+  styleUrls: ['../styles/common-styles.css', './totals.component.css']
 })
 export class TotalsComponent {
 

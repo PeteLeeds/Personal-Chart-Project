@@ -5,7 +5,7 @@ import { ModalConfig } from '../modal.config';
 @Component({
   selector: 'custom-modal',
   templateUrl: './modal-template.component.html',
-  styleUrls: ['./modal-template.component.scss']
+  styleUrls: ['../../styles/common-styles.css', './modal-template.component.scss']
 })
 export class ModalTemplateComponent implements OnInit {
   @Input() public modalConfig: ModalConfig

@@ -10,7 +10,7 @@ import { Chart } from '../types/chart';
 @Component({
   selector: 'app-chart-select',
   templateUrl: './chart-select.component.html',
-  styleUrls: ['./chart-select.component.css']
+  styleUrls: ['../styles/common-styles.css', './chart-select.component.css']
 })
 export class ChartSelectComponent implements OnInit {
   @ViewChild('deleteItemModal') private deleteItemModal: DeleteItemComponent;

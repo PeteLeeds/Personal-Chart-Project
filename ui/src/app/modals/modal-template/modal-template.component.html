@@ -8,13 +8,13 @@
                 <ng-content></ng-content>
             </div>
             <div class="modal-footer">
-                <button type="button" class="button" (click)="dismiss(modalConfig.returnVal)"
+                <button type="button" (click)="dismiss(modalConfig.returnVal)"
                     *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()"
                     [disabled]="modalConfig.disableDismissButton !== undefined && modalConfig.disableDismissButton()">
                     {{ modalConfig.dismissButtonLabel }}
                 </button>
                 <!-- Can't bind to *ngIf because it isn't a known property of button? -->
-                <button type="button" class="button" (click)="close()"
+                <button type="button" (click)="close()"
                     *ngIf="modalConfig.hideCloseButton === undefined || !modalConfig.hideCloseButton()"
                     [disabled]="modalConfig.disableCloseButton !== undefined && modalConfig.disableCloseButton()">
                     {{ modalConfig.closeButtonLabel }}
