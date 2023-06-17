@@ -94,7 +94,7 @@ export class SongDb {
                     )
                     if (duplicateChart) {
                         if (duplicateChart.position == DROPOUT) {
-                            const indexOfDuplicateChart = to.charts[series].includes(duplicateChart)
+                            const indexOfDuplicateChart = to.charts[series].indexOf(duplicateChart)
                             to.charts[series][indexOfDuplicateChart] = chart1
                         }
                         else if (chart1.position != DROPOUT) {
