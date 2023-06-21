@@ -24,7 +24,6 @@ export class ArtistService {
     }
 
     public getArtists(options: Record<string, string>): Observable<Artist[]> {
-        // page: number, sortBy: string, limit: number
         return this.httpClient.get<Artist[]>(`${BASE_URL}/artist/find?${getQueryString(options)}`);
     }
 
