@@ -27,11 +27,20 @@ export class SearchComponent {
   public search(): void {
     console.log('search', this.title, this.artist, this.options)
     if (this.options.type === 'song') {
-      this.songService.searchSongs(this.title, this.artist, this.options.returnCount)
+      const queryOptions = {
+        title: this.title,
+        artist: this.artist,
+        limit: this.options.returnCount.toString()
+      }
+      this.songService.getSongs(queryOptions)
       .subscribe(res => this.changeEvent.emit(res))
     }
     else {
-      this.artistService.searchArtists(this.artist, this.options.returnCount)
+      const queryOptions = {
+        name: this.artist,
+        limit: this.options.returnCount.toString()
+      }
+      this.artistService.getArtists(queryOptions)
       .subscribe(res => this.changeEvent.emit(res))
     }
   }

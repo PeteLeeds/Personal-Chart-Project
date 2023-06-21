@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { Artist } from "../types/artist";
+import { getQueryString } from "../shared/get-query-string";
 
 const BASE_URL = '/database'
 
@@ -22,8 +23,9 @@ export class ArtistService {
             (`${BASE_URL}/artist?id=${id}${seriesName ? `&seriesName=${seriesName}` : ''}`);
     }
 
-    public getArtists(page: number, sortBy: string, limit: number): Observable<Artist[]> {
-        return this.httpClient.get<Artist[]>(`${BASE_URL}/artist/find?pageNumber=${page}&limit=${limit}&sortBy=${sortBy}`);
+    public getArtists(options: Record<string, string>): Observable<Artist[]> {
+        // page: number, sortBy: string, limit: number
+        return this.httpClient.get<Artist[]>(`${BASE_URL}/artist/find?${getQueryString(options)}`);
     }
 
     public getArtistCount(): Observable<number> {
@@ -34,10 +36,6 @@ export class ArtistService {
             map((res) => +res.headers.get("X-Count"))
           );
       }
-
-    public searchArtists(nameString: string, count: number): Observable<Artist[]> {
-        return this.httpClient.get<Artist[]>(`${BASE_URL}/artist/find?name=${nameString}&limit=${count}`)
-    }
 
     public mergeArtists(fromId: string, toId: string): Observable<Artist[]> {
         return this.httpClient.delete<Artist[]>(`${BASE_URL}/artist/merge/${fromId}/${toId}`)

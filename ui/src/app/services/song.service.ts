@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { CheckedSong, Song } from '../types/song';
 import { catchError, map } from 'rxjs/operators';
+import { getQueryString } from '../shared/get-query-string';
 
 const BASE_URL = '/database'
 
@@ -15,16 +16,6 @@ export class SongService {
 
   constructor(httpClient: HttpClient) {
     this.httpClient = httpClient;
-  }
-
-  private getQueryString(params: Record<string, string>) {
-    let queryString = ''
-    Object.entries(params).forEach(([key, value]) => {
-      console.log('keys', key, value)
-      queryString += queryString.length !== 0 ? '&' : ''
-      queryString += `${key}=${value}`
-    });
-    return queryString
   }
 
   public getSongById(songId: string, seriesName?: string): Observable<Song> {
@@ -49,8 +40,8 @@ export class SongService {
     }), catchError(() => of({ songString, pos, exists: false })))
   }
 
-  public getSongs(sortBy: string, page: number, count: number): Observable<Song[]> {
-    return this.httpClient.get<Song[]>(`${BASE_URL}/song/find?sortBy=${sortBy}&pageNumber=${page}&limit=${count}`);
+  public getSongs(options: Record<string, string>): Observable<Song[]> {
+    return this.httpClient.get<Song[]>(`${BASE_URL}/song/find?${getQueryString(options)}`);
   }
 
   public getSongCount(): Observable<number> {
@@ -68,10 +59,6 @@ export class SongService {
     )
   }
 
-  public searchSongs(title: string, artist: string, count: number): Observable<Song[]> {
-    return this.httpClient.get<Song[]>(`${BASE_URL}/song/find?title=${title}&artist=${artist}&limit=${count}`)
-  }
-
   public mergeSongs(fromId: string, toId: string) {
     const url = `${BASE_URL}/song/merge/${fromId}/${toId}`
     console.log('merge songs', url)
@@ -79,6 +66,6 @@ export class SongService {
   }
 
   public getLeaderboard(options: Record<string, string>) {
-    return this.httpClient.get<Song[]>(`${BASE_URL}/song/totals?${this.getQueryString(options)}`)
+    return this.httpClient.get<Song[]>(`${BASE_URL}/song/totals?${getQueryString(options)}`)
   }
 }

@@ -42,8 +42,13 @@ export class ArtistComponent implements OnInit {
   }
 
   public reloadArtists() {
+    const queryOptions = {
+      pageNumber: (this.pageNumber - 1).toString(),
+      limit: '20',
+      sortBy: 'name'
+    }
     forkJoin({
-      artists: this.artistService.getArtists(this.pageNumber - 1, 'name', 20),
+      artists: this.artistService.getArtists(queryOptions),
       artistCount: this.artistService.getArtistCount()
     }).subscribe(res => {
       this.artists = res.artists;
