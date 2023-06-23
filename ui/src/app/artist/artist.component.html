@@ -1,5 +1,5 @@
 <p>Number of artists: {{artistCount}}</p>
-<search [options]="searchOptions" (changeEvent)="setDisplayedArtists($event)"></search>
+<search [type]="'artist'" (changeEvent)="setParams($event)"></search>
 <div class="row">
     <div *ngIf="pageNumber > 1" class="button" (click)="decPageNumber()">Previous Page</div>
     <div *ngIf="artistCount && artistCount > pageNumber * 20" class="button" (click)="incPageNumber()">Next Page</div>

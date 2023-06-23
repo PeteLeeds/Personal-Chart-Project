@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { SongService } from '../services/song.service';
-import { SearchOptions } from '../types/search-options';
 import { Song } from '../types/song';
 
 @Component({

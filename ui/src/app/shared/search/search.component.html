@@ -1,10 +1,10 @@
-<div *ngIf="options">
-    <div *ngIf="options.type === 'song'">
+<div *ngIf="type">
+    <div *ngIf="type === 'song'">
         Title:
-        <input type="text" [(ngModel)]="title" (input)="search()" />
+        <input type="text" [(ngModel)]="title" (input)="setParams()" />
     </div>
     <div>
         Artist:
-        <input type="text" [(ngModel)]="artist" (input)="search()" />
+        <input type="text" [(ngModel)]="artist" (input)="setParams()" />
     </div>
 </div>

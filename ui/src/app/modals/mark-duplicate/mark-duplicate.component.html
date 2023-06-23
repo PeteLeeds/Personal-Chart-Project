@@ -1,6 +1,6 @@
 <custom-modal #modal [modalConfig]="modalConfig">
     <b>Please search for the {{type}} this is a duplicate of:</b>
-    <search [options]="searchOptions" (changeEvent)="setSuggestions($event)"></search>
+    <search [type]="type" (changeEvent)="reloadSuggestions($event)"></search>
     <div (click)="selectItem(item)" 
         [ngClass]="item._id === selectedId ? 'bold' : 'fake-link'" 
         *ngFor="let item of suggestions">

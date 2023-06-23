@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ArtistService } from 'src/app/services/artist.service';
 import { SongService } from 'src/app/services/song.service';
-import { SearchOptions } from 'src/app/types/search-options';
 import { Song } from 'src/app/types/song';
 import { ModalTemplateComponent } from '../modal-template/modal-template.component';
 import { ModalConfig } from '../modal.config';
+import { Observable } from 'rxjs';
+import { Artist } from 'src/app/types/artist';
 
 @Component({
   selector: 'mark-duplicate-modal',
@@ -22,7 +23,6 @@ export class MarkDuplicateComponent implements OnInit {
   public selectedId = ''
   private id = ''
   public type: 'artist' | 'song'
-  public searchOptions: SearchOptions
 
   constructor(songService: SongService, artistService: ArtistService) {
     this.songService = songService
@@ -35,10 +35,6 @@ export class MarkDuplicateComponent implements OnInit {
     }
     this.type = type
     this.id = id
-    this.searchOptions = {
-      type: this.type,
-      returnCount: 10
-    }
     return this.baseModal.open();
   }
 
@@ -57,8 +53,16 @@ export class MarkDuplicateComponent implements OnInit {
     })
   }
 
-  public setSuggestions(suggestions) {
-    this.suggestions = suggestions
+  public reloadSuggestions(params: Record<string, string>) {
+    const queryOptions = {
+      ...params,
+      limit: '10',
+      sortBy: 'name'
+    }
+    const suggestionObservable = (this.type == 'artist'
+      ? this.artistService.getArtists(queryOptions)
+      : this.songService.getSongs(queryOptions)) as Observable<Artist[] | Song[]>
+    suggestionObservable.subscribe((suggestions) => this.suggestions = suggestions)
   }
 
   public selectItem(song: Song): void {

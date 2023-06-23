@@ -14,10 +14,7 @@ export class ArtistComponent implements OnInit {
   public pageNumber = 1;
   public artists: Artist[];
 
-  public searchOptions = {
-    type: 'artist',
-    returnCount: 20
-  }
+  public searchParams = {}
 
   constructor(artistService: ArtistService) {
     this.artistService = artistService;
@@ -41,12 +38,20 @@ export class ArtistComponent implements OnInit {
     this.artists = artists
   }
 
+  public setParams(params: Record<string, string>) {
+    this.searchParams = params
+    this.pageNumber = 1
+    this.reloadArtists()
+  }
+
   public reloadArtists() {
     const queryOptions = {
+      ...this.searchParams,
       pageNumber: (this.pageNumber - 1).toString(),
       limit: '20',
       sortBy: 'name'
     }
+    console.log(queryOptions)
     forkJoin({
       artists: this.artistService.getArtists(queryOptions),
       artistCount: this.artistService.getArtistCount()
