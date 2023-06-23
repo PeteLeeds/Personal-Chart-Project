@@ -1,4 +1,5 @@
 <p>Number of songs: {{songCount}}</p>
+<search [type]="'song'" (changeEvent)="setParams($event)"></search>
 <div>
     <b>Sort By:</b>
     <select [(ngModel)]="sortBy" (change)="reloadSongs()">
