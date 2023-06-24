@@ -9,7 +9,7 @@ describe('sort songs', () => {
             charts: {
                 [SELECTED_SERIES]: [
                     {
-                        'date': new Date('2023-01-01')
+                        'date': '2023-01-01T00:00:00.000Z'
                     }
                 ]
             }
@@ -18,7 +18,7 @@ describe('sort songs', () => {
             charts: {
                 [SELECTED_SERIES]: [
                     {
-                        'date': new Date('2022-01-01')
+                        'date': '2022-01-01T00:00:00.000Z'
                     }
                 ]
             }
@@ -32,10 +32,10 @@ describe('sort songs', () => {
             charts: {
                 [SELECTED_SERIES]: [
                     {
-                        'date': new Date('2023-01-01')
+                        'date': '2023-01-01T00:00:00.000Z'
                     },
                     {
-                        'date': new Date('2021-01-01')
+                        'date': '2021-01-01T00:00:00.000Z'
                     }
                 ]
             }
@@ -44,11 +44,11 @@ describe('sort songs', () => {
             charts: {
                 [SELECTED_SERIES]: [
                     {
-                        'date': new Date('2022-01-01')
+                        'date': '2022-01-01T00:00:00.000Z'
                         
                     },
                     {
-                        'date': new Date('2022-01-08')
+                        'date': '2022-01-08T00:00:00.000Z'
                     }
                 ]
             }
@@ -62,10 +62,10 @@ describe('sort songs', () => {
             charts: {
                 [SELECTED_SERIES]: [
                     {
-                        'date': new Date('2023-01-01')
+                        'date': '2023-01-01T00:00:00.000Z'
                     },
                     {
-                        'date': new Date('2021-01-01'),
+                        'date': '2021-01-01T00:00:00.000Z',
                         'position': 5
                     }
                 ]
@@ -75,11 +75,11 @@ describe('sort songs', () => {
             charts: {
                 [SELECTED_SERIES]: [
                     {
-                        'date': new Date('2022-01-01')
+                        'date': '2022-01-01T00:00:00.000Z'
                         
                     },
                     {
-                        'date': new Date('2021-01-01'),
+                        'date': '2021-01-01T00:00:00.000Z',
                         'position': 1
                     }
                 ]

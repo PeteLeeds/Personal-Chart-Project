@@ -35,10 +35,15 @@ for (const string of collaborationStrings) {
     return songTitle;
 }
 
+function getEarliestDate(song, selectedSeries) {
+  const chartsSortedByDate = song.charts[selectedSeries].sort((a, b) => new Date(a.date) > new Date(b.date) ? 1 : -1)
+  return new Date(chartsSortedByDate[0].date)
+}
+
 export function sortSongs(songA, songB, selectedSeries): number {
     // Sort by date, then by highest entry position
-    const song1EntryDate = songA.charts[selectedSeries].sort((a, b) => a.date > b.date ? 1 : -1)[0].date
-    const song2EntryDate = songB.charts[selectedSeries].sort((a, b) => a.date > b.date ? 1 : -1)[0].date
+    const song1EntryDate = getEarliestDate(songA, selectedSeries)
+    const song2EntryDate = getEarliestDate(songB, selectedSeries)
     if (song1EntryDate.toDateString() === song2EntryDate.toDateString()) {
       return (songA.charts[selectedSeries][0].position - songB.charts[selectedSeries][0].position)
     } else {
