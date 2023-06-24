@@ -1,0 +1,95 @@
+{
+    "_id": "638bbba594fd773d5c63946a",
+    "name": "7Chariot",
+    "songs": [
+        {
+            "_id": "638bbba594fd773d5c63946b",
+            "title": "Bad Dreams (ft. 7Chariot)",
+            "artistIds": [
+                "6372a32169aed00c443a0a83",
+                "638bbba594fd773d5c63946a"
+            ],
+            "artistDisplay": "Bakermat",
+            "charts": {
+                "test series": [
+                    {
+                        "chart": "Sat Jan 02 2021",
+                        "position": 21,
+                        "date": "2021-01-02T00:00:00.000Z"
+                    },
+                    {
+                        "chart": "Sat Jan 09 2021",
+                        "position": 21,
+                        "date": "2021-01-09T00:00:00.000Z"
+                    },
+                    {
+                        "chart": "Sat Jan 16 2021",
+                        "position": 19,
+                        "date": "2021-01-16T00:00:00.000Z"
+                    },
+                    {
+                        "chart": "Sat Jan 23 2021",
+                        "position": 21,
+                        "date": "2021-01-23T00:00:00.000Z"
+                    },
+                    {
+                        "chart": "Sat Jan 30 2021",
+                        "position": 23,
+                        "date": "2021-01-30T00:00:00.000Z"
+                    },
+                    {
+                        "chart": "Sat Feb 06 2021",
+                        "position": 24,
+                        "date": "2021-02-06T00:00:00.000Z"
+                    },
+                    {
+                        "chart": "Sat Feb 13 2021",
+                        "position": 25,
+                        "date": "2021-02-13T00:00:00.000Z"
+                    },
+                    {
+                        "chart": "Sat Feb 20 2021",
+                        "position": 24,
+                        "date": "2021-02-20T00:00:00.000Z"
+                    },
+                    {
+                        "chart": "Sat Feb 27 2021",
+                        "position": 26,
+                        "date": "2021-02-27T00:00:00.000Z"
+                    },
+                    {
+                        "chart": "Sat Mar 06 2021",
+                        "position": 31,
+                        "date": "2021-03-06T00:00:00.000Z"
+                    },
+                    {
+                        "chart": "Sat Mar 13 2021",
+                        "position": 36,
+                        "date": "2021-03-13T00:00:00.000Z"
+                    },
+                    {
+                        "chart": "Sat Mar 20 2021",
+                        "position": 44,
+                        "date": "2021-03-20T00:00:00.000Z"
+                    },
+                    {
+                        "chart": "Sat Mar 27 2021",
+                        "position": 52,
+                        "date": "2021-03-27T00:00:00.000Z"
+                    },
+                    {
+                        "chart": "Sat Apr 03 2021",
+                        "position": 68,
+                        "date": "2021-04-02T23:00:00.000Z"
+                    },
+                    {
+                        "chart": "Sat Apr 10 2021",
+                        "position": 89,
+                        "date": "2021-04-09T23:00:00.000Z"
+                    }
+                ]
+            },
+            "peak": 19
+        }
+    ]
+}

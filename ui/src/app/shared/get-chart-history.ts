@@ -39,7 +39,7 @@ export function sortSongs(songA, songB, selectedSeries): number {
     // Sort by date, then by highest entry position
     const song1EntryDate = songA.charts[selectedSeries].sort((a, b) => a.date > b.date ? 1 : -1)[0].date
     const song2EntryDate = songB.charts[selectedSeries].sort((a, b) => a.date > b.date ? 1 : -1)[0].date
-    if (song1EntryDate === song2EntryDate) {
+    if (song1EntryDate.toDateString() === song2EntryDate.toDateString()) {
       return (songA.charts[selectedSeries][0].position - songB.charts[selectedSeries][0].position)
     } else {
       return (song1EntryDate > song2EntryDate ? 1 : -1)
