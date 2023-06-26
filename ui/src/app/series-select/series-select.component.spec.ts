@@ -53,13 +53,13 @@ describe('SeriesSelectComponent', () => {
   });
 
   it('should contain charts passed in', () => {
-    const link = fixture.nativeElement.querySelector('a')
+    const link = fixture.nativeElement.querySelector('div.select-option')
     expect(link.textContent).toContain('Test Series');
   });
 
   it('should route to chart component correctly', fakeAsync(() => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-    const link = fixture.nativeElement.querySelector('a')
+    const link = fixture.nativeElement.querySelector('div.select-option')
     link.click()
     tick(1)
     const calledUrl = navigateSpy.calls.first().args[0].toString()
@@ -68,7 +68,7 @@ describe('SeriesSelectComponent', () => {
 
   it('should create series using modal', fakeAsync(() => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-    const link = fixture.nativeElement.querySelector('p.fake-link')
+    const link = fixture.nativeElement.querySelector('div.button')
     link.click()
     tick(1)
     const calledUrl = navigateSpy.calls.first().args[0].toString()
