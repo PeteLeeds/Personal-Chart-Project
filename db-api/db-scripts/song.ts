@@ -56,8 +56,8 @@ export class SongDb {
     public async findSong(details: string) {
         console.log('find song', details)
         const indexOfFirstHyphen = details.indexOf(' - ')
-        const artistDisplay = details.slice(0, indexOfFirstHyphen);
-        const title = details.slice(indexOfFirstHyphen + 3);
+        const artistDisplay = details.slice(0, indexOfFirstHyphen).trim();
+        const title = details.slice(indexOfFirstHyphen + 3).trim();
         return this.db.collection(SONG_COLLECTION).findOne({ $and: [{ artistDisplay }, { title }] })
     }
 
