@@ -22,7 +22,7 @@ export class ChartRouter {
         router.get('/:name', async (req, res) => {
             console.log('list charts')
             res.json(
-                await (res.locals.db as Database).seriesDb.getChartsInSeries(req.params.name, parseInt(req.query.page as string))
+                await (res.locals.db as Database).seriesDb.getChartsInSeries(req.params.name, req.query as Record<string, string>)
             )
         })
 

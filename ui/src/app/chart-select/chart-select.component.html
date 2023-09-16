@@ -7,6 +7,12 @@
 <h2>Select a Chart</h2>
 
 <div class="row">
+    <p>Order By:</p>
+    <div class="toggle" [class.toggle-selected]="sortOrder == '1'" (click)="setSortOrder('1')">Ascending</div>
+    <div class="toggle" [class.toggle-selected]="sortOrder == '-1'" (click)="setSortOrder('-1')">Descending</div>
+</div>
+
+<div class="row">
     <div *ngIf="pageNumber > 1" class="button" (click)="decPageNumber()">Previous Page</div>
     <div  class="button" (click)="incPageNumber()">Next Page</div>
 </div>

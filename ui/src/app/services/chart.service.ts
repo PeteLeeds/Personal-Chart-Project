@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Chart, ChartParams } from '../types/chart';
 import { Song } from '../types/song';
 import { Series } from '../types/series';
+import { getQueryString } from '../shared/get-query-string';
 
 const BASE_URL = '/database'
 
@@ -22,8 +23,9 @@ export class ChartService {
     return this.httpClient.get<Series[]>(`${BASE_URL}/series/`)
   }
 
-  public getChartsInSeries(name: string, page: number): Observable<Series> {
-    return this.httpClient.get<Series>(`${BASE_URL}/series/${name}?page=${page}`)
+  public getChartsInSeries(name: string, page: number, order: string): Observable<Series> {
+    const queryParams = {page: page.toString(), order}
+    return this.httpClient.get<Series>(`${BASE_URL}/series/${name}?${getQueryString(queryParams)}`)
   }
 
   public createSeries(name: string): Observable<unknown> {

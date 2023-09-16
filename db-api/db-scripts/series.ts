@@ -31,12 +31,14 @@ export class SeriesDb {
         return this.db.collection(SONG_COLLECTION).find().toArray()
     }*/
 
-    public getChartsInSeries(seriesName: string, page: number) {
+    public getChartsInSeries(seriesName: string, params: Record<string, string>) {
+        const page = parseInt(params.page)
+        const order = parseInt(params.order)
         return this.db.collection(CHART_COLLECTION).aggregate([
             { '$match': { name: seriesName } },
             {'$unwind': '$charts'},
             {'$replaceRoot': {'newRoot': '$charts'}},
-            {'$sort': {'date': 1}},
+            {'$sort': {'date': order}},
             {'$skip': page * 20},
             {'$limit': 20}
         ]).toArray()

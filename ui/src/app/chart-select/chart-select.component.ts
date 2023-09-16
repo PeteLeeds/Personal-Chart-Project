@@ -21,6 +21,7 @@ export class ChartSelectComponent implements OnInit {
   public chartList = []
   public pageNumber = 1;
   public seriesName: string
+  public sortOrder = '-1'
 
   public modalConfig: ModalConfig = { modalTitle: 'Create new Series', dismissButtonLabel: 'dismiss', closeButtonLabel: 'close' }
 
@@ -48,7 +49,7 @@ export class ChartSelectComponent implements OnInit {
     this.activatedRoute.params.pipe(mergeMap(params => {
       if (params.series) {
         this.seriesName = params.series
-        return this.chartService.getChartsInSeries(params.series, this.pageNumber - 1)
+        return this.chartService.getChartsInSeries(params.series, this.pageNumber - 1, this.sortOrder)
       }
       return of([])
     })).subscribe((charts: Chart[]) => {
@@ -61,6 +62,12 @@ export class ChartSelectComponent implements OnInit {
     await this.deleteItemModal.open(this.seriesName)
     // When modal closes, navigate to 'series' page
     this.router.navigate(['../..'], { relativeTo: this.activatedRoute })
+  }
+
+  public setSortOrder(sortOrder: string) {
+    this.sortOrder = sortOrder
+    this.pageNumber = 1
+    this.reloadSeries()
   }
 
 
