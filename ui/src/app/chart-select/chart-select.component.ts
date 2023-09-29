@@ -53,7 +53,7 @@ export class ChartSelectComponent implements OnInit {
       }
       return of([])
     })).subscribe((charts: Chart[]) => {
-      this.chartList = charts.sort((a, b) => a.date > b.date ? 1 : -1)
+      this.chartList = charts
     })
   }
 
