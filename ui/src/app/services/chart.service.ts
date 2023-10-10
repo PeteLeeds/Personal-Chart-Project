@@ -45,8 +45,9 @@ export class ChartService {
     return this.httpClient.post(`${BASE_URL}/series/${seriesName}/chart`, {params})
   }
 
-  public getChartSongs(seriesName: string, chartName: string): Observable<Song[]> {
-    return this.httpClient.get<Song[]>(`${BASE_URL}/series/${seriesName}/chart/${chartName}`)
+  public getChartSongs(seriesName: string, chartName: string, chartSize?: number): Observable<Song[]> {
+    const extraParam = chartSize ? `?size=${chartSize}` : ''
+    return this.httpClient.get<Song[]>(`${BASE_URL}/series/${seriesName}/chart/${chartName}${extraParam}`)
   }
 
   public getPreviousCharts(seriesName: string, chartName: string): Observable<Record<string, unknown>[]> {

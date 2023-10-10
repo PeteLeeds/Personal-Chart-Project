@@ -58,7 +58,7 @@ export class ChartRouter {
             console.log('Search new chart', req.params.name, req.params.chartName)
             // Preferably we would like it prettier than this
             res.json(
-                await (await (res.locals.db as Database).seriesDb.getChart(req.params.name, req.params.chartName)).toArray()
+                await (await (res.locals.db as Database).seriesDb.getChart(req.params.name, req.params.chartName, req.query?.size as string)).toArray()
             )
         })
 

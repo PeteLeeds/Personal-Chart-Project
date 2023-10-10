@@ -30,6 +30,8 @@ export class ChartDisplayComponent implements OnInit {
   public lastChart: string;
   public nextChart: string;
 
+  private chartSize = undefined
+
   faPlus = faPlus;
   faTrash = faTrash;
   faPenSquare = faPenSquare;
@@ -42,49 +44,50 @@ export class ChartDisplayComponent implements OnInit {
 
   public ngOnInit(): void {
     console.log('ROUTE URL', this.activatedRoute.url)
+    this.reloadChart()
+  }
 
+  private reloadChart(): void {
     this.subscriptions.push(
-    this.activatedRoute.params.pipe(mergeMap(params => {
-          if (params.series && params.name) {
-            this.seriesName = params.series
-            this.chartName = params.name
-            return forkJoin({
-              songs: this.chartService.getChartSongs(this.seriesName, this.chartName),
-              prevCharts: this.chartService.getPreviousCharts(this.seriesName, this.chartName),
-              nextChart: this.chartService.getNextChart(this.seriesName, this.chartName)
-            })
-          }
-          return of({songs: [], prevCharts: [], nextChart: null})
-        })).subscribe((res) => {
-        this.lastChart = res.prevCharts[1]?.name
-        this.nextChart = res.nextChart;
-        // Set songs and song stats
-        const prevCharts = res.prevCharts;
-        const songs = res.songs;
-        const prevChartNames = prevCharts.map(chart => chart.name);
-        this.chartData = songs.map((song: Song) => {
-          console.log('song', song)
-          // Index '1' is correct here as '0' will be the current chart
-          const currentSeries = song.charts[this.seriesName]
-          const charts = currentSeries.filter(
-              chart => prevChartNames.includes(chart.chart) && chart.position != DROPOUT
-          );
-          console.log('CHARTS ', charts)
-          const lastChartRecord = charts.find(chart => chart.chart === prevChartNames[1])
-          charts.sort((a, b) => a.position - b.position);
-          return {
-            ...song,
-            lastWeek: lastChartRecord?.position,
-            weeksOn: charts.length,
-            peak: charts[0].position,
-          }
-        });
-        console.log('chart data', this.chartData)
-      },
-      (err) => {
-        console.log('There was an error', err)
-      })
-    )
+      this.activatedRoute.params.pipe(mergeMap(params => {
+            if (params.series && params.name) {
+              this.seriesName = params.series
+              this.chartName = params.name
+              return forkJoin({
+                songs: this.chartService.getChartSongs(this.seriesName, this.chartName, this.chartSize),
+                prevCharts: this.chartService.getPreviousCharts(this.seriesName, this.chartName),
+                nextChart: this.chartService.getNextChart(this.seriesName, this.chartName)
+              })
+            }
+            return of({songs: [], prevCharts: [], nextChart: null})
+          })).subscribe((res) => {
+          this.lastChart = res.prevCharts[1]?.name
+          this.nextChart = res.nextChart;
+          // Set songs and song stats
+          const prevCharts = res.prevCharts;
+          const songs = res.songs;
+          const prevChartNames = prevCharts.map(chart => chart.name);
+          this.chartData = songs.map((song: Song) => {
+            // Index '1' is correct here as '0' will be the current chart
+            const currentSeries = song.charts[this.seriesName]
+            const charts = currentSeries.filter(
+                chart => prevChartNames.includes(chart.chart) && chart.position != DROPOUT
+            );
+            const lastChartRecord = charts.find(chart => chart.chart === prevChartNames[1])
+            charts.sort((a, b) => a.position - b.position);
+            return {
+              ...song,
+              lastWeek: lastChartRecord?.position,
+              weeksOn: charts.length,
+              peak: charts[0].position,
+            }
+          });
+          console.log('chart data', this.chartData)
+        },
+        (err) => {
+          console.log('There was an error', err)
+        })
+      )
   }
 
   public async openModal() {
@@ -98,5 +101,10 @@ export class ChartDisplayComponent implements OnInit {
     for (const subscription of this.subscriptions) {
       subscription.unsubscribe();
     }
+  }
+
+  public setChartSize(count: number): void {
+    this.chartSize = count
+    this.reloadChart()
   }
 }

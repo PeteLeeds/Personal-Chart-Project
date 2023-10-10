@@ -141,7 +141,29 @@ export class SeriesDb {
         return this.db.collection(CHART_COLLECTION).find();
     }
 
-    public async getChart(series: string, chartName: string): Promise<AggregationCursor<unknown>> {
+    /**
+     * Get a pipeline to limit past charts if a specific chart size is chosen
+     */
+    private getSizePipeline(series: string, size?: string): Record<string, unknown>[] {
+        if (!size) {
+            return []
+        }
+        return [{
+            $addFields: {
+                charts: {
+                    [`${series}`]: {
+                        $filter: {
+                            input: `$charts.${series}`,
+                            as: 'chart',
+                            cond: { $lte: [`$$chart.position`, parseInt(size)] }
+                        }   
+                    }
+                }
+            }
+        }]
+    }
+
+    public async getChart(series: string, chartName: string, size?: string): Promise<AggregationCursor<unknown>> {
         return this.db.collection(SONG_COLLECTION).aggregate([
             // Find all the songs in this chart
             {
@@ -150,11 +172,15 @@ export class SeriesDb {
                         $elemMatch:
                         {
                             chart: chartName,
-                            position: {$ne: DROPOUT}
+                            position: {
+                                $ne: DROPOUT,
+                                ...(size ? { $lte: parseInt(size) } : {})
+                            }
                         }
                     }
                 }
             },
+            ...this.getSizePipeline(series, size),
             // Remove all chart info for the songs besides the specified chart
             {
                 $addFields: {
