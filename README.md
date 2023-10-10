@@ -24,5 +24,5 @@ In order to run the DB API:
 - navigate to `/db-api`
 - run `npm i`
 - run `tsc`
-- run `. ./environment-variables.ps1` (Windows) or `. ./environment-variables.sh` (Linux)
+- run `. ./env.ps1` (Windows) or `. ./env.sh` (Linux/Mac)
 - run `node dist/index.js`
