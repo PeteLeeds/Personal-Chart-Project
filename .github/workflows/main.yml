@@ -4,13 +4,16 @@ on: [push]
 jobs:
   test-ui:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ui
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js 14.17.3
         uses: actions/setup-node@v1
         with:
           node-version: 14.17.3
-      - name: "Navigate to UI folder"
-        run: cd ui
+      - name: Install dependencies
+        run: npm install
       - name: "Run Tests"
         run: npm test
