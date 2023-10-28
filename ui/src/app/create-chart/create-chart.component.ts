@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { AbstractControl, UntypedFormControl, UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -27,10 +27,10 @@ export class CreateChartComponent implements OnInit {
   public numberOfSongs = 0
   public songsChecked = 0;
 
-  public chartForm = new FormGroup({
-    name: new FormControl({ value: '', disabled: this.useDateAsTitle }),
-    date: new FormControl(''),
-    songs: new FormControl('', this.hyphenValidator()),
+  public chartForm = new UntypedFormGroup({
+    name: new UntypedFormControl({ value: '', disabled: this.useDateAsTitle }),
+    date: new UntypedFormControl(''),
+    songs: new UntypedFormControl('', this.hyphenValidator()),
   });
 
   constructor(chartService: ChartService, songService: SongService, activatedRoute: ActivatedRoute, router: Router) { 

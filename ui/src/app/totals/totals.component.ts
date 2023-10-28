@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { ChartService } from '../services/chart.service';
 import { SongService } from '../services/song.service';
 import { ExportToCsv } from 'export-to-csv';
@@ -19,13 +19,13 @@ export class TotalsComponent {
   private songService: SongService
   private chartService: ChartService
 
-  public totalsForm = new FormGroup({
-    series: new FormControl(''),
-    from: new FormControl('', Validators.required),
-    to: new FormControl('', Validators.required),
-    includeFullChartRun: new FormControl(true),
-    numberOfResults: new FormControl(100),
-    estimateFuturePoints: new FormControl(true)
+  public totalsForm = new UntypedFormGroup({
+    series: new UntypedFormControl(''),
+    from: new UntypedFormControl('', Validators.required),
+    to: new UntypedFormControl('', Validators.required),
+    includeFullChartRun: new UntypedFormControl(true),
+    numberOfResults: new UntypedFormControl(100),
+    estimateFuturePoints: new UntypedFormControl(true)
   });
 
   public constructor(songService: SongService, chartService: ChartService) {
