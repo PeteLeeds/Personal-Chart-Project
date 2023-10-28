@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClipboardService } from 'ngx-clipboard';
 import { forkJoin, of, Subscription } from 'rxjs';
@@ -41,9 +41,9 @@ export class SongDisplayComponent implements OnInit {
 
   public faMusic = faMusic;
 
-  public songDetailsForm = new FormGroup({
-    title: new FormControl(''),
-    artistDisplay: new FormControl(''),
+  public songDetailsForm = new UntypedFormGroup({
+    title: new UntypedFormControl(''),
+    artistDisplay: new UntypedFormControl(''),
   });
 
   constructor(activatedRoute: ActivatedRoute, 

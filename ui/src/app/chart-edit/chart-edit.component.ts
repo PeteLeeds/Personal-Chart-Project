@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { mergeMap } from "rxjs/operators";
@@ -22,9 +22,9 @@ export class ChartEditComponent {
     public originalChartName: string;
     public chartDate: string;
 
-    public chartForm = new FormGroup({
-        name: new FormControl({ value: '', disabled: this.useDateAsTitle }),
-        date: new FormControl(''),
+    public chartForm = new UntypedFormGroup({
+        name: new UntypedFormControl({ value: '', disabled: this.useDateAsTitle }),
+        date: new UntypedFormControl(''),
     });
 
     public constructor(activatedRoute: ActivatedRoute, chartService: ChartService, router: Router) {
