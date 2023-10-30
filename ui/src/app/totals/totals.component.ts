@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { Validators, FormControl, FormGroup } from '@angular/forms';
 import { ChartService } from '../services/chart.service';
 import { SongService } from '../services/song.service';
 import { ExportToCsv } from 'export-to-csv';
@@ -19,13 +19,13 @@ export class TotalsComponent {
   private songService: SongService
   private chartService: ChartService
 
-  public totalsForm = new UntypedFormGroup({
-    series: new UntypedFormControl(''),
-    from: new UntypedFormControl('', Validators.required),
-    to: new UntypedFormControl('', Validators.required),
-    includeFullChartRun: new UntypedFormControl(true),
-    numberOfResults: new UntypedFormControl(100),
-    estimateFuturePoints: new UntypedFormControl(true)
+  public totalsForm = new FormGroup({
+    series: new FormControl<String>(''),
+    from: new FormControl<String>('', Validators.required),
+    to: new FormControl<String>('', Validators.required),
+    includeFullChartRun: new FormControl<Boolean>(true),
+    numberOfResults: new FormControl<Number>(100),
+    estimateFuturePoints: new FormControl<Boolean>(true)
   });
 
   public constructor(songService: SongService, chartService: ChartService) {
@@ -43,7 +43,13 @@ export class TotalsComponent {
 
   public onSubmit(): void {
     this.seriesBeingUsed = this.totalsForm.controls['series'].value
-    this.songService.getLeaderboard(this.totalsForm.value).subscribe(res => this.leaderboard = res)
+    const stringForm = {}
+    for (const [key, value] of Object.entries(this.totalsForm.value)) {
+      if (value) {
+        stringForm[key] = value.toString()
+      }
+    }
+    this.songService.getLeaderboard(stringForm).subscribe(res => this.leaderboard = res)
   }
 
   public export(): void {

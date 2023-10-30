@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { FormControl, FormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { mergeMap } from "rxjs/operators";
@@ -22,9 +22,9 @@ export class ChartEditComponent {
     public originalChartName: string;
     public chartDate: string;
 
-    public chartForm = new UntypedFormGroup({
-        name: new UntypedFormControl({ value: '', disabled: this.useDateAsTitle }),
-        date: new UntypedFormControl(''),
+    public chartForm = new FormGroup({
+        name: new FormControl<string>({ value: '', disabled: this.useDateAsTitle }),
+        date: new FormControl<Date>(new Date()),
     });
 
     public constructor(activatedRoute: ActivatedRoute, chartService: ChartService, router: Router) {
@@ -60,13 +60,14 @@ export class ChartEditComponent {
       }
 
       public onSubmit() {
+        const chartParams = {...this.chartForm.getRawValue()}
         if (this.useDateAsTitle) {
-          this.chartForm.value.name = (this.chartForm.value.date as Date).toDateString();
+            chartParams.name = chartParams.date.toDateString();
         }
     
-        this.chartService.updateChart(this.seriesName, this.originalChartName, this.chartForm.value).subscribe(() => { 
+        this.chartService.updateChart(this.seriesName, this.originalChartName, chartParams).subscribe(() => { 
             console.log('Chart Updated');
-            this.router.navigate(['../..', this.chartForm.value.name], { relativeTo: this.activatedRoute })
+            this.router.navigate(['../..', chartParams.name], { relativeTo: this.activatedRoute })
         })
     }
 }
