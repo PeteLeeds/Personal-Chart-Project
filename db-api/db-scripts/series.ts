@@ -224,13 +224,13 @@ export class SeriesDb {
     }
 
     public async getNextChart(series: string, chart: string): Promise<AggregationCursor<unknown>> {
-        const chartDateArray = await (this.db.collection(CHART_COLLECTION).aggregate([
+        const currentChart = await (this.db.collection(CHART_COLLECTION).aggregate([
             { $match: { name: series } },
             { $unwind: "$charts" },
             { $replaceRoot: { newRoot: "$charts" } },
             { $match: { name: chart } },
         ]).toArray())
-        const chartDate = chartDateArray[0].date
+        const chartDate = currentChart[0].date
         console.log('get next', JSON.stringify(chart));
         return this.getNextChartByDate(series, chartDate)
     }
