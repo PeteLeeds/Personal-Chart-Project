@@ -73,10 +73,10 @@ export class ChartRouter {
         })
 
         /**
-        * Given a chart in a series, return the previous set of charts in that series
+        * Given a chart in a series, return the next chart in that series
         */
         router.get('/:series/next/:chart', async (req, res) => {
-            console.log('Get next series', req.params.chart)
+            console.log('Get next chart', req.params.series, req.params.chart)
             res.json(
                 await (res.locals.db as Database).seriesDb.getNextChart(req.params.series, req.params.chart)
             )
