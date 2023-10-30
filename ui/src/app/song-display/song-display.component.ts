@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClipboardService } from 'ngx-clipboard';
 import { forkJoin, of, Subscription } from 'rxjs';
@@ -41,9 +41,9 @@ export class SongDisplayComponent implements OnInit {
 
   public faMusic = faMusic;
 
-  public songDetailsForm = new UntypedFormGroup({
-    title: new UntypedFormControl(''),
-    artistDisplay: new UntypedFormControl(''),
+  public songDetailsForm = new FormGroup({
+    title: new FormControl<string>(''),
+    artistDisplay: new FormControl<string>(''),
   });
 
   constructor(activatedRoute: ActivatedRoute, 
@@ -88,8 +88,8 @@ export class SongDisplayComponent implements OnInit {
 
   public updateSongDetails() {
     const updatedDetails = !this.artistsChanged()
-      ? this.songDetailsForm.value
-      : { ...this.songDetailsForm.value, ...{ artists: this.artistNames } }
+      ? this.songDetailsForm.getRawValue()
+      : { ...this.songDetailsForm.getRawValue(), ...{ artists: this.artistNames } }
     this.songService.updateSong(this.songInfo._id, updatedDetails).subscribe(() => {
       this.exitEditMode()
       this.reloadSongDetails()

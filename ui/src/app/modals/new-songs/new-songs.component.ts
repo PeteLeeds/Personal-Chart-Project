@@ -26,10 +26,10 @@ export class NewSongsComponent implements OnInit {
     })
   }
 
-  public open(songs: FormattedSong[]): Promise<unknown> {
+  public open(songs: FormattedSong[]): Promise<FormattedSong[]> {
     console.log('songs', songs)
     this.chartSongs = songs;
-    return this.baseModal.open();
+    return this.baseModal.open() as Promise<FormattedSong[]>;
   }
 
   public ngOnInit(): void {

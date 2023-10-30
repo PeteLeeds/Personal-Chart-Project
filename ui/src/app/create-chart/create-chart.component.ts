@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, UntypedFormControl, UntypedFormGroup, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -27,10 +27,10 @@ export class CreateChartComponent implements OnInit {
   public numberOfSongs = 0
   public songsChecked = 0;
 
-  public chartForm = new UntypedFormGroup({
-    name: new UntypedFormControl({ value: '', disabled: this.useDateAsTitle }),
-    date: new UntypedFormControl(''),
-    songs: new UntypedFormControl('', this.hyphenValidator()),
+  public chartForm = new FormGroup({
+    name: new FormControl<string>({ value: '', disabled: this.useDateAsTitle }),
+    date: new FormControl<Date>(new Date()),
+    songs: new FormControl<string>('', this.hyphenValidator()),
   });
 
   constructor(chartService: ChartService, songService: SongService, activatedRoute: ActivatedRoute, router: Router) { 
@@ -75,8 +75,9 @@ export class CreateChartComponent implements OnInit {
   public onSubmit() {
     this.checkingSongs = true
     const songs = this.chartForm.controls.songs.value.split('\n');
+    const chartParams = {...this.chartForm.getRawValue()}
     if (this.useDateAsTitle) {
-      this.chartForm.value.name = (this.chartForm.value.date as Date).toDateString();
+      chartParams.name = chartParams.date.toDateString();
     }
 
     this.songsChecked = 0
@@ -119,9 +120,9 @@ export class CreateChartComponent implements OnInit {
       const songsToSend = newSongsExist ? await this.newSongsModal.open(chartSongs) : chartSongs;
       console.log("In Create Chart: ", songsToSend);
       // This bit creates the chart
-      this.chartService.createChart(this.seriesName, {...this.chartForm.value, songs: songsToSend}).subscribe(() => { 
+      this.chartService.createChart(this.seriesName, {...chartParams, songs: songsToSend}).subscribe(() => { 
         console.log('Chart Created');
-        this.router.navigate(['..', this.chartForm.value.name], { relativeTo: this.activatedRoute })
+        this.router.navigate(['..', chartParams.name], { relativeTo: this.activatedRoute })
       })
     })
   }

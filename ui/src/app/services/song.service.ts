@@ -53,7 +53,7 @@ export class SongService {
       );
   }
 
-  public updateSong(id: string, newDetails: Song[]): Observable<unknown> {
+  public updateSong(id: string, newDetails: Partial<Song>): Observable<unknown> {
     return this.httpClient.put(`${BASE_URL}/song/${id}`, newDetails).pipe(
       map((res => {})), catchError(error => {throw error})
     )
