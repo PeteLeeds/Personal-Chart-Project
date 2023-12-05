@@ -130,7 +130,11 @@ export class SongDb {
                             options.includeFullChartRun === 'true'
                                 ? '$$this.position' 
                                 : {'$cond': [
-                                    {'$and': [{'$gte': ['$$this.date', new Date(options.from).toISOString()]}, {'$lte': ['$$this.date', new Date(options.to).toISOString()]}]},
+                                    {'$and': [
+                                        {'$gte': ['$$this.date', new Date(options.from).toISOString()]}, 
+                                        {'$lte': ['$$this.date', new Date(options.to).toISOString()]},
+                                        {'$ne': ['$$this.position', DROPOUT]},
+                                    ]},
                                     '$$this.position',
                                     101
                                 ]}
@@ -150,7 +154,10 @@ export class SongDb {
             {'$addFields': {lastChartObject: {'$arrayElemAt': ['$lastChart', 0]}}},
             {'$set': {'totalPoints': {
                 '$cond': [
-                    {'$eq': [{'$size': '$lastChart'}, 1]}, 
+                    {'$and': [
+                        {'$eq': [{'$size': '$lastChart'}, 1]},
+                        {'$ne': ['$lastChartObject.position', DROPOUT]}
+                    ]}, 
                     {'$add': ['$totalPoints', {'$floor': {'$pow': [2, {'$divide': [1050, {'$add': [100, '$lastChartObject.position']}]}]}}]}, 
                     '$totalPoints'
                 ]
