@@ -2,9 +2,11 @@ import { Db, ObjectId } from "mongodb";
 import { updateArtists } from "./common/update-artists";
 import { getSongChartPipeline } from "./common/add-chart-dates";
 import { SongQueryParams } from "../types/query-params";
+import { Song } from "../types/song";
 
 const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
+const CHART_COLLECTION = 'series'
 const DROPOUT = -1
 
 export class SongDb {
@@ -110,7 +112,15 @@ export class SongDb {
         return this.db.collection(SONG_COLLECTION).deleteOne({ '_id': new ObjectId(fromId) })
     }
 
-    public getLeaderboard(options: Record<string, string>) {
+    public async getLeaderboard(options: Record<string, string>): Promise<Song[]> {
+        const lastChart = await this.db.collection(CHART_COLLECTION).aggregate([
+            {'$match': {name: options.series}},
+            {'$unwind': '$charts'},
+            {'$match': {'charts.date': {'$lte': new Date(options.to).toISOString()}}},
+            {'$sort': {'charts.date': -1}},
+            {'$limit': 1}
+        ]).toArray()
+        const lastChartName = lastChart[0].charts.name
         return this.db.collection(SONG_COLLECTION).aggregate([
             ...getSongChartPipeline(options.series),
             {'$match': {[`charts.${options.series}.date`]: {'$gte': new Date(options.from).toISOString(), '$lte': new Date(options.to).toISOString()}}},
@@ -144,12 +154,11 @@ export class SongDb {
                 }
             }}}},
             // Add extra points if required
-            // NOTE: This doesn't work if the final chart isn't on the exact end date given. Can be sorted with a simple request to the series db.
             ...options.estimateFuturePoints === 'true' ? [
             {'$addFields': {lastChart: {'$filter': {
                 input: `$charts.${options.series}`,
                 as: "chart",
-                cond: { '$eq': [ "$$chart.date", new Date(options.to).toISOString() ] }
+                cond: { '$eq': [ "$$chart.chart", lastChartName ] }
             }}}},
             {'$addFields': {lastChartObject: {'$arrayElemAt': ['$lastChart', 0]}}},
             {'$set': {'totalPoints': {
@@ -165,6 +174,6 @@ export class SongDb {
             {'$project': {lastChart: 0, lastChartObject: 0}}] : [],
             {'$sort': {'totalPoints': -1}},
             {'$limit': parseInt(options.numberOfResults)}
-        ])
+        ]).toArray()
     }
 }
