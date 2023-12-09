@@ -1,5 +1,7 @@
 import { Artist } from "../types/artist"
 
+const DROPOUT = -1
+
 function getFormattedPeak(peak: number) {
     if (peak === 1) {
       return `[color=#FF0000][b]01[/b][/color]`
@@ -57,6 +59,7 @@ export function getChartHistory(artistInfo: Artist, selectedSeries: string) {
     let bbCodeString = `[b]${artistInfo.name}[/b]\n[size=1]`
     for (const song of songs) {
       const chartInfo = song.charts[selectedSeries]
+      song.charts[selectedSeries] = song.charts[selectedSeries].filter(chart => chart.position != DROPOUT)
       song.charts[selectedSeries].sort((a, b) => a.position - b.position);
       song.charts[selectedSeries].peak = song.charts[selectedSeries][0].position
       song.charts[selectedSeries].sort((a, b) => a.date > b.date ? 1 : -1)
