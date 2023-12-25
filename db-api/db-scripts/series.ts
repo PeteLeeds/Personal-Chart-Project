@@ -53,6 +53,9 @@ export class SeriesDb {
     }
 
     public async newChart(seriesName: string, params: ChartParams): Promise<unknown> {
+        if (!params.name) {
+            throw new Error('Chart name has not been specified')
+        }
         const existing = await this.db.collection(CHART_COLLECTION).findOne({ $and: [{ "name": seriesName }, { "charts.name": params.name }] })
         if (existing) {
             throw new Error('Chart names within a series must be unique')
