@@ -1,10 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatMomentDateModule} from '@angular/material-moment-adapter'
 import { ClipboardModule } from 'ngx-clipboard';
  
 import { AppRoutingModule } from './app-routing.module';
@@ -58,8 +59,8 @@ import { TotalsComponent } from './totals/totals.component';
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
-    OwlDateTimeModule, 
-    OwlNativeDateTimeModule,
+    MatDatepickerModule,
+    MatMomentDateModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
     MatSelectModule,

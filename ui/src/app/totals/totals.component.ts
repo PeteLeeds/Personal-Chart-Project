@@ -21,8 +21,8 @@ export class TotalsComponent {
 
   public totalsForm = new FormGroup({
     series: new FormControl<String>(''),
-    from: new FormControl<String>('', Validators.required),
-    to: new FormControl<String>('', Validators.required),
+    from: new FormControl<Date>(new Date(), Validators.required),
+    to: new FormControl<Date>(new Date(), Validators.required),
     includeFullChartRun: new FormControl<Boolean>(true),
     numberOfResults: new FormControl<Number>(100),
     estimateFuturePoints: new FormControl<Boolean>(true)

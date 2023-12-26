@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { mergeMap } from "rxjs/operators";
 import { ChartService } from "../services/chart.service";
+import moment from "moment";
 
 @Component({
     selector: 'app-chart-edit',
@@ -62,6 +63,7 @@ export class ChartEditComponent {
       public onSubmit() {
         const chartParams = {...this.chartForm.getRawValue()}
         if (this.useDateAsTitle) {
+            chartParams.date = moment(chartParams.date).toDate()
             chartParams.name = chartParams.date.toDateString();
         }
     

@@ -10,14 +10,16 @@
     </div>
     <div>
         <label>From:
-            <input [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3" placeholder="Date Time" formControlName="from">
-            <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+            <input [matDatepicker]="fromDatepicker" formControlName="from">
+            <mat-datepicker-toggle [for]="fromDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #fromDatepicker></mat-datepicker>
         </label>
     </div>
     <div>
         <label>To:
-            <input [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" placeholder="Date Time" formControlName="to">
-            <owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
+            <input [matDatepicker]="toDatepicker" formControlName="to">
+            <mat-datepicker-toggle [for]="toDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #toDatepicker></mat-datepicker>
         </label>
     </div>
     <div>

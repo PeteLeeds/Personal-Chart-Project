@@ -7,6 +7,7 @@ import { NewSongsComponent } from '../modals/new-songs/new-songs.component';
 import { ChartService } from '../services/chart.service';
 import { SongService } from '../services/song.service';
 import { CheckedSong, FormattedSong, Song } from '../types/song';
+import moment from 'moment';
 
 @Component({
   selector: 'app-create-chart',
@@ -77,6 +78,7 @@ export class CreateChartComponent implements OnInit {
     const songs = this.chartForm.controls.songs.value.split('\n');
     const chartParams = {...this.chartForm.getRawValue()}
     if (this.useDateAsTitle) {
+      chartParams.date = moment(chartParams.date).toDate()
       chartParams.name = chartParams.date.toDateString();
     }
 

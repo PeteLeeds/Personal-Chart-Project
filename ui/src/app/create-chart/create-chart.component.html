@@ -16,8 +16,9 @@
     </div>
     <div class="input-option">
         <label>Chart Date:
-            <input [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3" placeholder="Date Time" formControlName="date">
-            <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+            <input [matDatepicker]="chartDatepicker" formControlName="date">
+            <mat-datepicker-toggle [for]="chartDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #chartDatepicker></mat-datepicker>
         </label>
     </div>
     <div class="input-option">
