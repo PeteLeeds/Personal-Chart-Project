@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -28,7 +28,7 @@ export class CreateChartComponent implements OnInit {
   public songsChecked = 0;
 
   public chartForm = new FormGroup({
-    name: new FormControl<string>({ value: '', disabled: this.useDateAsTitle }),
+    name: new FormControl<string>({ value: '', disabled: this.useDateAsTitle },  Validators.required),
     date: new FormControl<Date>(new Date()),
     songs: new FormControl<string>('', this.hyphenValidator()),
   });
