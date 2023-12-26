@@ -13,7 +13,14 @@
             <a class="button" id="prev-chart" *ngIf="lastChart" [routerLink]="['..', lastChart]">Previous</a>
             <a class="button" id="next-chart" *ngIf="nextChart" [routerLink]="['..', nextChart]">Next</a>
         </div>
-        <p class="button" (click)="setChartSize(40)">Top 40</p>
+        <div class="row">
+            <ng-container *ngFor="let size of availableSizes">
+                <p class="button" (click)="setChartSize(size)">Top {{size}}</p>
+            </ng-container>
+            <ng-container *ngIf="availableSizes.length > 0">
+                <p class="button" (click)="setChartSize()">Full Chart</p>
+            </ng-container>
+        </div>
         <table class="song-table">
             <tr>
                 <th>Pos</th>

@@ -8,6 +8,7 @@ import { Song } from '../types/song';
 import { faPenSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const DROPOUT = -1
+const CHART_SIZES = [10, 20, 40, 75]
 
 @Component({
   selector: 'app-chart-display',
@@ -30,7 +31,8 @@ export class ChartDisplayComponent implements OnInit {
   public lastChart: string;
   public nextChart: string;
 
-  private chartSize = undefined
+  private songNumberToRetrieve = undefined
+  public availableSizes = []
 
   faPlus = faPlus;
   faTrash = faTrash;
@@ -54,7 +56,7 @@ export class ChartDisplayComponent implements OnInit {
               this.seriesName = params.series
               this.chartName = params.name
               return forkJoin({
-                songs: this.chartService.getChartSongs(this.seriesName, this.chartName, this.chartSize),
+                songs: this.chartService.getChartSongs(this.seriesName, this.chartName, this.songNumberToRetrieve),
                 prevCharts: this.chartService.getPreviousCharts(this.seriesName, this.chartName),
                 nextChart: this.chartService.getNextChart(this.seriesName, this.chartName)
               })
@@ -82,6 +84,10 @@ export class ChartDisplayComponent implements OnInit {
               peak: charts[0].position,
             }
           });
+          if (!this.songNumberToRetrieve) {
+            const chartSize = this.chartData.length
+            this.availableSizes = CHART_SIZES.filter(size => size < chartSize)
+          }
           console.log('chart data', this.chartData)
         },
         (err) => {
@@ -103,8 +109,8 @@ export class ChartDisplayComponent implements OnInit {
     }
   }
 
-  public setChartSize(count: number): void {
-    this.chartSize = count
+  public setChartSize(count?: number): void {
+    this.songNumberToRetrieve = count
     this.reloadChart()
   }
 }
