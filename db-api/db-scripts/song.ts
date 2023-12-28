@@ -3,6 +3,7 @@ import { updateArtists } from "./common/update-artists";
 import { getSongChartPipeline } from "./common/add-chart-dates";
 import { SongQueryParams } from "../types/query-params";
 import { Song } from "../types/song";
+import { escapeRegex } from "./common/excape-regex";
 
 const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
@@ -38,12 +39,14 @@ export class SongDb {
     }
 
     public async getSongs(params: SongQueryParams): Promise<unknown> {
+        const regex_title = escapeRegex(params.title || '')
+        const regex_artist = escapeRegex(params.artist || '')
         const song = await this.db.collection(SONG_COLLECTION)
             .aggregate([
                 ...params.sortBy ? [{ "$sort": { [params.sortBy]: 1 } }] : [],
                 {"$match": {"$and": [
-                    ...[params.title ? {"title": {"$regex": new RegExp(params.title), "$options": 'i'}} : {}],
-                    ...[params.artist ?  {"artistDisplay": {"$regex": new RegExp(params.artist), "$options": 'i'}} : {}]
+                    ...[params.title ? {"title": {"$regex": new RegExp(regex_title), "$options": 'i'}} : {}],
+                    ...[params.artist ?  {"artistDisplay": {"$regex": new RegExp(regex_artist), "$options": 'i'}} : {}]
                 ]}},
                 ...params.pageNumber ? [{ "$skip": parseInt(params.pageNumber) * 20 }] : [],
                 ...params.limit ? [{ "$limit": parseInt(params.limit) }] : [],

@@ -1,6 +1,7 @@
 import { Db, ObjectId } from "mongodb";
 import { ArtistQueryParams } from "../types/query-params";
 import { getSongChartPipeline } from "./common/add-chart-dates";
+import { escapeRegex } from "./common/excape-regex";
 
 const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
@@ -32,11 +33,12 @@ export class ArtistDb {
     }
 
     public getArtists(params: ArtistQueryParams): Promise<unknown> {
+        const regex_name = escapeRegex(params.name || '')
         const artist = this.db.collection(ARTIST_COLLECTION)
         .aggregate([
             ...params.sortBy ? [{ "$sort": { [params.sortBy]: 1 } }] : [],
             ... params.name ? [{"$match":
-                {"name": {"$regex": new RegExp(params.name), "$options": 'i'}}
+                {"name": {"$regex": new RegExp(regex_name), "$options": 'i'}}
             }] : [],
             ...params.pageNumber ? [{ "$skip": parseInt(params.pageNumber) * 20 }] : [],
             ...params.limit ? [{ "$limit": parseInt(params.limit) }] : [],
