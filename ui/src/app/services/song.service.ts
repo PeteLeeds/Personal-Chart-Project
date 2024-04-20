@@ -44,9 +44,9 @@ export class SongService {
     return this.httpClient.get<Song[]>(`${BASE_URL}/song/find?${getQueryString(options)}`);
   }
 
-  public getSongCount(): Observable<number> {
+  public getSongCount(options: Record<string, string>): Observable<number> {
     console.log('get song count')
-    return this.httpClient.head(`${BASE_URL}/song/find`, {observe: 'response'})
+    return this.httpClient.head(`${BASE_URL}/song/find?${getQueryString(options)}`, {observe: 'response'})
       .pipe(
         // + operator converts string to number
         map((res) => +res.headers.get("X-Count"))

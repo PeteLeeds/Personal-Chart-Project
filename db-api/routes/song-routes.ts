@@ -23,9 +23,9 @@ export class SongRouter {
         })
 
         // If we call HEAD, we automatically call GET - which is why it wasn't working before
-        router.head('/find', async (_, res) => {
+        router.head('/find', async (req, res) => {
             console.log('GET COUNT')
-            const count = (await (res.locals.db as Database).songDb.getSongCount()).toString();
+            const count = (await (res.locals.db as Database).songDb.getSongCount(req.query)).toString();
             res.set('X-Count', count);
             res.sendStatus(200);
         })

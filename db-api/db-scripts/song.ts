@@ -38,24 +38,32 @@ export class SongDb {
         return song[0]
     }
 
-    public async getSongs(params: SongQueryParams): Promise<unknown> {
+    private getMatchPipeline(params: SongQueryParams): Record<string, unknown> {
         const regex_title = escapeRegex(params.title || '')
         const regex_artist = escapeRegex(params.artist || '')
+        return {"$match": {"$and": [
+            ...[params.title ? {"title": {"$regex": new RegExp(regex_title), "$options": 'i'}} : {}],
+            ...[params.artist ?  {"artistDisplay": {"$regex": new RegExp(regex_artist), "$options": 'i'}} : {}]
+        ]}}
+    }
+
+    public async getSongs(params: SongQueryParams): Promise<unknown> {
         const song = await this.db.collection(SONG_COLLECTION)
             .aggregate([
                 ...params.sortBy ? [{ "$sort": { [params.sortBy]: 1 } }] : [],
-                {"$match": {"$and": [
-                    ...[params.title ? {"title": {"$regex": new RegExp(regex_title), "$options": 'i'}} : {}],
-                    ...[params.artist ?  {"artistDisplay": {"$regex": new RegExp(regex_artist), "$options": 'i'}} : {}]
-                ]}},
+                this.getMatchPipeline(params),
                 ...params.pageNumber ? [{ "$skip": parseInt(params.pageNumber) * 20 }] : [],
                 ...params.limit ? [{ "$limit": parseInt(params.limit) }] : [],
             ]);
         return song.toArray()
     }
 
-    public async getSongCount() {
-        return this.db.collection(SONG_COLLECTION).countDocuments();
+    public async getSongCount(params: SongQueryParams): Promise<number> {
+        const count_object = await this.db.collection(SONG_COLLECTION).aggregate([
+            this.getMatchPipeline(params),
+            {'$count': 'song_count'}
+        ]).toArray();
+        return count_object[0].song_count
     }
 
     public async findSong(details: string) {

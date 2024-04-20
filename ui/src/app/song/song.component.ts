@@ -41,7 +41,7 @@ export class SongComponent implements OnInit {
     }
     forkJoin({
       songs: this.songService.getSongs(queryOptions),
-      songCount: this.songService.getSongCount()
+      songCount: this.songService.getSongCount(queryOptions)
     }).subscribe(res => {
       this.songs = res.songs;
       this.songCount = res.songCount;
