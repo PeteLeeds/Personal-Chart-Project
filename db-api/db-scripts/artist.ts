@@ -32,22 +32,30 @@ export class ArtistDb {
         return artist
     }
 
-    public getArtists(params: ArtistQueryParams): Promise<unknown> {
+    private getMatchPipeline(params: ArtistQueryParams): Record<string, unknown> {
         const regex_name = escapeRegex(params.name || '')
+        return {"$match":
+            {"name": {"$regex": new RegExp(regex_name), "$options": 'i'}}
+        }
+    }
+
+    public getArtists(params: ArtistQueryParams): Promise<unknown> {
         const artist = this.db.collection(ARTIST_COLLECTION)
         .aggregate([
             ...params.sortBy ? [{ "$sort": { [params.sortBy]: 1 } }] : [],
-            ... params.name ? [{"$match":
-                {"name": {"$regex": new RegExp(regex_name), "$options": 'i'}}
-            }] : [],
+            ...params.name ? [this.getMatchPipeline(params)] : [],
             ...params.pageNumber ? [{ "$skip": parseInt(params.pageNumber) * 20 }] : [],
             ...params.limit ? [{ "$limit": parseInt(params.limit) }] : [],
         ]);
         return artist.toArray()
     }
 
-    public async getArtistCount() {
-        return this.db.collection(ARTIST_COLLECTION).countDocuments();
+    public async getArtistCount(params: ArtistQueryParams): Promise<number> {
+        const count_object = await this.db.collection(ARTIST_COLLECTION).aggregate([
+            ...params.name ? [this.getMatchPipeline(params)] : [],
+            {'$count': 'artist_count'}
+        ]).toArray();
+        return count_object[0].artist_count
     }
 
     public async mergeArtists(fromId: string, toId: string) {

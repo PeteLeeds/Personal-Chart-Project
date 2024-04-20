@@ -54,7 +54,7 @@ export class ArtistComponent implements OnInit {
     console.log(queryOptions)
     forkJoin({
       artists: this.artistService.getArtists(queryOptions),
-      artistCount: this.artistService.getArtistCount()
+      artistCount: this.artistService.getArtistCount(queryOptions)
     }).subscribe(res => {
       this.artists = res.artists;
       this.artistCount = res.artistCount;
