@@ -6,6 +6,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatMomentDateModule} from '@angular/material-moment-adapter'
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { ClipboardModule } from 'ngx-clipboard';
  
 import { AppRoutingModule } from './app-routing.module';
@@ -66,6 +67,7 @@ import { TotalsComponent } from './totals/totals.component';
     MatSelectModule,
     MatFormFieldModule,
     ClipboardModule,
+    MatProgressSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
