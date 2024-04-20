@@ -1,6 +1,6 @@
 # Personal Chart Project
 
-An Angular project which allows the user to input in their own Personal Charts, and see stats relating to their charts. The CSS is lacking, but the basic functionality is there!
+An Angular project which allows the user to input in their own Personal Charts, and see stats relating to their charts.
 
 At the moment, it is possible to:
 - Upload charts (including multiple 'series' of charts)
