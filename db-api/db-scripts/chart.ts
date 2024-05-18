@@ -1,6 +1,7 @@
 import { AggregationCursor, Cursor, Db, ObjectId } from "mongodb"
 import { Song } from "../types/song";
 import { updateArtists } from "./common/update-artists";
+import { Chart } from "../types/chart";
 
 const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
@@ -166,7 +167,36 @@ export class ChartDb {
         }]
     }
 
-    public async getChart(series: string, chartName: string, size?: string): Promise<AggregationCursor<unknown>> {
+    public async getChart(series: string, chartName: string, size?: string) {
+        const songs = await (await this.getChartSongs(series, chartName, size)).toArray()
+        const previousCharts = await (await this.getPreviousCharts(series, chartName)).toArray()
+        const nextChart = this.getNextChart(series, chartName)
+
+        const prevChartNames = previousCharts.map(chart => chart.name);
+        const songsWithStats = songs.map((song: Song) => {
+            // Index '1' is correct here as '0' will be the current chart
+            const currentSeries = song.charts[series]
+            const charts = currentSeries.filter(
+                chart => prevChartNames.includes(chart.chart) && chart.position != DROPOUT
+            );
+            const lastChartRecord = charts.find(chart => chart.chart === prevChartNames[1])
+            charts.sort((a, b) => a.position - b.position);
+            return {
+              ...song,
+              lastWeek: lastChartRecord?.position,
+              weeksOn: charts.length,
+              peak: charts[0].position,
+            }
+          });
+
+        return {
+            lastChart: previousCharts[1].name,
+            nextChart,
+            songs: songsWithStats,
+        }
+    }
+
+    public async getChartSongs(series: string, chartName: string, size?: string): Promise<AggregationCursor<Song>> {
         return this.db.collection(SONG_COLLECTION).aggregate([
             // Find all the songs in this chart
             {
@@ -203,7 +233,7 @@ export class ChartDb {
         ])
     }
 
-    public async getPreviousCharts(series: string, chart: string): Promise<AggregationCursor<unknown>> {
+    public async getPreviousCharts(series: string, chart: string): Promise<AggregationCursor<Chart>> {
         const chartDateArray = await (this.db.collection(CHART_COLLECTION).aggregate([
             { $match: { name: series } },
             { $unwind: "$charts" },
@@ -226,7 +256,7 @@ export class ChartDb {
         return this.db.collection(CHART_COLLECTION).aggregate(aggregateDb);
     }
 
-    public async getNextChart(series: string, chart: string): Promise<AggregationCursor<unknown>> {
+    public async getNextChart(series: string, chart: string): Promise<string> {
         const currentChart = await (this.db.collection(CHART_COLLECTION).aggregate([
             { $match: { name: series } },
             { $unwind: "$charts" },
@@ -238,7 +268,7 @@ export class ChartDb {
         return this.getNextChartByDate(series, chartDate)
     }
 
-    public async getNextChartByDate(series: string, chartDate: Date) {
+    public async getNextChartByDate(series: string, chartDate: Date): Promise<string> {
         const aggregateDb = [
             { $match: { name: series } },
             { $unwind: "$charts" },

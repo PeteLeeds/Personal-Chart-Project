@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Chart, ChartParams } from '../types/chart';
+import { Chart, ChartParams, FullChart } from '../types/chart';
 import { Song } from '../types/song';
 import { Series } from '../types/series';
 import { getQueryString } from '../shared/get-query-string';
@@ -45,9 +45,9 @@ export class ChartService {
     return this.httpClient.post(`${BASE_URL}/series/${seriesName}/chart`, {params})
   }
 
-  public getChartSongs(seriesName: string, chartName: string, chartSize?: number): Observable<Song[]> {
+  public getChart(seriesName: string, chartName: string, chartSize?: number): Observable<FullChart> {
     const extraParam = chartSize ? `?size=${chartSize}` : ''
-    return this.httpClient.get<Song[]>(`${BASE_URL}/series/${seriesName}/chart/${chartName}${extraParam}`)
+    return this.httpClient.get<FullChart>(`${BASE_URL}/series/${seriesName}/chart/${chartName}${extraParam}`)
   }
 
   public getPreviousCharts(seriesName: string, chartName: string): Observable<Record<string, unknown>[]> {

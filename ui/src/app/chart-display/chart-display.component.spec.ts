@@ -36,22 +36,24 @@ describe('ChartDisplayComponent', () => {
     mockChartService = jasmine.createSpyObj<ChartService>(
       'ChartService',
       {
-        getChartSongs: of([
-          {
-            _id: '0', title: 'Song 1', artistDisplay: 'Artist 1',
-            charts: { 'Test Series': [{ 'chart': 'Test Chart', 'position': 1 }] }
-          },
-          {
-            _id: '1', title: 'Song 2', artistDisplay: 'Artist 2',
-            charts: { 'Test Series': [{ 'chart': 'Test Chart', 'position': 2 }] }
-          },
-          {
-            _id: '2', title: 'Song 3', artistDisplay: 'Artist 3',
-            charts: { 'Test Series': [{ 'chart': 'Test Chart', 'position': 3 }] }
-          }
-        ]),
-        getPreviousCharts: of([{'name': 'Test Chart'}, {'name': 'Test Previous Chart'}]),
-        getNextChart: of('Test Next Chart')
+        getChart: of({
+            songs: [
+              {
+                _id: '0', title: 'Song 1', artistDisplay: 'Artist 1',
+                charts: { 'Test Series': [{ 'chart': 'Test Chart', 'position': 1 }] }
+              },
+              {
+                _id: '1', title: 'Song 2', artistDisplay: 'Artist 2',
+                charts: { 'Test Series': [{ 'chart': 'Test Chart', 'position': 2 }] }
+              },
+              {
+                _id: '2', title: 'Song 3', artistDisplay: 'Artist 3',
+                charts: { 'Test Series': [{ 'chart': 'Test Chart', 'position': 3 }] }
+              }
+            ],
+            lastChart: 'Test Previous Chart',
+            nextChart: 'Test Next Chart'
+        }),
       }
     );
 

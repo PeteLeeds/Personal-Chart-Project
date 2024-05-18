@@ -15,7 +15,7 @@ export interface CheckedSong {
     song?: Song;
     songString?: string;
     pos?: number;
-    exists: boolean;
+    exists?: boolean;
 }
 
 export interface NewSong extends CheckedSong {
