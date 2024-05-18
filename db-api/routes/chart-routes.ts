@@ -12,7 +12,7 @@ export class ChartRouter {
         router.get('/', async (_, res) => {
             console.log('list series')
             res.json(
-                await (res.locals.db as Database).seriesDb.listSeries().toArray()
+                await (res.locals.db as Database).chartDb.listSeries().toArray()
             )
         })
 
@@ -22,13 +22,13 @@ export class ChartRouter {
         router.get('/:name', async (req, res) => {
             console.log('list charts')
             res.json(
-                await (res.locals.db as Database).seriesDb.getChartsInSeries(req.params.name, req.query as Record<string, string>)
+                await (res.locals.db as Database).chartDb.getChartsInSeries(req.params.name, req.query as Record<string, string>)
             )
         })
 
         router.delete('/:name', async (req, res) => {
             console.log('delete series')
-            res.json(await (res.locals.db as Database).seriesDb.deleteSeries(req.params.name))
+            res.json(await (res.locals.db as Database).chartDb.deleteSeries(req.params.name))
         })
 
         /**
@@ -37,7 +37,7 @@ export class ChartRouter {
         router.post('/', async (req, res) => {
             console.log('Create new chart series')
             res.json(
-                await (res.locals.db as Database).seriesDb.newSeries(req.body)
+                await (res.locals.db as Database).chartDb.newSeries(req.body)
             )
         })
 
@@ -47,7 +47,7 @@ export class ChartRouter {
         router.post('/:name/chart', async (req, res) => {
             console.log('Create new chart')
             res.json(
-                await (res.locals.db as Database).seriesDb.newChart(req.params.name, req.body.params)
+                await (res.locals.db as Database).chartDb.newChart(req.params.name, req.body.params)
             )
         })
 
@@ -58,7 +58,7 @@ export class ChartRouter {
             console.log('Search new chart', req.params.name, req.params.chartName)
             // Preferably we would like it prettier than this
             res.json(
-                await (await (res.locals.db as Database).seriesDb.getChart(req.params.name, req.params.chartName, req.query?.size as string)).toArray()
+                await (await (res.locals.db as Database).chartDb.getChart(req.params.name, req.params.chartName, req.query?.size as string)).toArray()
             )
         })
 
@@ -68,7 +68,7 @@ export class ChartRouter {
         router.get('/:series/prev/:chart', async (req, res) => {
             console.log('Get previous series', req.params.chart)
             res.json(
-                (await (await (res.locals.db as Database).seriesDb.getPreviousCharts(req.params.series, req.params.chart)).toArray())
+                (await (await (res.locals.db as Database).chartDb.getPreviousCharts(req.params.series, req.params.chart)).toArray())
             )
         })
 
@@ -78,7 +78,7 @@ export class ChartRouter {
         router.get('/:series/next/:chart', async (req, res) => {
             console.log('Get next chart', req.params.series, req.params.chart)
             res.json(
-                await (res.locals.db as Database).seriesDb.getNextChart(req.params.series, req.params.chart)
+                await (res.locals.db as Database).chartDb.getNextChart(req.params.series, req.params.chart)
             )
         })
 
@@ -88,7 +88,7 @@ export class ChartRouter {
         router.get('/:series/date/:chart', async (req, res) => {
             console.log('Get chart date', req.params.chart)
             res.json(
-                await (res.locals.db as Database).seriesDb.getChartDate(req.params.series, req.params.chart)
+                await (res.locals.db as Database).chartDb.getChartDate(req.params.series, req.params.chart)
             )
         })
 
@@ -99,7 +99,7 @@ export class ChartRouter {
         router.put('/:series/:chart', async (req, res) => {
             console.log('Update chart', req.params.chart)
             res.json(
-                await (res.locals.db as Database).seriesDb.updateChart(req.params.series, req.params.chart, req.body)
+                await (res.locals.db as Database).chartDb.updateChart(req.params.series, req.params.chart, req.body)
             )
         })
 
@@ -109,7 +109,7 @@ export class ChartRouter {
         router.delete('/:series/:chart', async (req, res) => {
             console.log('Delete chart', req.params.chart)
             res.json(
-                await (res.locals.db as Database).seriesDb.deleteChart(req.params.series, req.params.chart)
+                await (res.locals.db as Database).chartDb.deleteChart(req.params.series, req.params.chart)
             )
         })
 

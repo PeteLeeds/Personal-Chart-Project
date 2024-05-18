@@ -15,16 +15,16 @@ export interface ChartParams {
     songs: Record<string, unknown>[]
 }
 
-export class SeriesDb {
+export class ChartDb {
     static init(db: Db) {
-        return new SeriesDb(db);
+        return new ChartDb(db);
     }
 
     private db: Db
 
     constructor(db: Db) {
         this.db = db;
-        console.log('initialised Series class')
+        console.log('initialised Chart class')
     }
 
     /*public getChart(): Promise<Record<string, unknown>[]> {

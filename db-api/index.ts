@@ -1,5 +1,5 @@
 import { Db, MongoClient } from 'mongodb'
-import { SeriesDb } from './db-scripts/series';
+import { ChartDb } from './db-scripts/chart';
 import { MONGO_DB, MONGO_URI } from './config'
 import Express from 'express'
 import { ServerRouter } from './routes';
@@ -10,16 +10,16 @@ import { ArtistDb } from './db-scripts/artist';
 const app = Express()
 
 export class Database {
-    public seriesDb: SeriesDb;
+    public chartDb: ChartDb;
     public songDb: SongDb
     public artistDb: ArtistDb;
 
     public constructor(
-        seriesDb: SeriesDb, 
+        chartDb: ChartDb, 
         songDb: SongDb, 
         artistDb: ArtistDb) 
     {
-        this.seriesDb = seriesDb;
+        this.chartDb = chartDb;
         this.songDb = songDb;
         this.artistDb = artistDb;
     }
@@ -38,7 +38,7 @@ class App {
             })
         })
         const database = db.db(MONGO_DB);
-        const db2 = new Database(SeriesDb.init(database), SongDb.init(database), ArtistDb.init(database));
+        const db2 = new Database(ChartDb.init(database), SongDb.init(database), ArtistDb.init(database));
 
         app.use(BodyParser.urlencoded({ extended: true }))
         app.use(BodyParser.json())
