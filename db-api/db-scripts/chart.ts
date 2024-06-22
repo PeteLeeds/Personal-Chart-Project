@@ -1,4 +1,4 @@
-import { AggregationCursor, Cursor, Db, ObjectId } from "mongodb"
+import { AggregationCursor, Db, FindCursor, ObjectId } from "mongodb"
 import { Song } from "../types/song";
 import { updateArtists } from "./common/update-artists";
 import { Chart } from "../types/chart";
@@ -71,14 +71,14 @@ export class ChartDb {
                 // If the song isn't in the following chart, mark it as a 'dropout' in that chart
                 if (nextChart) {
                     const songObject = await this.db.collection(SONG_COLLECTION).findOne({_id: new ObjectId(song.id as ObjectId)})
-                    const nextChartInSong = songObject.charts[seriesName].find(
+                    const nextChartInSong = songObject?.charts[seriesName].find(
                         (chart: Record<string, string>) => chart.chart === nextChart
                     )
                     if (nextChartInSong.length === 0) {
                         newChartPositions.push({chart: nextChart, position: DROPOUT})
                     }
                 }
-                await this.db.collection(SONG_COLLECTION).updateOne(
+                await this.db.collection<Song>(SONG_COLLECTION).updateOne(
                     { _id: new ObjectId(song.id as ObjectId) },
                     { $push: { [`charts.${seriesName}`]: {$each: newChartPositions }} }
                 )
@@ -111,7 +111,7 @@ export class ChartDb {
         const previousCharts = await (await this.getPreviousChartsByDate(seriesName, params.date)).toArray()
         const previousChart = previousCharts[0]
         if (previousChart) {
-            await this.db.collection(SONG_COLLECTION).updateMany(
+            await this.db.collection<Song>(SONG_COLLECTION).updateMany(
                 {
                     $and: [{
                         [`charts.${seriesName}`]: {$elemMatch:
@@ -130,7 +130,7 @@ export class ChartDb {
             )
         }
         // Insert the chart
-        return this.db.collection(CHART_COLLECTION).updateOne({ name: seriesName },
+        return this.db.collection<Chart>(CHART_COLLECTION).updateOne({ name: seriesName },
             {
                 $push: {
                     charts: {
@@ -141,7 +141,7 @@ export class ChartDb {
             })
     }
 
-    public listSeries(): Cursor<any> {
+    public listSeries(): FindCursor<any> {
         return this.db.collection(CHART_COLLECTION).find();
     }
 
@@ -245,7 +245,7 @@ export class ChartDb {
         return this.getPreviousChartsByDate(series, chartDate)
     }
 
-    public async getPreviousChartsByDate(series: string, chartDate: Date) {
+    public async getPreviousChartsByDate(series: string, chartDate: Date): Promise<AggregationCursor<Chart>> {
         const aggregateDb = [
             { $match: { name: series } },
             { $unwind: "$charts" },
@@ -300,7 +300,7 @@ export class ChartDb {
     public async deleteChart(seriesName: string, chartName: string) {
         // First delete any song info about the series
         console.log("Deleting chart info")
-        await this.db.collection(SONG_COLLECTION).updateMany(
+        await this.db.collection<Song>(SONG_COLLECTION).updateMany(
             {},
             { '$pull': { [`charts.${seriesName}`]: {chart: chartName} }}
         )
@@ -316,7 +316,7 @@ export class ChartDb {
         // TODO: Also delete artists which don't have any songs
         // Then delete the chart itself
         console.log("Deleting chart")
-        return this.db.collection(CHART_COLLECTION).updateMany(
+        return this.db.collection<Chart>(CHART_COLLECTION).updateMany(
             { "name": seriesName }, 
             { '$pull': { 'charts': { 'name': chartName}  }}
         )

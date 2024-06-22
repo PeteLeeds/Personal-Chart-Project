@@ -20,9 +20,12 @@ export class ArtistDb {
     
     public async getArtist(artistId: string, seriesName?: string): Promise<unknown> {
         const artist = await this.db.collection(ARTIST_COLLECTION).findOne({ '_id': new ObjectId(artistId) });
+        if (!artist) {
+            throw new Error('Artist does not exist')
+        }
         if (!seriesName) {
             seriesName = Object.keys(
-              (await this.db.collection(SONG_COLLECTION).findOne({ 'artistIds': new ObjectId(artistId) })).charts
+              (await this.db.collection(SONG_COLLECTION).findOne({ 'artistIds': new ObjectId(artistId) }))?.charts
             )[0]
           }
         artist.songs = await this.db.collection(SONG_COLLECTION).aggregate([

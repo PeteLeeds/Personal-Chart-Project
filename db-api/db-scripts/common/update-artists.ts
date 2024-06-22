@@ -1,6 +1,6 @@
-import { Collection, ObjectID } from "mongodb";
+import { Collection, ObjectId } from "mongodb";
 
-export async function updateArtists(collection: Collection, artistName: string): Promise<ObjectID> {
+export async function updateArtists(collection: Collection, artistName: string): Promise<ObjectId> {
     const existingArtist = await collection.findOne({ name: artistName })
     if (existingArtist) {
         console.log('existing artist', JSON.stringify(existingArtist))

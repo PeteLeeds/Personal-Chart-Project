@@ -29,12 +29,12 @@ class App {
     public static async run() {
         console.log('Connecting to db...')
         const db = await new Promise<MongoClient>((resolve, reject) => {
-            MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, db) => {
-                if (err) {
-                    console.error('Error initialising Mongo: ', err)
-                    reject(err)
-                }
-                resolve(db)
+            MongoClient.connect(MONGO_URI).then(db => {
+                resolve(db as MongoClient)
+            })
+            .catch(err => {
+                console.error('Error initialising Mongo: ', err)
+                reject(err)
             })
         })
         const database = db.db(MONGO_DB);

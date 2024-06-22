@@ -27,7 +27,7 @@ export class SongDb {
         // If series name is not defined, find the first series the song has appeared in
         if (!seriesName) {
           seriesName = Object.keys(
-            (await this.db.collection(SONG_COLLECTION).findOne({ '_id': new ObjectId(songId) })).charts
+            (await this.db.collection(SONG_COLLECTION).findOne({ '_id': new ObjectId(songId) }))?.charts
           )[0]
         }
         const song = await this.db.collection(SONG_COLLECTION).aggregate([
@@ -132,7 +132,7 @@ export class SongDb {
             {'$limit': 1}
         ]).toArray()
         const lastChartName = lastChart[0].charts.name
-        return this.db.collection(SONG_COLLECTION).aggregate([
+        return this.db.collection(SONG_COLLECTION).aggregate<Song>([
             ...getSongChartPipeline(options.series),
             {'$match': {[`charts.${options.series}.date`]: {'$gte': new Date(options.from).toISOString(), '$lte': new Date(options.to).toISOString()}}},
             {'$addFields': {totalPoints: {'$reduce': {
