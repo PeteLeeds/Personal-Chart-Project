@@ -170,7 +170,7 @@ export class ChartDb {
     public async getChart(series: string, chartName: string, size?: string) {
         const songs = await (await this.getChartSongs(series, chartName, size)).toArray()
         const previousCharts = await (await this.getPreviousCharts(series, chartName)).toArray()
-        const nextChart = this.getNextChart(series, chartName)
+        const nextChart = await this.getNextChart(series, chartName)
 
         const prevChartNames = previousCharts.map(chart => chart.name);
         const songsWithStats = songs.map((song: Song) => {
