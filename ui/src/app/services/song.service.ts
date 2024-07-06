@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { CheckedSong, Song } from '../types/song';
+import { CheckedSong, FullSongInfo } from '../types/song';
 import { catchError, map } from 'rxjs/operators';
 import { getQueryString } from '../shared/get-query-string';
 
@@ -18,8 +18,8 @@ export class SongService {
     this.httpClient = httpClient;
   }
 
-  public getSongById(songId: string, seriesName?: string): Observable<Song> {
-    return this.httpClient.get<Song>(`${BASE_URL}/song?id=${songId}${seriesName ? `&seriesName=${seriesName}` : ''}`)
+  public getSongById(songId: string, seriesName?: string): Observable<FullSongInfo> {
+    return this.httpClient.get<FullSongInfo>(`${BASE_URL}/song?id=${songId}${seriesName ? `&seriesName=${seriesName}` : ''}`)
   }
 
   public checkIfSongExists(songString: string, pos: number): Observable<CheckedSong> {
@@ -32,7 +32,7 @@ export class SongService {
         httpSongString = httpSongString.substring(0, indexToReplace) + codeReplacement[1] + httpSongString.substring(indexToReplace + 1)
       }
     }
-    return this.httpClient.get<Song>(`${BASE_URL}/song/find/${httpSongString}`).pipe(map((val: Song) => {
+    return this.httpClient.get<FullSongInfo>(`${BASE_URL}/song/find/${httpSongString}`).pipe(map((val: FullSongInfo) => {
       if (val) {
         return { song: val, pos, exists: true }
       }
@@ -40,8 +40,8 @@ export class SongService {
     }), catchError(() => of({ songString, pos, exists: false })))
   }
 
-  public getSongs(options: Record<string, string>): Observable<Song[]> {
-    return this.httpClient.get<Song[]>(`${BASE_URL}/song/find?${getQueryString(options)}`);
+  public getSongs(options: Record<string, string>): Observable<FullSongInfo[]> {
+    return this.httpClient.get<FullSongInfo[]>(`${BASE_URL}/song/find?${getQueryString(options)}`);
   }
 
   public getSongCount(options: Record<string, string>): Observable<number> {
@@ -53,7 +53,7 @@ export class SongService {
       );
   }
 
-  public updateSong(id: string, newDetails: Partial<Song>): Observable<unknown> {
+  public updateSong(id: string, newDetails: Partial<FullSongInfo>): Observable<unknown> {
     return this.httpClient.put(`${BASE_URL}/song/${id}`, newDetails).pipe(
       map((res => {})), catchError(error => {throw error})
     )
@@ -66,6 +66,6 @@ export class SongService {
   }
 
   public getLeaderboard(options: Record<string, string>) {
-    return this.httpClient.get<Song[]>(`${BASE_URL}/song/totals?${getQueryString(options)}`)
+    return this.httpClient.get<FullSongInfo[]>(`${BASE_URL}/song/totals?${getQueryString(options)}`)
   }
 }

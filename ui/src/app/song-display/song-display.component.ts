@@ -9,7 +9,7 @@ import { ArtistService } from '../services/artist.service';
 import { SongService } from '../services/song.service';
 import { getChartHistory } from '../shared/get-chart-history';
 import { getChartRuns, getFullChartRun } from '../shared/get-chart-run';
-import { Song } from '../types/song';
+import { FullSongInfo } from '../types/song';
 import { faMusic } from '@fortawesome/free-solid-svg-icons';
 
 const DROPOUT = -1
@@ -29,7 +29,7 @@ export class SongDisplayComponent implements OnInit {
   private clipboardService: ClipboardService;
   private router: Router;
 
-  public songInfo: Song;
+  public songInfo: FullSongInfo;
   public selectedSeries = "";
   public chartSelectOptions: string[];
   public chartRuns = [];
@@ -69,7 +69,7 @@ export class SongDisplayComponent implements OnInit {
           return this.songService.getSongById(params.id, this.selectedSeries)
         }
         return of([])
-      })).subscribe((song: Song) => {
+      })).subscribe((song: FullSongInfo) => {
         this.songInfo = song;
         this.chartSelectOptions = Object.keys(this.songInfo.charts)
         if (initialLoad) {
@@ -146,7 +146,7 @@ export class SongDisplayComponent implements OnInit {
     forkJoin(artistObservables).subscribe(async artists => {
       let chartHistories = ''
       for (const artist of artists) {
-        chartHistories += getChartHistory(artist, this.selectedSeries)
+        chartHistories += getChartHistory(artist)
         chartHistories += '\n\n'
       }
       display += `[size=4][b]Top 100 Chart History[/b][/size]\n\n[size=1]${chartHistories}[/size]`

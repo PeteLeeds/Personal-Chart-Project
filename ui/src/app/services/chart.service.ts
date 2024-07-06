@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Chart, ChartParams, FullChart } from '../types/chart';
-import { Song } from '../types/song';
+import { FullSongInfo } from '../types/song';
 import { Series } from '../types/series';
 import { getQueryString } from '../shared/get-query-string';
 

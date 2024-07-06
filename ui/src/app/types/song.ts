@@ -6,13 +6,16 @@ export interface Song {
     title: string;
     artists?: Artist[];
     artistDisplay: string;
+}
+
+export interface FullSongInfo extends Song {
     charts: Record<string, SongInChart[]>;
     peak?: number;
 }
 
 export interface CheckedSong {
     // Should either have one or the other
-    song?: Song;
+    song?: FullSongInfo;
     songString?: string;
     pos?: number;
     exists?: boolean;

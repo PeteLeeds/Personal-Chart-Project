@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { SongService } from '../services/song.service';
-import { Song } from '../types/song';
+import { FullSongInfo } from '../types/song';
 
 @Component({
   selector: 'app-song',
@@ -11,7 +11,7 @@ import { Song } from '../types/song';
 export class SongComponent implements OnInit {
 
   private songService: SongService;
-  public songs: Song[];
+  public songs: FullSongInfo[];
   public songCount: number;
   public sortBy = "title";
   public sortOptions = ["title", "artistDisplay"];

@@ -51,11 +51,11 @@ export class ArtistDisplayComponent implements OnInit {
         this.chartSelectOptions = [];
         // Get distinct set of series this artist appears in
         for (const song of this.artistInfo.songs) {
-          for (const chart of Object.keys(song.charts)) {
-            if (!(this.chartSelectOptions.includes(chart))) {
-              this.chartSelectOptions.push(chart);
-            }
-          }
+          // for (const chart of Object.keys(song.charts)) {
+          //   if (!(this.chartSelectOptions.includes(chart))) {
+          //     this.chartSelectOptions.push(chart);
+          //   }
+          // }
         }
         if (initialLoad) {
           this.selectedSeries = this.chartSelectOptions[0];
@@ -80,7 +80,7 @@ export class ArtistDisplayComponent implements OnInit {
   }
 
   public copyChartHistory() {
-    const chartHistory = getChartHistory(this.artistInfo, this.selectedSeries)
+    const chartHistory = getChartHistory(this.artistInfo)
     this.clipboardService.copyFromContent(chartHistory)
   }
 

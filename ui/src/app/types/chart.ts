@@ -1,4 +1,4 @@
-import { FormattedSong, Song } from "./song";
+import { FormattedSong, FullSongInfo } from "./song";
 
 export interface ChartParams extends Chart {
     songs: FormattedSong[]

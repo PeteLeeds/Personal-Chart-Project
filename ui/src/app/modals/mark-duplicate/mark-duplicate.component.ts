@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ArtistService } from 'src/app/services/artist.service';
 import { SongService } from 'src/app/services/song.service';
-import { Song } from 'src/app/types/song';
+import { FullSongInfo } from 'src/app/types/song';
 import { ModalTemplateComponent } from '../modal-template/modal-template.component';
 import { ModalConfig } from '../modal.config';
 import { Observable } from 'rxjs';
@@ -61,11 +61,11 @@ export class MarkDuplicateComponent implements OnInit {
     }
     const suggestionObservable = (this.type == 'artist'
       ? this.artistService.getArtists(queryOptions)
-      : this.songService.getSongs(queryOptions)) as Observable<Artist[] | Song[]>
+      : this.songService.getSongs(queryOptions)) as Observable<Artist[] | FullSongInfo[]>
     suggestionObservable.subscribe((suggestions) => this.suggestions = suggestions)
   }
 
-  public selectItem(song: Song): void {
+  public selectItem(song: FullSongInfo): void {
     this.selectedId = song._id
   }
 

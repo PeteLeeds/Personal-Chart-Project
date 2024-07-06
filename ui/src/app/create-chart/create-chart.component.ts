@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { NewSongsComponent } from '../modals/new-songs/new-songs.component';
 import { ChartService } from '../services/chart.service';
 import { SongService } from '../services/song.service';
-import { CheckedSong, FormattedSong, Song } from '../types/song';
+import { CheckedSong, FormattedSong, FullSongInfo } from '../types/song';
 import moment from 'moment';
 
 @Component({
