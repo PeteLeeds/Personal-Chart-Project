@@ -22,9 +22,9 @@
 
     <div>
         Selected Series:
-        <select *ngIf="chartSelectOptions" [(ngModel)]="selectedSeries" (click)="reloadArtist()">
-            <ng-container *ngFor="let chart of chartSelectOptions">
-                <option>{{chart}}</option>
+        <select *ngIf="artistInfo.series" [(ngModel)]="selectedSeries" (click)="reloadArtist()">
+            <ng-container *ngFor="let series of artistInfo.series">
+                <option>{{series}}</option>
             </ng-container>
         </select>
     </div>

@@ -25,7 +25,6 @@ export class ArtistDisplayComponent implements OnInit {
   
   public artistInfo: Artist;
   public selectedSeries = "";
-  public chartSelectOptions: string[];
 
   public faGuitar = faGuitar
 
@@ -40,6 +39,7 @@ export class ArtistDisplayComponent implements OnInit {
   }
 
   public reloadArtist(initialLoad = false): void {
+    console.log('reloading', this.selectedSeries)
     this.subscriptions.push(
       this.activatedRoute.params.pipe(mergeMap(params => {
         if (params.id) {
@@ -48,18 +48,10 @@ export class ArtistDisplayComponent implements OnInit {
         return of({})
       })).subscribe((artist: Artist) => {
         this.artistInfo = artist;
-        this.chartSelectOptions = [];
-        // Get distinct set of series this artist appears in
-        for (const song of this.artistInfo.songs) {
-          // for (const chart of Object.keys(song.charts)) {
-          //   if (!(this.chartSelectOptions.includes(chart))) {
-          //     this.chartSelectOptions.push(chart);
-          //   }
-          // }
-        }
         if (initialLoad) {
-          this.selectedSeries = this.chartSelectOptions[0];
+          this.selectedSeries = artist.series[0];
         }
+        console.log('got', this.artistInfo)
         // This line is needed to trigger the change on the frontend
         this.artistInfo.songs = [...this.artistInfo.songs]
       }))  

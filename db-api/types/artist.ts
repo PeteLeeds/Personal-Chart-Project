@@ -5,4 +5,5 @@ export interface Artist {
     _id: ObjectId;
     name: string;
     songs?: Song[];
+    series?: string[]
 }

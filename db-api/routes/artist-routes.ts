@@ -15,7 +15,7 @@ export class ArtistRouter {
             }
             console.log('get artist', req.url)
             res.json(
-                await (res.locals.db as Database).artistDb.getArtist(id)
+                await (res.locals.db as Database).artistDb.getArtist(id, req.query.seriesName as string)
             )
         })
 

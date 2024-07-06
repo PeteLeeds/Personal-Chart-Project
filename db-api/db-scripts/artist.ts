@@ -38,9 +38,16 @@ export class ArtistDb {
             ...getSongChartPipeline(seriesName)
         ]).toArray();
         artist.songs.sort((a,b) => sortSongs(a, b, seriesName || ''))
+        artist.series = []
         for (const song of artist.songs) {
             if (!song.charts) {
                 throw new Error(`Song ${song.title} has no charts!`);
+            }
+            // Get distinct set of series this artist appears in
+            for (const series of Object.keys(song.charts)) {
+                if (!(artist.series.includes(series))) {
+                    artist.series.push(series);
+                }
             }
             if (!song.charts[seriesName]) {
               continue;

@@ -4,6 +4,7 @@ export interface Artist {
     _id: string;
     name: string;
     songs: ArtistSong[];
+    series: string[]
 }
 
 export interface ArtistSong extends Song {
