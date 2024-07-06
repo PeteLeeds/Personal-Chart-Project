@@ -5,11 +5,9 @@ import { of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { MarkDuplicateComponent } from '../modals/mark-duplicate/mark-duplicate.component';
 import { ArtistService } from '../services/artist.service';
-import { getChartHistory, sortSongs } from '../shared/get-chart-history';
+import { getChartHistory } from '../shared/get-chart-history';
 import { Artist } from '../types/artist';
 import { faGuitar } from '@fortawesome/free-solid-svg-icons';
-
-const DROPOUT = -1
 
 @Component({
   selector: 'app-artist-display',
@@ -62,18 +60,6 @@ export class ArtistDisplayComponent implements OnInit {
         if (initialLoad) {
           this.selectedSeries = this.chartSelectOptions[0];
         }
-        for (const song of this.artistInfo.songs) {
-          if (!song.charts[this.selectedSeries]) {
-            continue;
-          }
-          song.charts[this.selectedSeries] = song.charts[this.selectedSeries].filter(chart => chart.position != DROPOUT)
-          // Sort in ascending order so that peak is at position 0
-          song.charts[this.selectedSeries].sort((a, b) => a.position - b.position);
-          song.peak = song.charts[this.selectedSeries][0].position
-          // Then sort in date order
-          song.charts[this.selectedSeries].sort((a, b) => a.date > b.date ? 1 : -1)          
-        }
-        this.artistInfo.songs.sort((a,b) => sortSongs(a, b, this.selectedSeries))
         // This line is needed to trigger the change on the frontend
         this.artistInfo.songs = [...this.artistInfo.songs]
       }))  

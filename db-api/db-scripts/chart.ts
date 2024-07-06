@@ -175,6 +175,9 @@ export class ChartDb {
         const prevChartNames = previousCharts.map(chart => chart.name);
         const songsWithStats = songs.map((song: Song) => {
             // Index '1' is correct here as '0' will be the current chart
+            if (!song.charts) {
+                throw new Error(`Song ${song.title} has no charts!`);
+            }
             const currentSeries = song.charts[series]
             const charts = currentSeries.filter(
                 chart => prevChartNames.includes(chart.chart) && chart.position != DROPOUT
