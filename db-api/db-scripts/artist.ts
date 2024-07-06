@@ -4,6 +4,7 @@ import { getSongChartPipeline } from "./common/add-chart-dates";
 import { escapeRegex } from "./common/excape-regex";
 import { Song } from "../types/song";
 import { Artist } from "../types/artist";
+import { sortSongs } from "./common/sort-songs";
 
 const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
@@ -21,28 +22,6 @@ export class ArtistDb {
         this.db = db;
         console.log('initialised Artist class')
     }
-
-    private sortSongs(songA: Song, songB: Song, selectedSeries: string): number {
-        // Sort by date, then by highest entry position
-        if (!songA.charts || !songB.charts) {
-            throw new Error(`Trying to sort songs with no charts!`);
-        }
-        const song1EntryDate = this.getEarliestDate(songA, selectedSeries)
-        const song2EntryDate = this.getEarliestDate(songB, selectedSeries)
-        if (song1EntryDate.toDateString() === song2EntryDate.toDateString()) {
-          return (songA.charts[selectedSeries][0].position - songB.charts[selectedSeries][0].position)
-        } else {
-          return (song1EntryDate > song2EntryDate ? 1 : -1)
-        }
-    }
-
-    private getEarliestDate(song: Song, selectedSeries: string) {
-        if (!song.charts) {
-            throw new Error(`Song ${song.title} has no charts!`);
-        }
-        const chartsSortedByDate = song.charts[selectedSeries].sort((a, b) => new Date(a.date) > new Date(b.date) ? 1 : -1)
-        return new Date(chartsSortedByDate[0].date)
-    }
     
     public async getArtist(artistId: string, seriesName?: string): Promise<unknown> {
         const artist = await this.db.collection<Artist>(ARTIST_COLLECTION).findOne({ '_id': new ObjectId(artistId) });
@@ -58,7 +37,7 @@ export class ArtistDb {
             {"$match": { artistIds: new ObjectId(artistId) }},
             ...getSongChartPipeline(seriesName)
         ]).toArray();
-        artist.songs.sort((a,b) => this.sortSongs(a, b, seriesName || ''))
+        artist.songs.sort((a,b) => sortSongs(a, b, seriesName || ''))
         for (const song of artist.songs) {
             if (!song.charts) {
                 throw new Error(`Song ${song.title} has no charts!`);

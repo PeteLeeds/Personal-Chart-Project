@@ -1,7 +1,5 @@
 import { Artist } from "../types/artist"
 
-const DROPOUT = -1
-
 function getFormattedPeak(peak: number) {
     if (peak === 1) {
       return `[color=#FF0000][b]01[/b][/color]`
@@ -36,22 +34,6 @@ for (const string of collaborationStrings) {
     }
     return songTitle;
 }
-
-function getEarliestDate(song, selectedSeries) {
-  const chartsSortedByDate = song.charts[selectedSeries].sort((a, b) => new Date(a.date) > new Date(b.date) ? 1 : -1)
-  return new Date(chartsSortedByDate[0].date)
-}
-
-export function sortSongs(songA, songB, selectedSeries): number {
-    // Sort by date, then by highest entry position
-    const song1EntryDate = getEarliestDate(songA, selectedSeries)
-    const song2EntryDate = getEarliestDate(songB, selectedSeries)
-    if (song1EntryDate.toDateString() === song2EntryDate.toDateString()) {
-      return (songA.charts[selectedSeries][0].position - songB.charts[selectedSeries][0].position)
-    } else {
-      return (song1EntryDate > song2EntryDate ? 1 : -1)
-    }
-  }
 
 export function getChartHistory(artistInfo: Artist) {
     let bbCodeString = `[b]${artistInfo.name}[/b]\n[size=1]`

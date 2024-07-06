@@ -1,7 +1,7 @@
 interface SongInChart {
     chart: string,
     position: number,
-    date: Date
+    date: string
 }
 
 export interface Song {
