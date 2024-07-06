@@ -1,6 +1,7 @@
 {
     "_id": "638bbba594fd773d5c63946a",
     "name": "7Chariot",
+    "series": ["test series"],
     "songs": [
         {
             "_id": "638bbba594fd773d5c63946b",
