@@ -10,9 +10,11 @@ import { SeriesSelectComponent } from './series-select/series-select.component';
 import { SongDisplayComponent } from './song-display/song-display.component';
 import { SongComponent } from './song/song.component';
 import { TotalsComponent } from './totals/totals.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   // Can't have 'children' unless we want the parent displayed also!
+  { path: '', component: HomeComponent },
   { path: 'series', component: SeriesSelectComponent },
   { path: 'series/:series/chart', component: ChartSelectComponent },
   { path: 'series/:series/chart/new', component: CreateChartComponent },
