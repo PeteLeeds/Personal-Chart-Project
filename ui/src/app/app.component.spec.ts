@@ -5,6 +5,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 
 @Component({
+  template: `Home`,
+})
+class TestHomeComponent {}
+
+@Component({
   template: `Series`,
 })
 class TestSeriesSelectComponent {}
@@ -25,7 +30,7 @@ class TestArtistComponent {}
 class TestTotalsComponent {}
 
 export const routes: Routes = [
-  { path: '', component: AppComponent },
+  { path: '', component: TestHomeComponent },
   { path: 'series', component: TestSeriesSelectComponent },
   { path: 'song', component: TestSongComponent },
   { path: 'artist', component: TestArtistComponent },
@@ -67,7 +72,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
     const buttons = compiled.querySelectorAll('a')
-    const pages = ['Series', 'Song', 'Artist', 'Totals']
+    const pages = ['Home', 'Series', 'Song', 'Artist', 'Totals']
 
     buttons.forEach((button, index) => {
       button.click()
