@@ -149,7 +149,11 @@ export class ChartDb {
         return this.db.collection(CHART_COLLECTION).aggregate([
             {'$unwind': '$charts'},
             {'$sort': {'charts.date': -1}},
-            {'$limit': 5}
+            {'$limit': 5},
+            {'$project': {
+                'series': '$name',
+                'name': '$charts.name',
+            }}
         ])
     }
 

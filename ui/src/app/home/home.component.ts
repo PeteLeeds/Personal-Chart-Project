@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CreateSeriesComponent } from '../modals/create-series/create-series.component';
 import { ChartService } from '../services/chart.service';

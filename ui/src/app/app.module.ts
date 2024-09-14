@@ -31,6 +31,7 @@ import { MarkDuplicateComponent } from './modals/mark-duplicate/mark-duplicate.c
 import { SearchComponent } from './shared/search/search.component'
 import { ChartEditComponent } from './chart-edit/chart-edit.component';
 import { TotalsComponent } from './totals/totals.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { TotalsComponent } from './totals/totals.component';
     MarkDuplicateComponent,
     SearchComponent,
     ChartEditComponent,
-    TotalsComponent
+    TotalsComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
