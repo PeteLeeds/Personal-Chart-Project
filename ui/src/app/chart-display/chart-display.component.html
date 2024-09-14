@@ -29,11 +29,6 @@
                 <th>Peak</th>
                 <th>Weeks</th>
             </tr>
-            <!--Either need to fetch all this info separately on the server and calculate on the client
-                Or calculate on the server-->
-            <!--Last Week: Given a chart, return the immediately preceding chart and get the position for that
-                Peak: Given a chart, get all preceding charts and find the highest value within that range
-                Weeks: Given a chart, get all preceding charts and find the number that appear-->
             <ng-container *ngFor="let song of chartData">
                 <tr class="select-option">
                     <td class="text-center">{{song.position}}</td>
