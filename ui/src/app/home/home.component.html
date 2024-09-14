@@ -3,7 +3,7 @@
 <h2>Recent Charts</h2>
 
 <ng-container *ngFor="let chart of recentCharts">
-    <a [routerLink]="['/series', chart.series, '/chart', chart.name]">
+    <a [routerLink]="['series', chart.series, 'chart', chart.name]">
         <div class="select-option">
             <div><b>{{chart.name}}</b></div>
             <div><i>{{chart.series}}</i></div>
