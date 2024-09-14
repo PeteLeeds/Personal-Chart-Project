@@ -58,6 +58,10 @@ export class ChartService {
     return this.httpClient.get<string>(`${BASE_URL}/series/${seriesName}/next/${chartName}`)
   }
 
+  public getRecentCharts(): Observable<Chart[]> {
+    return this.httpClient.get<Chart[]>(`${BASE_URL}/series/recent`)
+  }
+
   public getChartDate(seriesName: string, chartName: string): Observable<string> {
     return this.httpClient.get<string>(`${BASE_URL}/series/${seriesName}/date/${chartName}`)
   }

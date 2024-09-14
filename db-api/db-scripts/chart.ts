@@ -145,6 +145,14 @@ export class ChartDb {
         return this.db.collection(CHART_COLLECTION).find();
     }
 
+    public getRecentCharts(): AggregationCursor<Chart[]> {
+        return this.db.collection(CHART_COLLECTION).aggregate([
+            {'$unwind': '$charts'},
+            {'$sort': {'charts.date': -1}},
+            {'$limit': 5}
+        ])
+    }
+
     /**
      * Get a pipeline to limit past charts if a specific chart size is chosen
      */

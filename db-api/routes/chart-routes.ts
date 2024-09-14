@@ -19,6 +19,16 @@ export class ChartRouter {
         /**
          * Return an existing chart series
          */
+        router.get('/recent', async (_, res) => {
+            console.log('list recent charts')
+            res.json(
+                await (res.locals.db as Database).chartDb.getRecentCharts().toArray()
+            )
+        })
+
+        /**
+         * Return an existing chart series
+         */
         router.get('/:name', async (req, res) => {
             console.log('list charts')
             res.json(
