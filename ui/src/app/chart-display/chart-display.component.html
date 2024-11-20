@@ -1,4 +1,5 @@
 <div class="row right">
+    <div (click)="copyPlaintext()" title="Copy Chart"><fa-icon [icon]="faCopy" class="fa-lg"></fa-icon></div>
     <a routerLink="./edit" title="Edit Details"><fa-icon [icon]="faPenSquare" class="fa-lg"></fa-icon></a>
     <div (click)="openModal()" title="Delete Chart"><fa-icon [icon]="faTrash" class="fa-lg"></fa-icon></div>
     <a [routerLink]="['..', 'new']" title="Upload New Chart"><fa-icon [icon]="faPlus" class="fa-lg"></fa-icon></a>
@@ -32,7 +33,7 @@
             <ng-container *ngFor="let song of chartData">
                 <tr class="select-option">
                     <td class="text-center">{{song.position}}</td>
-                    <td class="text-center">{{song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NEW')}}</td>
+                    <td class="text-center">{{song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NE')}}</td>
                     <td>
                         <a [routerLink]="['/song', song._id]">
                             <div class="song-title">

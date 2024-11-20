@@ -1,11 +1,17 @@
 import { Artist } from './artist';
-import { Chart } from './chart'
 
 export interface Song {
     _id: string;
     title: string;
     artists?: Artist[];
     artistDisplay: string;
+}
+
+export interface AbstractSongInfo extends Song {
+    peak: number;
+    lastWeek?: number;
+    weeksOn: number;
+    position: number;
 }
 
 export interface FullSongInfo extends Song {
@@ -21,13 +27,13 @@ export interface CheckedSong {
     exists?: boolean;
 }
 
-export interface NewSong extends CheckedSong {
+interface NewSong extends CheckedSong {
     artists?: string[];
     artistDisplay?: string;
     title?: string;
 }
 
-export interface ExistingSong {
+interface ExistingSong {
     id: string;
     pos?: number;
     exists: boolean;

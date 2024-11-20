@@ -4,9 +4,10 @@ import { of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { DeleteItemComponent } from '../modals/delete-series/delete-item.component';
 import { ChartService } from '../services/chart.service'
-import { FormattedSong } from '../types/song';
-import { faPenSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { AbstractSongInfo } from '../types/song';
+import { faPenSquare, faTrash, faPlus, faCopy } from '@fortawesome/free-solid-svg-icons';
 import { FullChart } from '../types/chart';
+import { ClipboardService } from 'ngx-clipboard';
 
 const CHART_SIZES = [10, 20, 40, 75]
 
@@ -20,11 +21,12 @@ export class ChartDisplayComponent implements OnInit {
   @ViewChild('deleteItemModal') private deleteItemModal: DeleteItemComponent;
 
   private chartService: ChartService;
+  private clipboardService: ClipboardService;
   private subscriptions: Subscription[] = [];
   private activatedRoute: ActivatedRoute;
   private router: Router;
 
-  public chartData: FormattedSong[]
+  public chartData: AbstractSongInfo[]
   public seriesName: string;
   public chartName: string;
 
@@ -37,9 +39,14 @@ export class ChartDisplayComponent implements OnInit {
   faPlus = faPlus;
   faTrash = faTrash;
   faPenSquare = faPenSquare;
+  faCopy = faCopy;
 
-  public constructor(chartService: ChartService, activatedRoute: ActivatedRoute, router: Router) {
+  public constructor(chartService: ChartService, 
+    clipboardService: ClipboardService,
+    activatedRoute: ActivatedRoute, 
+    router: Router) {
     this.chartService = chartService;
+    this.clipboardService = clipboardService;
     this.activatedRoute = activatedRoute;
     this.router = router;
   }
@@ -80,6 +87,14 @@ export class ChartDisplayComponent implements OnInit {
     await this.deleteItemModal.open(this.seriesName, this.chartName)
     // When modal closes, navigate to 'series' page
     this.router.navigate(['..'], { relativeTo: this.activatedRoute })
+  }
+
+  public copyPlaintext() {
+    let chartString = ""
+    for (const song of this.chartData) {
+      chartString += `${song.position} [${song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NEW')}] ${song.artistDisplay} - ${song.title}\n`
+    }
+    this.clipboardService.copyFromContent(chartString)
   }
 
   public ngOnDestroy(): void {

@@ -1,4 +1,4 @@
-import { FormattedSong, FullSongInfo } from "./song";
+import { AbstractSongInfo, FormattedSong } from "./song";
 
 export interface ChartParams extends Chart {
     songs: FormattedSong[]
@@ -12,5 +12,5 @@ export interface Chart {
 export interface FullChart {
     lastChart: string,
     nextChart: string,
-    songs: FormattedSong[]
+    songs: AbstractSongInfo[]
 }
