@@ -40,15 +40,23 @@ describe('ChartDisplayComponent', () => {
             songs: [
               {
                 _id: '0', title: 'Song 1', artistDisplay: 'Artist 1',
-                charts: { 'Test Series': [{ 'chart': 'Test Chart', 'position': 1 }] }
+                position: 1,
+                peak: 1,
+                weeksOn: 2,
+                lastWeek: 1,
               },
               {
                 _id: '1', title: 'Song 2', artistDisplay: 'Artist 2',
-                charts: { 'Test Series': [{ 'chart': 'Test Chart', 'position': 2 }] }
+                position: 2,
+                peak: 2,
+                weeksOn: 2,
+                lastWeek: 4,              
               },
               {
                 _id: '2', title: 'Song 3', artistDisplay: 'Artist 3',
-                charts: { 'Test Series': [{ 'chart': 'Test Chart', 'position': 3 }] }
+                position: 3,
+                peak: 3,
+                weeksOn: 1,
               }
             ],
             lastChart: 'Test Previous Chart',
