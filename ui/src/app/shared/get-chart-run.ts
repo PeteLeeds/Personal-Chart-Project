@@ -1,9 +1,9 @@
-import { SongInChart } from "../types/song";
+import { ChartPosition } from "../types/song";
 
 const DROPOUT = -1
 
 /* Break up chart runs based on dropouts */
-export function getChartRuns(charts: SongInChart[]): SongInChart[][] {
+export function getChartRuns(charts: ChartPosition[]): ChartPosition[][] {
     charts.sort((a, b) => new Date(a.date) > new Date(b.date) ? 1 : -1)
     const chartRuns = charts.reduce((prevValue, current) => {
         if (current.position == DROPOUT) {
@@ -21,7 +21,7 @@ export function getChartRuns(charts: SongInChart[]): SongInChart[][] {
     return chartRuns
 }
 
-function getBbCodeChartRun(charts: SongInChart[], peak: number, reEntry = false): string {
+function getBbCodeChartRun(charts: ChartPosition[], peak: number, reEntry = false): string {
     const formattedDate = formatDate(new Date(charts[0].date))
     let bbCodeString = `[b]${reEntry ? 'R' : 'N'}E[/b] (${formattedDate}) `
     let currentColour = ''
@@ -42,7 +42,7 @@ function getBbCodeChartRun(charts: SongInChart[], peak: number, reEntry = false)
     return bbCodeString;
 }
 
-export function getFullChartRun(chartRuns: SongInChart[][]) {
+export function getFullChartRun(chartRuns: ChartPosition[][]) {
     let peak = 101;
     for (const chartRun of chartRuns) {
         for (const chart of chartRun) {

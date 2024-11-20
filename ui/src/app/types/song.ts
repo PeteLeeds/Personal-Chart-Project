@@ -9,7 +9,7 @@ export interface Song {
 }
 
 export interface FullSongInfo extends Song {
-    charts: Record<string, SongInChart[]>;
+    charts: Record<string, ChartPosition[]>;
     peak?: number;
 }
 
@@ -33,7 +33,7 @@ export interface ExistingSong {
     exists: boolean;
 }
 
-export interface SongInChart {
+export interface ChartPosition {
     chart?: string
     date?: string;
     position: number;
