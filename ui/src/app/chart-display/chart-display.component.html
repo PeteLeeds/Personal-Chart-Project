@@ -11,8 +11,8 @@
     <h2>{{chartName}}</h2>
     <ng-container *ngIf="chartData; else loading">
         <div class="row">
-            <a class="button" id="prev-chart" *ngIf="lastChart" [routerLink]="['..', lastChart]">Previous</a>
-            <a class="button" id="next-chart" *ngIf="nextChart" [routerLink]="['..', nextChart]">Next</a>
+            <a class="button" id="prev-chart" *ngIf="lastChart" (click)="resetData()" [routerLink]="['..', lastChart]">Previous</a>
+            <a class="button" id="next-chart" *ngIf="nextChart" (click)="resetData()" [routerLink]="['..', nextChart]">Next</a>
         </div>
         <div class="row">
             <ng-container *ngFor="let size of availableSizes">

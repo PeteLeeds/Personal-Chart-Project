@@ -107,4 +107,8 @@ export class ChartDisplayComponent implements OnInit {
     this.songNumberToRetrieve = count
     this.reloadChart()
   }
+
+  public resetData() {
+    this.chartData = null
+  }
 }
