@@ -31,10 +31,6 @@
   display: flex;
 }
 
-.text-center {
-  text-align: center;
-}
-
 #song-square {
   min-height: 10rem;
   max-height: 10rem;

@@ -1,63 +1,71 @@
-<h1>Cumulative Total Calculator</h1>
-<form [formGroup]="totalsForm" (ngSubmit)="onSubmit()">
-    <div>
-        <label>Series:</label>
-        <select formControlName="series">
-            <ng-container *ngFor="let series of seriesList">
-                <option>{{series.name}}</option>
-            </ng-container>
-        </select>
+<div class="centre">
+    <h1 class="text-center">Cumulative Total Calculator</h1>
+    <form [formGroup]="totalsForm" (ngSubmit)="onSubmit()">
+        <div class="centre">
+            <label>Series:
+                <select formControlName="series">
+                    <ng-container *ngFor="let series of seriesList">
+                        <option>{{series.name}}</option>
+                    </ng-container>
+                </select>
+            </label>
+        </div>
+        <div class="centre">
+            <label>From:
+                <input [matDatepicker]="fromDatepicker" formControlName="from">
+                <mat-datepicker-toggle [for]="fromDatepicker"></mat-datepicker-toggle>
+                <mat-datepicker #fromDatepicker></mat-datepicker>
+            </label>
+        </div>
+        <div class="centre">
+            <label>To:
+                <input [matDatepicker]="toDatepicker" formControlName="to">
+                <mat-datepicker-toggle [for]="toDatepicker"></mat-datepicker-toggle>
+                <mat-datepicker #toDatepicker></mat-datepicker>
+            </label>
+        </div>
+        <div class="centre">
+            <label>Include full chart runs (including those starting/ending outside dates shown)
+                <input type="checkbox" checked="true" formControlName="includeFullChartRun">
+            </label>
+        </div>
+        <div class="centre">
+            <label>Estimate future points of songs in chart on end date
+                <input type="checkbox" checked="true" formControlName="estimateFuturePoints">
+            </label>
+        </div>
+        <div class="centre">
+            <label>Return top:
+                <input type="text" value="100" formControlName="numberOfResults">
+            </label>
+        </div>
+        <td class="centre"><button type="submit" [disabled]="!totalsForm.valid">Submit</button></td>
+    </form>
+    <div *ngIf="calculating">
+        <mat-spinner></mat-spinner>
     </div>
-    <div>
-        <label>From:
-            <input [matDatepicker]="fromDatepicker" formControlName="from">
-            <mat-datepicker-toggle [for]="fromDatepicker"></mat-datepicker-toggle>
-            <mat-datepicker #fromDatepicker></mat-datepicker>
-        </label>
-    </div>
-    <div>
-        <label>To:
-            <input [matDatepicker]="toDatepicker" formControlName="to">
-            <mat-datepicker-toggle [for]="toDatepicker"></mat-datepicker-toggle>
-            <mat-datepicker #toDatepicker></mat-datepicker>
-        </label>
-    </div>
-    <div>
-        <label>Include full chart runs (including those starting/ending outside dates shown)</label>
-        <input type="checkbox" checked="true" formControlName="includeFullChartRun">
-    </div>
-    <div>
-        <label>Estimate future points of songs in chart on end date</label>
-        <input type="checkbox" checked="true" formControlName="estimateFuturePoints">
-    </div>
-    <div>
-        <label>Return top:</label>
-        <input type="text" value="100" formControlName="numberOfResults">
-    </div>
-    <td><button type="submit" [disabled]="!totalsForm.valid">Submit</button></td>
-</form>
-
-<div *ngIf="leaderboard.length > 0">
-    <button (click)="export()">Export to CSV</button>
-    <table>
-        <tr>
-            <th>Pos</th>
-            <th>Artist</th>
-            <th>Title</th>
-            <th>Points</th>
-        </tr>
-        <!--Either need to fetch all this info separately on the server and calculate on the client
-        Or calculate on the server-->
-        <!--Last Week: Given a chart, return the immediately preceding chart and get the position for that
-        Peak: Given a chart, get all preceding charts and find the highest value within that range
-        Weeks: Given a chart, get all preceding charts and find the number that appear-->
-        <ng-container *ngFor="let song of leaderboard; let i = index">
+    <div *ngIf="leaderboard.length > 0">
+        <div class="centre"><button (click)="export()">Export to CSV</button></div>
+        <table class="song-table">
             <tr>
-                <td>{{i + 1}}</td>
-                <td>{{song.artistDisplay}}</td>
-                <td><a [routerLink]="['/song', song._id]">{{song.title}}</a></td>
-                <td>{{song.totalPoints}}</td>
+                <th>Pos</th>
+                <th>Song</th>
+                <th>Points</th>
             </tr>
-        </ng-container>
-    </table>
+            <ng-container *ngFor="let song of leaderboard; let i = index">
+                <tr class="select-option">
+                    <td class="text-center">{{i + 1}}</td>
+                    <td>
+                        <a [routerLink]="['/song', song._id]">
+                            <div class="song-title">
+                                <div><b>{{song.title}}</b></div>
+                                <div><i>{{song.artistDisplay}}</i></div>
+                            </div>
+                        </a>
+                    </td>
+                    <td class="text-center">{{song.totalPoints}}</td>
+                </tr>
+            </ng-container>
+        </table>
+    </div>
 </div>

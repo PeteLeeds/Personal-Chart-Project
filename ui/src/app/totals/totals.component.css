@@ -1,11 +1,13 @@
-table, th, td{
-    border: 1px solid blue
-}
-
 button:disabled {
     background-color: grey;
 }
 
 button:disabled:hover {
     background-color: grey;
+}
+
+.centre {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

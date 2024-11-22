@@ -15,6 +15,7 @@ export class TotalsComponent {
   public seriesList = []
   public leaderboard = []
   public seriesBeingUsed = null
+  public calculating = false
 
   private songService: SongService
   private chartService: ChartService
@@ -42,6 +43,7 @@ export class TotalsComponent {
   }
 
   public onSubmit(): void {
+    this.calculating = true
     this.seriesBeingUsed = this.totalsForm.controls['series'].value
     const stringForm = {}
     for (const [key, value] of Object.entries(this.totalsForm.value)) {
@@ -49,7 +51,10 @@ export class TotalsComponent {
         stringForm[key] = value.toString()
       }
     }
-    this.songService.getLeaderboard(stringForm).subscribe(res => this.leaderboard = res)
+    this.songService.getLeaderboard(stringForm).subscribe(res => {
+      this.leaderboard = res
+      this.calculating = false
+    })
   }
 
   public export(): void {
