@@ -33,7 +33,7 @@
             <ng-container *ngFor="let song of chartData">
                 <tr class="select-option">
                     <td class="text-center">{{song.position}}</td>
-                    <td class="text-center">{{song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NE')}}</td>
+                    <td class="text-center">{{song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NEW')}}</td>
                     <td>
                         <a [routerLink]="['/song', song._id]">
                             <div class="song-title">
