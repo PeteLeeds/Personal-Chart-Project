@@ -102,6 +102,16 @@ export class ChartRouter {
             )
         })
 
+        /**
+        * Given a chart in a series, return a formatted string of the songs in that chart
+        */
+        router.get('/:series/string/:chart', async (req, res) => {
+            console.log('Get chart string', req.params.chart)
+            res.json(
+                await (res.locals.db as Database).chartDb.getFormattedChartString(req.params.series, req.params.chart)
+            )
+        })
+
 
         /**
         * Update the details of a given chart in a series
