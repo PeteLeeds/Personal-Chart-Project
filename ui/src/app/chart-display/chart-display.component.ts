@@ -95,6 +95,7 @@ export class ChartDisplayComponent implements OnInit {
       chartString += `${song.position} [${song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NEW')}] ${song.artistDisplay} - ${song.title}\n`
     }
     this.clipboardService.copyFromContent(chartString)
+    this.chartService.getChartString(this.seriesName, this.chartName).subscribe((chartString: string) => console.log(chartString))
   }
 
   public ngOnDestroy(): void {

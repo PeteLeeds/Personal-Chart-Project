@@ -12,4 +12,5 @@ export interface Song {
     debut?: string
     peak?: number
     weeksOn?: number
+    lastWeek?: number
 }

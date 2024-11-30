@@ -296,6 +296,68 @@ export class ChartDb {
         return chartArray[0]?.name
     }
 
+    private getSymbol(weeksOn: number, thisWeek: number, lastWeek?: number) {
+        if (!lastWeek || lastWeek > 40) {
+            if (weeksOn == 1) {
+                return ':ne:'
+            }
+            return ':re:'
+        } else if (thisWeek > lastWeek) {
+            return ':down:'
+        } else if (thisWeek < lastWeek) {
+            return ':up:'
+        } else {
+            return ':right:'
+        }
+    }
+
+    public async getFormattedChartString(series: string, chartName: string, size?: string): Promise<Record<string, string>> {
+        const songs = await (await this.getChartSongs(series, chartName, size)).toArray()
+        const previousCharts = await (await this.getPreviousCharts(series, chartName)).toArray()
+        const prevChartNames = previousCharts.map(chart => chart.name);
+
+        let formattedChartString = ""
+        for (let i = 0; i < songs.length; i++) {
+            if (i == 40) {
+                formattedChartString += `[b]Below 40:[/b][size=1]\n\n`
+            }
+            const song = songs[i]
+            if (!song.charts) {
+                throw new Error(`Song ${song.title} has no charts!`);
+            }
+            const currentSeries = song.charts[series]
+            const charts = currentSeries.filter(
+                chart => prevChartNames.includes(chart.chart) && chart.position != DROPOUT
+            );
+            const lastChartRecord = charts.find(chart => chart.chart === prevChartNames[1])
+            song.lastWeek = lastChartRecord?.position
+            song.weeksOn = charts.length
+            const weeksOnTop40 = charts.filter(chart => chart.position <= 40).length
+            charts.sort((a, b) => a.position - b.position);
+            const lastWeekString = `${song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NE')}`
+            let positionString = `[b]${i + 1}[/b] [${lastWeekString}]`
+            if (i >= 40 && lastWeekString == 'NE') {
+                positionString = `[color=#FF0000]${positionString}[/color]`
+            }
+            let songString = `${positionString} ${song.artistDisplay} - ${song.title}`
+            if (i < 40) {
+                const symbol = this.getSymbol(weeksOnTop40, i + 1, song.lastWeek)
+                const chartRun = "(CHART RUN TBA)"
+                songString = `${symbol} ${songString} ${chartRun}`
+                if ((i + 1) % 10 == 0) {
+                    songString += `\n`
+                }
+            } else {
+                songString += ` (Pk: ${song.peak})`
+            }
+            formattedChartString += `${songString}\n`
+        }
+        if (songs.length > 40) {
+            formattedChartString += `[/size]`
+        }
+        return {'chartString': formattedChartString}
+    }
+
     public async deleteSeries(seriesName: string) {
         // First delete any song info about the series
         console.log("Deleting chart info")
