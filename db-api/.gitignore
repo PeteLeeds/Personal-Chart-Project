@@ -1,2 +1,4 @@
 /dist
 /node_modules
+env.ps1
+env.sh

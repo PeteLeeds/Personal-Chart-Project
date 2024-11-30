@@ -21,8 +21,13 @@ In order to run the UI:
 
 ### Db API
 In order to run the DB API:
+- set the following environment variables:
+```
+MONGO_URI = <URI of Mongo instance, if running locally this will be 'mongodb://127.0.0.1:27017'>
+MONGO_DB = <Mongo DB Name, for example `personal_chart`>
+PORT = 8083
+```
 - navigate to `/db-api`
 - run `npm i`
 - run `tsc`
-- run `. ./env.ps1` (Windows) or `. ./env.sh` (Linux/Mac)
 - run `node dist/index.js`
