@@ -88,7 +88,7 @@ export class ArtistDb {
             ...params.name ? [this.getMatchPipeline(params)] : [],
             {'$count': 'artist_count'}
         ]).toArray();
-        return count_object[0].artist_count
+        return count_object.length > 0 ? count_object[0].artist_count : 0
     }
 
     public async mergeArtists(fromId: string, toId: string) {
