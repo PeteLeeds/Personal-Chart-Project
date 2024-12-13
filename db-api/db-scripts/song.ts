@@ -38,7 +38,7 @@ export class SongDb {
             ...getSongChartPipeline(seriesName),
         ]).toArray();
         const song = songArray[0]
-        song.artists = await this.db.collection(ARTIST_COLLECTION).find<Artist>({ _id: {" $in": song.artistIds } }).toArray();
+        song.artists = await this.db.collection(ARTIST_COLLECTION).find<Artist>({ _id: {$in: song.artistIds as unknown as ObjectId[] } }).toArray();
         song.chartRuns = splitChartRun(song.charts ? song.charts[seriesName] : [])
         formatSong(song, seriesName)
         return song
