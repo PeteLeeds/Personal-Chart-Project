@@ -3,7 +3,7 @@ import { Validators, FormControl, FormGroup } from '@angular/forms';
 import { ChartService } from '../services/chart.service';
 import { SongService } from '../services/song.service';
 import { ExportToCsv } from 'export-to-csv';
-import { getChartRuns, getFullChartRun } from '../shared/get-chart-run';
+import { getFullChartRun } from '../shared/get-chart-run';
 
 @Component({
   selector: 'totals',
@@ -60,12 +60,11 @@ export class TotalsComponent {
   public export(): void {
 
     const songData = this.leaderboard.map((song, index) => {
-      const chartRuns = getChartRuns(song.charts[this.seriesBeingUsed])
       return {
         pos: index + 1,
         artist: song.artistDisplay,
         title: song.title,
-        chartRun: getFullChartRun(chartRuns),
+        chartRun: getFullChartRun(song.chartRuns),
         points: song.totalPoints
       }
     })

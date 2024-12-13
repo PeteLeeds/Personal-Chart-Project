@@ -8,7 +8,7 @@ import { MarkDuplicateComponent } from '../modals/mark-duplicate/mark-duplicate.
 import { ArtistService } from '../services/artist.service';
 import { SongService } from '../services/song.service';
 import { getChartHistory } from '../shared/get-chart-history';
-import { getChartRuns, getFullChartRun } from '../shared/get-chart-run';
+import { getFullChartRun } from '../shared/get-chart-run';
 import { FullSongInfo } from '../types/song';
 import { faMusic } from '@fortawesome/free-solid-svg-icons';
 
@@ -71,17 +71,10 @@ export class SongDisplayComponent implements OnInit {
         return of([])
       })).subscribe((song: FullSongInfo) => {
         this.songInfo = song;
-        this.chartSelectOptions = Object.keys(this.songInfo.charts)
+        this.chartSelectOptions = this.songInfo.series
         if (initialLoad) {
           this.selectedSeries = this.chartSelectOptions[0];
         }
-        this.chartRuns = getChartRuns(song.charts[this.selectedSeries])
-        song.charts[this.selectedSeries] = song.charts[this.selectedSeries].filter(chart => chart.position != DROPOUT)
-        this.weeksOn = song.charts[this.selectedSeries].length;
-        this.peak = [...song.charts[this.selectedSeries]]
-          .sort((a, b) => a.position - b.position)[0]
-          .position
-        this.songInfo.charts[this.selectedSeries].sort((a, b) => new Date(a.date) > new Date(b.date) ? 1 : -1)
         this.songDetailsForm.setValue({ title: song.title, artistDisplay: song.artistDisplay });
       }))
   }

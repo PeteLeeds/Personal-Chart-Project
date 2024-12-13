@@ -4,6 +4,9 @@ import { getSongChartPipeline } from "./common/add-chart-dates";
 import { SongQueryParams } from "../types/query-params";
 import { Song } from "../types/song";
 import { escapeRegex } from "./common/excape-regex";
+import { splitChartRun } from "./common/chart-run"
+import { Artist } from "../types/artist";
+import { formatSong } from "./common/format-song";
 
 const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
@@ -23,19 +26,22 @@ export class SongDb {
         console.log('initialised Song class')
     }
 
-    public async getSong(songId: string, seriesName?: string): Promise<unknown> {
+    public async getSong(songId: string, seriesName?: string): Promise<Song> {
         // If series name is not defined, find the first series the song has appeared in
         if (!seriesName) {
           seriesName = Object.keys(
             (await this.db.collection(SONG_COLLECTION).findOne({ '_id': new ObjectId(songId) }))?.charts
           )[0]
         }
-        const song = await this.db.collection(SONG_COLLECTION).aggregate([
+        const songArray = await this.db.collection(SONG_COLLECTION).aggregate<Song>([
             {"$match": { '_id': new ObjectId(songId) }}, 
             ...getSongChartPipeline(seriesName),
         ]).toArray();
-        song[0].artists = await this.db.collection(ARTIST_COLLECTION).find({ _id: { $in: song[0].artistIds } }).toArray();
-        return song[0]
+        const song = songArray[0]
+        song.artists = await this.db.collection(ARTIST_COLLECTION).find<Artist>({ _id: {" $in": song.artistIds } }).toArray();
+        song.chartRuns = splitChartRun(song.charts ? song.charts[seriesName] : [])
+        formatSong(song, seriesName)
+        return song
     }
 
     private getMatchPipeline(params: SongQueryParams): Record<string, unknown> {
@@ -132,7 +138,7 @@ export class SongDb {
             {'$limit': 1}
         ]).toArray()
         const lastChartName = lastChart[0].charts.name
-        return this.db.collection(SONG_COLLECTION).aggregate<Song>([
+        const leaderboard = await this.db.collection(SONG_COLLECTION).aggregate<Song>([
             ...getSongChartPipeline(options.series),
             {'$match': {[`charts.${options.series}.date`]: {'$gte': new Date(options.from).toISOString(), '$lte': new Date(options.to).toISOString()}}},
             {'$addFields': {totalPoints: {'$reduce': {
@@ -186,5 +192,9 @@ export class SongDb {
             {'$sort': {'totalPoints': -1}},
             {'$limit': parseInt(options.numberOfResults)}
         ]).toArray()
+        for (const song of leaderboard) {
+            song.chartRuns = splitChartRun(song.charts ? song.charts[options.series] : [])
+        }
+        return leaderboard
     }
 }
