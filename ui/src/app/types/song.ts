@@ -15,8 +15,9 @@ export interface AbstractSongInfo extends Song {
 }
 
 export interface FullSongInfo extends Song {
-    charts: Record<string, ChartPosition[]>;
-    peak?: number;
+    chartRuns: ChartPosition[][];
+    peak: number;
+    series: string[]
 }
 
 export interface CheckedSong {

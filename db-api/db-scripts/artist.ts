@@ -5,6 +5,7 @@ import { escapeRegex } from "./common/excape-regex";
 import { Song } from "../types/song";
 import { Artist } from "../types/artist";
 import { sortSongs } from "./common/sort-songs";
+import { formatSong } from "./common/format-song";
 
 const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
@@ -49,18 +50,7 @@ export class ArtistDb {
                     artist.series.push(series);
                 }
             }
-            if (!song.charts[seriesName]) {
-              continue;
-            }
-            song.charts[seriesName] = song.charts[seriesName].filter(chart => chart.position != DROPOUT)
-            // Sort in ascending order so that peak is at position 0
-            song.charts[seriesName].sort((a, b) => a.position - b.position);
-            song.peak = song.charts[seriesName][0].position
-            song.weeksOn = song.charts[seriesName].length
-            song.debut = song.charts[seriesName][0].chart
-            // Then sort in date order
-            song.charts[seriesName].sort((a, b) => a.date > b.date ? 1 : -1)    
-            delete song.charts      
+            formatSong(song, seriesName)
           }
         return artist
     }

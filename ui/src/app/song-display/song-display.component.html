@@ -67,8 +67,8 @@
         </div>
     </div>
     <h2>Chart History</h2>
-    <ng-container *ngIf="songInfo?.charts && songInfo?.charts[selectedSeries]; else loading">
-        <div *ngFor="let run of chartRuns; let i = index">
+    <ng-container *ngIf="songInfo?.chartRuns; else loading">
+        <div *ngFor="let run of songInfo.chartRuns; let i = index">
             <div class="text-center">
                 <p class="run-header">Chart run {{i + 1}}</p>
                 <p>{{run[0].chart}} - {{run[run.length - 1].chart}}</p>

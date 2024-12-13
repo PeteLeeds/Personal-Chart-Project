@@ -1,26 +1,5 @@
 import { ChartPosition } from "../types/song";
 
-const DROPOUT = -1
-
-/* Break up chart runs based on dropouts */
-export function getChartRuns(charts: ChartPosition[]): ChartPosition[][] {
-    charts.sort((a, b) => new Date(a.date) > new Date(b.date) ? 1 : -1)
-    const chartRuns = charts.reduce((prevValue, current) => {
-        if (current.position == DROPOUT) {
-          if (prevValue[prevValue.length - 1].length > 0) {
-            prevValue.push([])
-          }
-          return prevValue
-        }
-        prevValue[prevValue.length - 1].push(current)
-        return prevValue
-      }, [[]])
-      if (chartRuns[chartRuns.length - 1].length === 0) {
-        chartRuns.pop()
-      }
-    return chartRuns
-}
-
 function getBbCodeChartRun(charts: ChartPosition[], peak: number, reEntry = false): string {
     const formattedDate = formatDate(new Date(charts[0].date))
     let bbCodeString = `[b]${reEntry ? 'R' : 'N'}E[/b] (${formattedDate}) `
