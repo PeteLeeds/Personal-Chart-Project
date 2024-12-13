@@ -133,7 +133,7 @@ export class SongDisplayComponent implements OnInit {
   public copyDisplay() {
     let display = '[color=#000000][size=5][b]#xx[/b] (xxpts)[/size][/color]'
     display += `\n\n[size=4][b]${this.songInfo.artistDisplay}[/b][/size]\n[i][size=3][b]${this.songInfo.title}[/b][/size][/i]`
-    display += `\n-\n[size=4][b]Chart Statistics[/b][/size]\n\n${getFullChartRun(this.chartRuns)}\n\n`
+    display += `\n-\n[size=4][b]Chart Statistics[/b][/size]\n\n${getFullChartRun(this.songInfo.chartRuns)}\n\n`
     display += `[size=4][b]Video[/b][/size]\n\n[youtube][/youtube]\n\n[size=4][b]Commentary[/b][/size]\n\n`
     const artistObservables = this.songInfo.artists.map(artist => this.artistService.getArtistById(artist._id))
     forkJoin(artistObservables).subscribe(async artists => {
