@@ -22,22 +22,27 @@ export function splitChartRun(charts: SongInChart[]): SongInChart[][] {
 }
 
 export function getTop40ChartRun(chartRuns: SongInChart[][]): string {
-  let run = "("
+  let runString = "("
   let potentialRun = ""
   let top40Reached = false
-  for (let i = 0; i < chartRuns[0].length; i++) {
-    const chart = chartRuns[0][i]
-    if (chart.position <= 40) {
-      if (potentialRun.length > 0) {
-        run += `${potentialRun}[/color]`
-        potentialRun = ""
+  for (let i = 0; i < chartRuns.length; i++) {
+    const run = chartRuns[i]
+    for (const chart of run) {
+      if (chart.position <= 40) {
+        if (potentialRun.length > 0) {
+          runString += `${potentialRun}[/color]`
+          potentialRun = ""
+        }
+        runString += `${chart.position}${runString.length == 0 ? '' : '-'}`
+        top40Reached = true
+      } else if (top40Reached) {
+        potentialRun += `${potentialRun.length == 0 ? '[color=#708090]' : ''}${chart.position}${runString.length == 0 ? '' : '-'}`
       }
-      run += `${chart.position}${run.length == 0 ? '' : '-'}`
-      top40Reached = true
-    } else if (top40Reached) {
-      potentialRun += `${potentialRun.length == 0 ? '[color=#708090]' : ''}${chart.position}${run.length == 0 ? '' : '-'}`
+    } 
+    if (chartRuns.length - 1 > i) {
+      potentialRun += `${potentialRun.length == 0 ? '[color=#708090]' : ''}xx-`
     }
   }
-  run += ")"
-  return run
+  runString += ")"
+  return runString
 }
