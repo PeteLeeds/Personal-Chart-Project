@@ -5,6 +5,7 @@ import { Chart, ChartParams, FullChart } from '../types/chart';
 import { FullSongInfo } from '../types/song';
 import { Series } from '../types/series';
 import { getQueryString } from '../shared/get-query-string';
+import { map } from 'rxjs/operators';
 
 const BASE_URL = '/database'
 
@@ -59,7 +60,9 @@ export class ChartService {
   }
 
   public getChartString(seriesName: string, chartName: string): Observable<string> {
-    return this.httpClient.get<string>(`${BASE_URL}/series/${seriesName}/string/${chartName}`)
+    return this.httpClient.get<Record<string, string>>(`${BASE_URL}/series/${seriesName}/string/${chartName}`).pipe(
+      map((chartObject) => chartObject.chartString)
+    )
   }
 
   public getRecentCharts(): Observable<Chart[]> {
