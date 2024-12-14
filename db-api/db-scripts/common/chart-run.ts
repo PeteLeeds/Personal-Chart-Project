@@ -29,13 +29,13 @@ export function getTop40ChartRun(chartRuns: SongInChart[][]): string {
     const chart = chartRuns[0][i]
     if (chart.position <= 40) {
       if (potentialRun.length > 0) {
-        run += `${potentialRun.length}[/color]`
+        run += `${potentialRun}[/color]`
         potentialRun = ""
       }
       run += `${chart.position}${run.length == 0 ? '' : '-'}`
       top40Reached = true
     } else if (top40Reached) {
-      potentialRun += `${potentialRun.length == 0 ? '' : '[color=#708090]'}${chart.position}`
+      potentialRun += `${potentialRun.length == 0 ? '[color=#708090]' : ''}${chart.position}${run.length == 0 ? '' : '-'}`
     }
   }
   run += ")"
