@@ -12,6 +12,8 @@ export interface AbstractSongInfo extends Song {
     lastWeek?: number;
     weeksOn: number;
     position: number;
+    chartRuns?: ChartPosition[][];
+    series?: string[]
 }
 
 export interface FullSongInfo extends Song {

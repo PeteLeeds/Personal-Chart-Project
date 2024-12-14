@@ -9,7 +9,7 @@ import { ArtistService } from '../services/artist.service';
 import { SongService } from '../services/song.service';
 import { getChartHistory } from '../shared/get-chart-history';
 import { getFullChartRun } from '../shared/get-chart-run';
-import { FullSongInfo } from '../types/song';
+import { AbstractSongInfo } from '../types/song';
 import { faMusic } from '@fortawesome/free-solid-svg-icons';
 
 const DROPOUT = -1
@@ -29,15 +29,12 @@ export class SongDisplayComponent implements OnInit {
   private clipboardService: ClipboardService;
   private router: Router;
 
-  public songInfo: FullSongInfo;
+  public songInfo: AbstractSongInfo;
   public selectedSeries = "";
   public chartSelectOptions: string[];
   public chartRuns = [];
   public editMode = false;
   public artistNames = []
-
-  public peak = 0;
-  public weeksOn = 0;
 
   public faMusic = faMusic;
 
@@ -69,7 +66,7 @@ export class SongDisplayComponent implements OnInit {
           return this.songService.getSongById(params.id, this.selectedSeries)
         }
         return of([])
-      })).subscribe((song: FullSongInfo) => {
+      })).subscribe((song: AbstractSongInfo) => {
         this.songInfo = song;
         this.chartSelectOptions = this.songInfo.series
         if (initialLoad) {

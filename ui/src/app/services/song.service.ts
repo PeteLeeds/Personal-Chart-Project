@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { CheckedSong, FullSongInfo } from '../types/song';
+import { AbstractSongInfo, CheckedSong, FullSongInfo } from '../types/song';
 import { catchError, map } from 'rxjs/operators';
 import { getQueryString } from '../shared/get-query-string';
 
@@ -18,8 +18,8 @@ export class SongService {
     this.httpClient = httpClient;
   }
 
-  public getSongById(songId: string, seriesName?: string): Observable<FullSongInfo> {
-    return this.httpClient.get<FullSongInfo>(`${BASE_URL}/song?id=${songId}${seriesName ? `&seriesName=${seriesName}` : ''}`)
+  public getSongById(songId: string, seriesName?: string): Observable<AbstractSongInfo> {
+    return this.httpClient.get<AbstractSongInfo>(`${BASE_URL}/song?id=${songId}${seriesName ? `&seriesName=${seriesName}` : ''}`)
   }
 
   public checkIfSongExists(songString: string, pos: number): Observable<CheckedSong> {
