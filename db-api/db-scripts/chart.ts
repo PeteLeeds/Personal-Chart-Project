@@ -2,6 +2,8 @@ import { AggregationCursor, Db, FindCursor, ObjectId } from "mongodb"
 import { Song } from "../types/song";
 import { updateArtists } from "./common/update-artists";
 import { Chart } from "../types/chart";
+import { getTop40ChartRun, splitChartRun } from "./common/chart-run";
+import { formatSong } from "./common/format-song";
 
 const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
@@ -314,7 +316,6 @@ export class ChartDb {
     public async getFormattedChartString(series: string, chartName: string, size?: string): Promise<Record<string, string>> {
         const songs = await (await this.getChartSongs(series, chartName, size)).toArray()
         const previousCharts = await (await this.getPreviousCharts(series, chartName)).toArray()
-        const prevChartNames = previousCharts.map(chart => chart.name);
 
         let formattedChartString = ""
         for (let i = 0; i < songs.length; i++) {
@@ -326,14 +327,24 @@ export class ChartDb {
                 throw new Error(`Song ${song.title} has no charts!`);
             }
             const currentSeries = song.charts[series]
-            const charts = currentSeries.filter(
-                chart => prevChartNames.includes(chart.chart) && chart.position != DROPOUT
+            const chartPositions = []
+            for (const chartPosition of currentSeries) {
+                const chart = previousCharts.find(chart => chart.name == chartPosition.chart)
+                if (chart) {
+                    chartPosition.date = chart.date.toString()
+                    chartPositions.push(chartPosition)
+                }
+            }
+            song.chartRuns = splitChartRun(chartPositions)
+            chartPositions.filter(
+                chart => chart.position != DROPOUT
             );
-            const lastChartRecord = charts.find(chart => chart.chart === prevChartNames[1])
+            const lastChartRecord = chartPositions.find(chart => chart.chart === previousCharts[1].name)
             song.lastWeek = lastChartRecord?.position
-            song.weeksOn = charts.length
-            const weeksOnTop40 = charts.filter(chart => chart.position <= 40).length
-            charts.sort((a, b) => a.position - b.position);
+            song.weeksOn = chartPositions.length
+            const weeksOnTop40 = chartPositions.filter(chart => chart.position <= 40).length
+            chartPositions.sort((a, b) => a.position - b.position);
+            song.peak = chartPositions[0].position
             const lastWeekString = `${song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NE')}`
             let positionString = `[b]${i + 1}[/b] [${lastWeekString}]`
             if (i >= 40 && lastWeekString == 'NE') {
@@ -342,7 +353,7 @@ export class ChartDb {
             let songString = `${positionString} ${song.artistDisplay} - ${song.title}`
             if (i < 40) {
                 const symbol = this.getSymbol(weeksOnTop40, i + 1, song.lastWeek)
-                const chartRun = "(CHART RUN TBA)"
+                const chartRun = getTop40ChartRun(song.chartRuns)
                 songString = `${symbol} ${songString} ${chartRun}`
                 if ((i + 1) % 10 == 0) {
                     songString += `\n`
