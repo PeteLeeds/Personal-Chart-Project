@@ -335,16 +335,15 @@ export class ChartDb {
                     chartPositions.push(chartPosition)
                 }
             }
-            song.chartRuns = splitChartRun(chartPositions)
-            chartPositions.filter(
+            const activeChartPositions = chartPositions.filter(
                 chart => chart.position != DROPOUT
             );
-            const lastChartRecord = chartPositions.find(chart => chart.chart === previousCharts[1].name)
+            const lastChartRecord = activeChartPositions.find(chart => chart.chart === previousCharts[1].name)
             song.lastWeek = lastChartRecord?.position
-            song.weeksOn = chartPositions.length
-            const weeksOnTop40 = chartPositions.filter(chart => chart.position <= 40).length
-            chartPositions.sort((a, b) => a.position - b.position);
-            song.peak = chartPositions[0].position
+            song.weeksOn = activeChartPositions.length
+            const weeksOnTop40 = activeChartPositions.filter(chart => chart.position <= 40).length
+            activeChartPositions.sort((a, b) => a.position - b.position);
+            song.peak = activeChartPositions[0].position
             const lastWeekString = `${song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NE')}`
             let positionString = `[b]${i + 1}[/b] [${lastWeekString}]`
             if (i >= 40 && lastWeekString == 'NE') {
@@ -353,13 +352,15 @@ export class ChartDb {
             let songString = `${positionString} ${song.artistDisplay} - ${song.title}`
             if (i < 40) {
                 const symbol = this.getSymbol(weeksOnTop40, i + 1, song.lastWeek)
+                song.chartRuns = splitChartRun(chartPositions)
                 const chartRun = getTop40ChartRun(song.chartRuns)
                 songString = `${symbol} ${songString} ${chartRun}`
                 if ((i + 1) % 10 == 0) {
                     songString += `\n`
                 }
             } else {
-                songString += ` (Pk: ${song.peak})`
+                const peakString = song.peak == i + 1 ? `[b]${song.peak}[/b]` : song.peak
+                songString += ` (Pk: ${peakString})`
             }
             formattedChartString += `${songString}\n`
         }
