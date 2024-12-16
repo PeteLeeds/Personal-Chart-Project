@@ -1,31 +1,26 @@
-.input-option {
-    padding-bottom: 1rem;
+.top-navbar {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    background-color: #949191;
 }
 
-#chart-text {
-    height: 75rem;
-    width: 25rem
+li {
+    float: left;
 }
 
-.subtext {
-    color: gray;
-    font-size: small;
+li a:hover {
+    background-color: #111;
 }
 
-.submit-chart {
-    float: right;
+ul {
+    list-style-type: none;
 }
 
-.title-submit-table {
-    width: 100%
-}
-
-.centre {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -50px;
-    margin-left: -50px;
-    width: 10rem;
-    height: 10rem;
+a {
+    background-color: #949191;
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+    display: block;
 }

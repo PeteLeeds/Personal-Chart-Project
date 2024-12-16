@@ -21,7 +21,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CommonModule } from '@angular/common';
 import { ChartSelectComponent } from './chart-select/chart-select.component';
-import { CreateChartComponent } from './create-chart/create-chart.component';
+import { CreateBasicChartComponent } from './create-chart-basic/create-chart-basic.component';
 import { SongDisplayComponent } from './song-display/song-display.component';
 import { SongComponent } from './song/song.component';
 import { ArtistComponent } from './artist/artist.component';
@@ -32,6 +32,8 @@ import { SearchComponent } from './shared/search/search.component'
 import { ChartEditComponent } from './chart-edit/chart-edit.component';
 import { TotalsComponent } from './totals/totals.component';
 import { HomeComponent } from './home/home.component';
+import { CreateChartComponent } from './create-chart/create-chart.component';
+import { CreateInteractiveChartComponent } from './create-chart-interactive/create-chart-interactive.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,7 @@ import { HomeComponent } from './home/home.component';
     CreateSeriesComponent,
     DeleteItemComponent,
     CreateChartComponent,
+    CreateBasicChartComponent,
     NewSongsComponent,
     SongDisplayComponent,
     SongComponent,
@@ -53,7 +56,8 @@ import { HomeComponent } from './home/home.component';
     SearchComponent,
     ChartEditComponent,
     TotalsComponent,
-    HomeComponent
+    HomeComponent,
+    CreateInteractiveChartComponent
   ],
   imports: [
     BrowserModule,
