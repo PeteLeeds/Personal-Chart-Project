@@ -1,0 +1,20 @@
+<h2>Please select the songs you want to rank for this chart</h2>
+
+<form [formGroup]="chartForm" (ngSubmit)="onSubmit()">
+    <div class="centre">
+        <label>
+            <input type="checkbox" formControlName="includeSongs">
+            All songs from the past X weeks
+        </label>
+    </div>
+    <div class="input-option">
+        <p>Plus the following songs:</p>
+        <p class="subtext">(Please enter the artist and title of each song in order, separated by hyphens)</p>
+        <textarea id="chart-text" type="text" formControlName="songs"></textarea>
+    </div>
+    <table>
+        <tr>
+            <td><button type="submit" class="submit-chart" [disabled]="!chartForm.valid">Submit</button></td>
+        </tr>
+    </table>
+</form>
