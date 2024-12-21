@@ -10,6 +10,7 @@ export class EnterSongsComponent {
 
     public chartForm = new FormGroup({
       includeSongs: new FormControl<Boolean>(false),
+      numberOfWeeks: new FormControl<Number>(1),
       songs: new FormControl<string>('', this.hyphenValidator()),
     });
 
