@@ -42,7 +42,7 @@ export class CreateBasicChartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe((params => {
+    this.activatedRoute.parent.params.subscribe((params => {
       if (params.series) {
         this.seriesName = params.series
       }
@@ -124,7 +124,7 @@ export class CreateBasicChartComponent implements OnInit {
       // This bit creates the chart
       this.chartService.createChart(this.seriesName, {...chartParams, songs: songsToSend}).subscribe(() => { 
         console.log('Chart Created');
-        this.router.navigate(['..', chartParams.name], { relativeTo: this.activatedRoute })
+        this.router.navigate(['../..', chartParams.name], { relativeTo: this.activatedRoute })
       })
     })
   }
