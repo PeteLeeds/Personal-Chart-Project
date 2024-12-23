@@ -8,3 +8,9 @@ export interface Chart {
     name: string;
     date: Date;
 }
+
+export interface InteractiveChartParams {
+    includeSongs: Boolean;
+    numberOfWeeks: Number;
+    songs: string
+}

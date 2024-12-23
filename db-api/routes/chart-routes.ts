@@ -52,6 +52,16 @@ export class ChartRouter {
         })
 
         /**
+         * Initiate interactive chart
+         */
+        router.post('/interactive', async (req, res) => {
+            console.log('Initiate interactive chart series')
+            res.json(
+                (res.locals.db as Database).chartDb.initiateInteractiveChartCreation(req.body)
+            )
+        })
+
+        /**
          * Create a new chart within a series
          */
         router.post('/:name/chart', async (req, res) => {

@@ -1,7 +1,7 @@
 import { AggregationCursor, Db, FindCursor, ObjectId } from "mongodb"
 import { Song } from "../types/song";
 import { updateArtists } from "./common/update-artists";
-import { Chart } from "../types/chart";
+import { Chart, InteractiveChartParams } from "../types/chart";
 import { getTop40ChartRun, splitChartRun } from "./common/chart-run";
 import { formatSong } from "./common/format-song";
 
@@ -45,6 +45,10 @@ export class ChartDb {
             {'$skip': page * 20},
             {'$limit': 20}
         ]).toArray()
+    }
+
+    public initiateInteractiveChartCreation(params: InteractiveChartParams) {
+        return {initiated: true}
     }
 
     public newSeries(params: Record<string, unknown>): Promise<unknown> {

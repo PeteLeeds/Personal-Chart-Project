@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { ChartService } from 'src/app/services/chart.service';
 
 @Component({
   selector: 'app-enter-songs',
@@ -14,6 +15,12 @@ export class EnterSongsComponent {
       songs: new FormControl<string>('', this.hyphenValidator()),
     });
 
+    public chartService: ChartService
+
+    public constructor(chartService: ChartService) {
+      this.chartService = chartService
+    }
+
     public hyphenValidator(): ValidatorFn {
       return (control: AbstractControl): { [key: string]: any } | null => {
         const songs = control.value.split('\n');
@@ -27,7 +34,9 @@ export class EnterSongsComponent {
     }
 
     public onSubmit() {
-      console.log('submitting!')
+      this.chartService.initiateInteractiveChartCreation(this.chartForm.value).subscribe(res => {
+        console.log(res)
+      })
     }
 
 }

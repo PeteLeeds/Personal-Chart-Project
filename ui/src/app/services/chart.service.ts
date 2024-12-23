@@ -33,6 +33,10 @@ export class ChartService {
     return this.httpClient.post(`${BASE_URL}/series/`, {name}, {headers: new HttpHeaders({'Content-Type':  'application/json'})})
   }
 
+  public initiateInteractiveChartCreation(params: Record<string, string | Number | Boolean>) {
+    return this.httpClient.post(`${BASE_URL}/series/interactive`, params)
+  }
+
   public deleteSeries(seriesName: string) {
     return this.httpClient.delete(`${BASE_URL}/series/${seriesName}`)
   }
