@@ -7,6 +7,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatMomentDateModule} from '@angular/material-moment-adapter'
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatRadioModule} from '@angular/material/radio';
 import { ClipboardModule } from 'ngx-clipboard';
  
 import { AppRoutingModule } from './app-routing.module';
@@ -76,6 +77,7 @@ import { EnterSongsComponent } from './create-chart-interactive/enter-songs/ente
     MatFormFieldModule,
     ClipboardModule,
     MatProgressSpinnerModule,
+    MatRadioModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

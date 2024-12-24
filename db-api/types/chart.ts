@@ -9,8 +9,9 @@ export interface Chart {
     date: Date;
 }
 
-export interface InteractiveChartParams {
+export interface InteractiveChartParams extends Chart {
     includeSongs: Boolean;
     numberOfWeeks: Number;
-    songs: string
+    songs: string;
+    revealOrder: 'random' | 'inOrder'
 }
