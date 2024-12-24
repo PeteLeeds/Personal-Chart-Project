@@ -24,18 +24,18 @@ export class ChartService {
     return this.httpClient.get<Series[]>(`${BASE_URL}/series/`)
   }
 
-  public getChartsInSeries(name: string, page: number, order: string): Observable<Series> {
+  public getChartsInSeries(seriesName: string, page: number, order: string): Observable<Series> {
     const queryParams = {page: page.toString(), order}
-    return this.httpClient.get<Series>(`${BASE_URL}/series/${name}?${getQueryString(queryParams)}`)
+    return this.httpClient.get<Series>(`${BASE_URL}/series/${seriesName}?${getQueryString(queryParams)}`)
   }
 
-  public createSeries(name: string): Observable<unknown> {
-    return this.httpClient.post(`${BASE_URL}/series/`, {name}, {headers: new HttpHeaders({'Content-Type':  'application/json'})})
+  public createSeries(seriesName: string): Observable<unknown> {
+    return this.httpClient.post(`${BASE_URL}/series/`, {name: seriesName}, {headers: new HttpHeaders({'Content-Type':  'application/json'})})
   }
 
-  public initiateInteractiveChartCreation(name: string, params: Record<string, string | Number | Boolean | Date>) {
-    console.log('initiate creation', name, params)
-    return this.httpClient.post(`${BASE_URL}/series/${name}/interactive`, params)
+  public initiateInteractiveChartCreation(seriesName: string, params: Record<string, string | Number | Boolean | Date>) {
+    console.log('initiate creation', seriesName, params)
+    return this.httpClient.post(`${BASE_URL}/series/${seriesName}/interactive`, params)
   }
 
   public deleteSeries(seriesName: string) {

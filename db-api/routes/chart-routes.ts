@@ -29,16 +29,16 @@ export class ChartRouter {
         /**
          * Return an existing chart series
          */
-        router.get('/:name', async (req, res) => {
+        router.get('/:seriesName', async (req, res) => {
             console.log('list charts')
             res.json(
-                await (res.locals.db as Database).chartDb.getChartsInSeries(req.params.name, req.query as Record<string, string>)
+                await (res.locals.db as Database).chartDb.getChartsInSeries(req.params.seriesName, req.query as Record<string, string>)
             )
         })
 
-        router.delete('/:name', async (req, res) => {
+        router.delete('/:seriesName', async (req, res) => {
             console.log('delete series')
-            res.json(await (res.locals.db as Database).chartDb.deleteSeries(req.params.name))
+            res.json(await (res.locals.db as Database).chartDb.deleteSeries(req.params.seriesName))
         })
 
         /**
@@ -54,31 +54,31 @@ export class ChartRouter {
         /**
          * Initiate interactive chart
          */
-        router.post('/:name/interactive', async (req, res) => {
+        router.post('/:seriesName/interactive', async (req, res) => {
             console.log('Initiate interactive chart series')
             res.json(
-                (res.locals.db as Database).chartDb.initiateInteractiveChartCreation(req.params.name, req.body)
+                (res.locals.db as Database).chartDb.initiateInteractiveChartCreation(req.params.seriesName, req.body)
             )
         })
 
         /**
          * Create a new chart within a series
          */
-        router.post('/:name/chart', async (req, res) => {
+        router.post('/:seriesName/chart', async (req, res) => {
             console.log('Create new chart')
             res.json(
-                await (res.locals.db as Database).chartDb.newChart(req.params.name, req.body.params)
+                await (res.locals.db as Database).chartDb.newChart(req.params.seriesName, req.body.params)
             )
         })
 
         /**
         * Return a chart within a series
         */
-        router.get('/:name/chart/:chartName', async (req, res) => {
-            console.log('Search new chart', req.params.name, req.params.chartName)
+        router.get('/:seriesName/chart/:chartName', async (req, res) => {
+            console.log('Search new chart', req.params.seriesName, req.params.chartName)
             // Preferably we would like it prettier than this
             res.json(
-                await (res.locals.db as Database).chartDb.getChart(req.params.name, req.params.chartName, req.query?.size as string)
+                await (res.locals.db as Database).chartDb.getChart(req.params.seriesName, req.params.chartName, req.query?.size as string)
             )
         })
 
