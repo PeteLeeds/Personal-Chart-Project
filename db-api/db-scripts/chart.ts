@@ -3,7 +3,7 @@ import { Song } from "../types/song";
 import { updateArtists } from "./common/update-artists";
 import { Chart, InteractiveChartParams } from "../types/chart";
 import { getTop40ChartRun, splitChartRun } from "./common/chart-run";
-import { formatSong } from "./common/format-song";
+import { ObjectSet } from "./common/object-set";
 
 const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
@@ -47,8 +47,8 @@ export class ChartDb {
         ]).toArray()
     }
 
-    private getXPreviousCharts(seriesName: String, date: Date, number: Number): Promise<Chart[]> {
-        return this.db.collection(CHART_COLLECTION).aggregate<Chart>([
+    private async getXPreviousCharts(seriesName: String, date: Date, number: Number): Promise<string[]> {
+        const previousCharts = await this.db.collection(CHART_COLLECTION).aggregate<Chart>([
             { '$match': { name: seriesName } },
             {'$unwind': '$charts'},
             {'$replaceRoot': {'newRoot': '$charts'}},
@@ -56,11 +56,46 @@ export class ChartDb {
             {'$sort': {'date': -1}},
             {'$limit': number},
         ]).toArray()
+        return previousCharts.map(chart => chart.name)
+    }
+
+    private async getSongsFromCharts(series: string, charts: string[]): Promise<Record<string, string>[]> {
+        const fullSongArray = []
+        for (const chart of charts) {
+            const chartSongs = await this.db.collection(SONG_COLLECTION).aggregate<Record<string, string>>([
+                ...this.getSongsPipeline(series, chart),
+                { '$project': {
+                    title: 1,
+                    artistDisplay: 1,
+                    _id: 1
+                }}
+            ]).toArray()
+            fullSongArray.push(...chartSongs)
+        }
+        const songArray = [...new ObjectSet<Record<string, string>>(fullSongArray)]
+        return songArray
+    }
+
+    public getNewSongs(songs: string): Record<string, string>[] {
+        const songArray = songs.split('\n');
+        return songArray.map(song => {
+            const indexOfFirstHyphen = song.indexOf(' - ')
+            let artist = song.slice(0, indexOfFirstHyphen);
+            let title = song.slice(indexOfFirstHyphen + 3);
+            return {
+                artistDisplay: artist.trim(),
+                title: title.trim()
+            }
+        })
     }
 
     public async initiateInteractiveChartCreation(seriesName: string, params: InteractiveChartParams) {
         const prevCharts = await this.getXPreviousCharts(seriesName, params.date, params.numberOfCharts)
-        console.log(prevCharts)
+        const songs = [
+            ...await this.getSongsFromCharts(seriesName, prevCharts),
+            ...this.getNewSongs(params.songs)
+        ]
+        console.log(songs)
         return {initiated: true}
     }
 
@@ -198,6 +233,23 @@ export class ChartDb {
         }]
     }
 
+    private getSongsPipeline(series: string, chartName: string, size?: string) {
+        return [{
+            $match: {
+                [`charts.${series}`]: {
+                    $elemMatch:
+                    {
+                        chart: chartName,
+                        position: {
+                            $ne: DROPOUT,
+                            ...(size ? { $lte: parseInt(size) } : {})
+                        }
+                    }
+                }
+            }
+        },]
+    }
+
     public async getChart(series: string, chartName: string, size?: string) {
         const songs = await (await this.getChartSongs(series, chartName, size)).toArray()
         const previousCharts = await (await this.getPreviousCharts(series, chartName)).toArray()
@@ -233,20 +285,7 @@ export class ChartDb {
     public async getChartSongs(series: string, chartName: string, size?: string): Promise<AggregationCursor<Song>> {
         return this.db.collection(SONG_COLLECTION).aggregate([
             // Find all the songs in this chart
-            {
-                $match: {
-                    [`charts.${series}`]: {
-                        $elemMatch:
-                        {
-                            chart: chartName,
-                            position: {
-                                $ne: DROPOUT,
-                                ...(size ? { $lte: parseInt(size) } : {})
-                            }
-                        }
-                    }
-                }
-            },
+            ...this.getSongsPipeline(series, chartName, size),
             ...this.getSizePipeline(series, size),
             // Remove all chart info for the songs besides the specified chart
             {
