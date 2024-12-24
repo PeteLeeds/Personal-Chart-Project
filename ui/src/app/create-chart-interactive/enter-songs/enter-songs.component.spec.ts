@@ -1,13 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EnterSongsComponent } from './enter-songs.component';
+import { HttpClientModule } from '@angular/common/http';
+
 
 describe('EnterSongsComponent', () => {
   let component: EnterSongsComponent;
   let fixture: ComponentFixture<EnterSongsComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({      
+      imports: [HttpClientModule],
       declarations: [ EnterSongsComponent ]
     })
     .compileComponents();
