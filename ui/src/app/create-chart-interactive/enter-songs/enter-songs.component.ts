@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { ChartService } from 'src/app/services/chart.service';
 
@@ -8,6 +8,7 @@ import { ChartService } from 'src/app/services/chart.service';
   styleUrls: ['../../styles/common-styles.css', './enter-songs.component.css']
 })
 export class EnterSongsComponent {
+    @Input() seriesName: string
 
     public chartService: ChartService
     public useDateAsTitle = false
@@ -16,7 +17,7 @@ export class EnterSongsComponent {
       name: new FormControl<string>({ value: '', disabled: this.useDateAsTitle }),
       date: new FormControl<Date>(new Date()),
       includeSongs: new FormControl<Boolean>(false),
-      numberOfWeeks: new FormControl<Number>(1),
+      numberOfCharts: new FormControl<Number>(1),
       songs: new FormControl<string>('', this.hyphenValidator()),
       revealOrder: new FormControl<'random' | 'inOrder'>('random')
     });
@@ -40,6 +41,9 @@ export class EnterSongsComponent {
 
     public hyphenValidator(): ValidatorFn {
       return (control: AbstractControl): { [key: string]: any } | null => {
+        if (control.value.length == 0) {
+          return null
+        }
         const songs = control.value.split('\n');
         for (const song of (songs as string[])) {
           if (!song.includes('-')) {
@@ -51,7 +55,7 @@ export class EnterSongsComponent {
     }
 
     public onSubmit() {
-      this.chartService.initiateInteractiveChartCreation(this.chartForm.value).subscribe(res => {
+      this.chartService.initiateInteractiveChartCreation(this.seriesName, this.chartForm.value).subscribe(res => {
         console.log(res)
       })
     }

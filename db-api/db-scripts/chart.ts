@@ -47,7 +47,20 @@ export class ChartDb {
         ]).toArray()
     }
 
-    public initiateInteractiveChartCreation(params: InteractiveChartParams) {
+    private getXPreviousCharts(seriesName: String, date: Date, number: Number): Promise<Chart[]> {
+        return this.db.collection(CHART_COLLECTION).aggregate<Chart>([
+            { '$match': { name: seriesName } },
+            {'$unwind': '$charts'},
+            {'$replaceRoot': {'newRoot': '$charts'}},
+            { '$match': { date: {'$lt': date} } },
+            {'$sort': {'date': -1}},
+            {'$limit': number},
+        ]).toArray()
+    }
+
+    public async initiateInteractiveChartCreation(seriesName: string, params: InteractiveChartParams) {
+        const prevCharts = await this.getXPreviousCharts(seriesName, params.date, params.numberOfCharts)
+        console.log(prevCharts)
         return {initiated: true}
     }
 

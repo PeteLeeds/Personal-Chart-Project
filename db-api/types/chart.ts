@@ -11,7 +11,7 @@ export interface Chart {
 
 export interface InteractiveChartParams extends Chart {
     includeSongs: Boolean;
-    numberOfWeeks: Number;
+    numberOfCharts: Number;
     songs: string;
     revealOrder: 'random' | 'inOrder'
 }
