@@ -78,6 +78,9 @@ export class ChartDb {
     }
 
     public getNewSongs(songs: string): Record<string, string>[] {
+        if (songs.length === 0) {
+            return []
+        }
         const songArray = songs.split('\n');
         return songArray.map(song => {
             const indexOfFirstHyphen = song.indexOf(' - ')

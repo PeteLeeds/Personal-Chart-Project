@@ -69,6 +69,9 @@ export class EnterSongsComponent {
     }
 
     public onSubmit() {
+      if (this.useDateAsTitle) {
+        this.chartForm.value.name = this.chartForm.value.date.toDateString();
+      }
       this.chartService.initiateInteractiveChartCreation(this.seriesName, this.chartForm.value).subscribe(res => {
         this.router.navigate([res.sessionId, 'rank'], {relativeTo: this.activatedRoute})
       })
