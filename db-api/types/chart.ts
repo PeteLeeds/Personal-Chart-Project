@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { Song } from "./song";
 
 export interface ChartParams extends Chart {
@@ -14,4 +15,17 @@ export interface InteractiveChartParams extends Chart {
     numberOfCharts: Number;
     songs: string;
     revealOrder: 'random' | 'inOrder'
+}
+
+export interface Session {
+    seriesName: string,
+    chartName: string,
+    date: string,
+    songOrder: SessionSong[]
+}
+
+export interface SessionSong {
+    _id?: ObjectId,
+    artistDisplay: string,
+    title: string
 }

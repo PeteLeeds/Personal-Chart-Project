@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Chart, ChartParams, FullChart } from '../types/chart';
+import { Chart, ChartParams, FullChart, Session } from '../types/chart';
 import { FullSongInfo } from '../types/song';
 import { Series } from '../types/series';
 import { getQueryString } from '../shared/get-query-string';
@@ -34,7 +34,6 @@ export class ChartService {
   }
 
   public initiateInteractiveChartCreation(seriesName: string, params: Record<string, string | Number | Boolean | Date>): Observable<{sessionId: string}> {
-    console.log('initiate creation', seriesName, params)
     return this.httpClient.post<{sessionId: string}>(`${BASE_URL}/series/${seriesName}/interactive`, params)
   }
 
@@ -76,6 +75,10 @@ export class ChartService {
 
   public getChartDate(seriesName: string, chartName: string): Observable<string> {
     return this.httpClient.get<string>(`${BASE_URL}/series/${seriesName}/date/${chartName}`)
+  }
+
+  public getInteractiveSession(sessionId: string): Observable<Session> {
+    return this.httpClient.get<Session>(`${BASE_URL}/series/session/${sessionId}`)
   }
 
   public updateChart(seriesName: string, chartName: string, newChartData: Chart) {

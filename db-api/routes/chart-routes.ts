@@ -122,6 +122,16 @@ export class ChartRouter {
             )
         })
 
+        /**
+         * Get interactive session
+         */
+        router.get('/session/:sessionId', async (req, res) => {
+            console.log('Get interactive session')
+            res.json(
+                await (res.locals.db as Database).chartDb.getInteractiveSession(req.params.sessionId)
+            )
+        })
+
 
         /**
         * Update the details of a given chart in a series

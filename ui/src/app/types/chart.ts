@@ -14,3 +14,16 @@ export interface FullChart {
     nextChart: string,
     songs: AbstractSongInfo[]
 }
+
+export interface Session {
+    seriesName: string,
+    chartName: string,
+    date: string,
+    songOrder: SessionSong[]
+}
+
+export interface SessionSong {
+    _id?: Object,
+    artistDisplay: string,
+    title: string
+}
