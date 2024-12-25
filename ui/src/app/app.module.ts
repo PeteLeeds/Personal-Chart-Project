@@ -34,7 +34,6 @@ import { ChartEditComponent } from './chart-edit/chart-edit.component';
 import { TotalsComponent } from './totals/totals.component';
 import { HomeComponent } from './home/home.component';
 import { CreateChartComponent } from './create-chart/create-chart.component';
-import { CreateInteractiveChartComponent } from './create-chart-interactive/create-chart-interactive.component';
 import { EnterSongsComponent } from './create-chart-interactive/enter-songs/enter-songs.component';
 import { RankSongsComponent } from './create-chart-interactive/rank-songs/rank-songs.component';
 
@@ -60,7 +59,6 @@ import { RankSongsComponent } from './create-chart-interactive/rank-songs/rank-s
     ChartEditComponent,
     TotalsComponent,
     HomeComponent,
-    CreateInteractiveChartComponent,
     EnterSongsComponent,
     RankSongsComponent
   ],

@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-rank-songs',
@@ -6,10 +7,21 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./rank-songs.component.css']
 })
 export class RankSongsComponent {
-    @Input() sessionId: string
 
-    public constructor() {
-      console.log(this.sessionId)
+    private activatedRoute: ActivatedRoute
+
+    public sessionId: string
+
+    public constructor(activatedRoute: ActivatedRoute) {
+      this.activatedRoute = activatedRoute
     }
+
+    ngOnInit(): void {
+      this.activatedRoute.params.subscribe((params => {
+        console.log(params)
+        if (params.session) {
+          this.sessionId = params.session
+        }
+    }))}
 
 }
