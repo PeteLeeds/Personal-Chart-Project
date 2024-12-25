@@ -1,1 +1,12 @@
-<p>{{sessionId}}</p>
+<p *ngIf="session.songOrder.length">
+    {{session.songOrder[0].artistDisplay}} - {{session.songOrder[0].title}}
+</p>
+<table>
+    <tr (click)="addSong(0)">ADD</tr>
+    <ng-container *ngFor="let song of session.placedSongs; let i = index">
+        <tr>
+            <p>{{song.artistDisplay}} - {{song.title}}</p>
+            <p (click)="addSong(i + 1)">ADD</p>
+        </tr>
+    </ng-container>
+</table>

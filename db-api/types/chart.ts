@@ -22,6 +22,7 @@ export interface Session {
     chartName: string,
     date: string,
     songOrder: SessionSong[]
+    placedSongs: SessionSong[]
 }
 
 export interface SessionSong {

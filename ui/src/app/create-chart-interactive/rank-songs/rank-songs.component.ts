@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { ChartService } from 'src/app/services/chart.service';
+import { Session } from 'src/app/types/chart';
 
 @Component({
   selector: 'app-rank-songs',
@@ -15,6 +16,7 @@ export class RankSongsComponent {
     private chartService: ChartService
 
     public sessionId: string
+    public session: Session
 
     public constructor(activatedRoute: ActivatedRoute, chartService: ChartService) {
       this.activatedRoute = activatedRoute
@@ -27,10 +29,15 @@ export class RankSongsComponent {
           this.sessionId = params.session
           return this.chartService.getInteractiveSession(this.sessionId)
         }
-        return of([])
+        return of({} as Session)
       })).subscribe(res => {
-        console.log(res)
+        this.session = res
       })
+    }
+
+    public addSong(position: number): void {
+      this.session.placedSongs.splice(position, 0, this.session.songOrder[0])
+      this.session.songOrder.shift()
     }
 
 }
