@@ -8,6 +8,7 @@ import { ObjectSet } from "./common/object-set";
 const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
 const CHART_COLLECTION = 'series'
+const SESSION_COLLECTION = 'interactive-sessions'
 
 const DROPOUT = -1
 
@@ -89,14 +90,36 @@ export class ChartDb {
         })
     }
 
+    private shuffle(array: unknown[]): void {
+        let currentIndex = array.length;
+
+        while (currentIndex != 0) {
+
+            let randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+        }
+    }
+
     public async initiateInteractiveChartCreation(seriesName: string, params: InteractiveChartParams) {
         const prevCharts = await this.getXPreviousCharts(seriesName, params.date, params.numberOfCharts)
         const songs = [
             ...await this.getSongsFromCharts(seriesName, prevCharts),
             ...this.getNewSongs(params.songs)
         ]
-        console.log(songs)
-        return {initiated: true}
+        if (params.revealOrder == 'random') {
+            this.shuffle(songs)
+        }
+        this.db.collection(SESSION_COLLECTION).insertOne({
+            seriesName,
+            chartName: params.name,
+            date: params.date,
+            songOrder: songs,
+            placedSongs: []
+        })
+        return {songs: songs}
     }
 
     public newSeries(params: Record<string, unknown>): Promise<unknown> {

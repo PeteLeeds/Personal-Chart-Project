@@ -33,9 +33,9 @@ export class ChartService {
     return this.httpClient.post(`${BASE_URL}/series/`, {name: seriesName}, {headers: new HttpHeaders({'Content-Type':  'application/json'})})
   }
 
-  public initiateInteractiveChartCreation(seriesName: string, params: Record<string, string | Number | Boolean | Date>) {
+  public initiateInteractiveChartCreation(seriesName: string, params: Record<string, string | Number | Boolean | Date>): Observable<{songs: Record<string, string>[]}> {
     console.log('initiate creation', seriesName, params)
-    return this.httpClient.post(`${BASE_URL}/series/${seriesName}/interactive`, params)
+    return this.httpClient.post<{songs: Record<string, string>[]}>(`${BASE_URL}/series/${seriesName}/interactive`, params)
   }
 
   public deleteSeries(seriesName: string) {

@@ -56,7 +56,7 @@ export class EnterSongsComponent {
 
     public onSubmit() {
       this.chartService.initiateInteractiveChartCreation(this.seriesName, this.chartForm.value).subscribe(res => {
-        console.log(res)
+        console.log('result', res)
       })
     }
 
