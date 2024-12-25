@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { ChartService } from 'src/app/services/chart.service';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-enter-songs',
@@ -9,6 +10,7 @@ import { ChartService } from 'src/app/services/chart.service';
 })
 export class EnterSongsComponent {
     @Input() seriesName: string
+    @Output() sessionIdEvent = new EventEmitter();
 
     public chartService: ChartService
     public useDateAsTitle = false
@@ -56,7 +58,7 @@ export class EnterSongsComponent {
 
     public onSubmit() {
       this.chartService.initiateInteractiveChartCreation(this.seriesName, this.chartForm.value).subscribe(res => {
-        console.log('result', res)
+        this.sessionIdEvent.emit(res.sessionId)
       })
     }
 

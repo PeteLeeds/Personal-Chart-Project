@@ -103,7 +103,7 @@ export class ChartDb {
         }
     }
 
-    public async initiateInteractiveChartCreation(seriesName: string, params: InteractiveChartParams) {
+    public async initiateInteractiveChartCreation(seriesName: string, params: InteractiveChartParams): Promise<Record<string, string>> {
         const prevCharts = await this.getXPreviousCharts(seriesName, params.date, params.numberOfCharts)
         const songs = [
             ...await this.getSongsFromCharts(seriesName, prevCharts),
@@ -112,14 +112,14 @@ export class ChartDb {
         if (params.revealOrder == 'random') {
             this.shuffle(songs)
         }
-        this.db.collection(SESSION_COLLECTION).insertOne({
+        const insertedItem = await this.db.collection(SESSION_COLLECTION).insertOne({
             seriesName,
             chartName: params.name,
             date: params.date,
             songOrder: songs,
             placedSongs: []
         })
-        return {songs: songs}
+        return {sessionId: insertedItem.insertedId.toString()}
     }
 
     public newSeries(params: Record<string, unknown>): Promise<unknown> {

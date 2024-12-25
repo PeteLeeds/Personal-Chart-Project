@@ -36,6 +36,7 @@ import { HomeComponent } from './home/home.component';
 import { CreateChartComponent } from './create-chart/create-chart.component';
 import { CreateInteractiveChartComponent } from './create-chart-interactive/create-chart-interactive.component';
 import { EnterSongsComponent } from './create-chart-interactive/enter-songs/enter-songs.component';
+import { RankSongsComponent } from './create-chart-interactive/rank-songs/rank-songs.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { EnterSongsComponent } from './create-chart-interactive/enter-songs/ente
     TotalsComponent,
     HomeComponent,
     CreateInteractiveChartComponent,
-    EnterSongsComponent
+    EnterSongsComponent,
+    RankSongsComponent
   ],
   imports: [
     BrowserModule,

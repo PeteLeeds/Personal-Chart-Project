@@ -11,6 +11,8 @@ export class CreateInteractiveChartComponent {
   private activatedRoute: ActivatedRoute
 
   public seriesName: string
+  public screenToDisplay = 'enter'
+  public sessionId: string
 
   constructor(activatedRoute: ActivatedRoute) {
     this.activatedRoute = activatedRoute
@@ -22,5 +24,10 @@ export class CreateInteractiveChartComponent {
         this.seriesName = params.series
       }
     }))
+  }
+
+  public moveToRanking(sessionId: string): void {
+    this.sessionId = sessionId
+    this.screenToDisplay = 'rank'
   }
 }
