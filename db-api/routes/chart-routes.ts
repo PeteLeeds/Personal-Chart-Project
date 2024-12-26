@@ -132,6 +132,16 @@ export class ChartRouter {
             )
         })
 
+        /**
+         * Update interactive session
+         */
+        router.put('/session/:sessionId', async (req, res) => {
+            console.log('Get interactive session')
+            res.json(
+                await (res.locals.db as Database).chartDb.updateSession(req.params.sessionId, req.body)
+            )
+        })
+
 
         /**
         * Update the details of a given chart in a series

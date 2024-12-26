@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Chart, ChartParams, FullChart, Session } from '../types/chart';
+import { Chart, ChartParams, FullChart, PutSessionParams, Session } from '../types/chart';
 import { FullSongInfo } from '../types/song';
 import { Series } from '../types/series';
 import { getQueryString } from '../shared/get-query-string';
@@ -83,5 +83,9 @@ export class ChartService {
 
   public updateChart(seriesName: string, chartName: string, newChartData: Chart) {
     return this.httpClient.put<string>(`${BASE_URL}/series/${seriesName}/${chartName}`, newChartData)
+  }
+
+  public updateSession(sessionId: string, sessionParams: PutSessionParams) {
+    return this.httpClient.put<string>(`${BASE_URL}/series/session/${sessionId}`, sessionParams)
   }
 }

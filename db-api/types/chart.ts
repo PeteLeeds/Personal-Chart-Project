@@ -17,12 +17,15 @@ export interface InteractiveChartParams extends Chart {
     revealOrder: 'random' | 'inOrder'
 }
 
-export interface Session {
+export interface PutSessionParams {
+    songOrder: SessionSong[]
+    placedSongs: SessionSong[]
+}
+
+export interface Session extends PutSessionParams {
     seriesName: string,
     chartName: string,
     date: string,
-    songOrder: SessionSong[]
-    placedSongs: SessionSong[]
 }
 
 export interface SessionSong {

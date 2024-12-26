@@ -38,6 +38,10 @@ export class RankSongsComponent {
     public addSong(position: number): void {
       this.session.placedSongs.splice(position, 0, this.session.songOrder[0])
       this.session.songOrder.shift()
+      this.chartService.updateSession(this.sessionId, {
+        placedSongs: this.session.placedSongs,
+        songOrder: this.session.songOrder
+      }).subscribe()
     }
 
 }

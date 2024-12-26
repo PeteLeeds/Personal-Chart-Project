@@ -1,7 +1,7 @@
 import { AggregationCursor, Db, FindCursor, ObjectId } from "mongodb"
 import { Song } from "../types/song";
 import { updateArtists } from "./common/update-artists";
-import { Chart, InteractiveChartParams, Session } from "../types/chart";
+import { Chart, InteractiveChartParams, PutSessionParams, Session } from "../types/chart";
 import { getTop40ChartRun, splitChartRun } from "./common/chart-run";
 import { ObjectSet } from "./common/object-set";
 
@@ -127,6 +127,10 @@ export class ChartDb {
 
     public getInteractiveSession(sessionId: string): Promise<Session | null> {
         return this.db.collection(SESSION_COLLECTION).findOne<Session>({_id: new ObjectId(sessionId)})
+    }
+
+    public updateSession(sessionId: string, sessionData: PutSessionParams) {
+        return this.db.collection(SESSION_COLLECTION).updateOne({_id: new ObjectId(sessionId)}, {$set: sessionData})
     }
 
     public newSeries(params: Record<string, unknown>): Promise<unknown> {
