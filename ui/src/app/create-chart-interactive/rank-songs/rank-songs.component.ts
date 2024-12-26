@@ -8,7 +8,7 @@ import { Session } from 'src/app/types/chart';
 @Component({
   selector: 'app-rank-songs',
   templateUrl: './rank-songs.component.html',
-  styleUrls: ['./rank-songs.component.css']
+  styleUrls: ['../../styles/common-styles.css', './rank-songs.component.css']
 })
 export class RankSongsComponent {
 

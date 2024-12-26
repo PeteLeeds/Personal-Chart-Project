@@ -10,3 +10,4 @@
         </tr>
     </ng-container>
 </table>
+<a [routerLink]="['..', 'finalise']"><button *ngIf="session && session.songOrder.length === 0">Continue</button></a>

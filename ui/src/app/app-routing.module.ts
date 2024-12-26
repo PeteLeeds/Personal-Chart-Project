@@ -14,6 +14,7 @@ import { HomeComponent } from './home/home.component';
 import { CreateChartComponent } from './create-chart/create-chart.component';
 import { EnterSongsComponent } from './create-chart-interactive/enter-songs/enter-songs.component';
 import { RankSongsComponent } from './create-chart-interactive/rank-songs/rank-songs.component';
+import { CreateChartFinaliseComponent } from './create-chart-finalise/create-chart-finalise.component';
 
 const routes: Routes = [
   // Can't have 'children' unless we want the parent displayed also!
@@ -33,6 +34,10 @@ const routes: Routes = [
      {
       path: 'interactive/:session/rank',
       component: RankSongsComponent
+     },
+     {
+      path: 'interactive/:session/finalise',
+      component: CreateChartFinaliseComponent
      }
     ]
   },
