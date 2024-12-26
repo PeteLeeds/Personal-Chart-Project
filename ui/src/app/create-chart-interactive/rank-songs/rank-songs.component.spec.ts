@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RankSongsComponent } from './rank-songs.component';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('RankSongsComponent', () => {
   let component: RankSongsComponent;
@@ -18,6 +19,7 @@ describe('RankSongsComponent', () => {
       providers: [
         {provide: ActivatedRoute, useValue: mockActivatedRoute},
       ], 
+      imports: [HttpClientModule],
       declarations: [ RankSongsComponent ]
     })
     .compileComponents();
