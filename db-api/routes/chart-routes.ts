@@ -133,6 +133,17 @@ export class ChartRouter {
         })
 
         /**
+         * Get chart preview
+         */
+        router.get('/session/:sessionId/preview', async (req, res) => {
+            console.log('Get chart preview')
+            res.json(
+                await (res.locals.db as Database).chartDb.getChartPreview(req.params.sessionId)
+            )
+        })
+        
+
+        /**
          * Update interactive session
          */
         router.put('/session/:sessionId', async (req, res) => {

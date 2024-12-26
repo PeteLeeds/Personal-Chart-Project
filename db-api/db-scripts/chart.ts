@@ -1,7 +1,7 @@
 import { AggregationCursor, Db, FindCursor, ObjectId } from "mongodb"
 import { Song } from "../types/song";
 import { updateArtists } from "./common/update-artists";
-import { Chart, InteractiveChartParams, PutSessionParams, Session } from "../types/chart";
+import { Chart, InteractiveChartParams, PutSessionParams, Session, SessionSong } from "../types/chart";
 import { getTop40ChartRun, splitChartRun } from "./common/chart-run";
 import { ObjectSet } from "./common/object-set";
 
@@ -16,7 +16,7 @@ const DROPOUT = -1
 export interface ChartParams {
     name: string;
     date: Date;
-    songs: Record<string, unknown>[]
+    songs: SessionSong[]
 }
 
 export class ChartDb {
@@ -133,6 +133,19 @@ export class ChartDb {
         return this.db.collection(SESSION_COLLECTION).updateOne({_id: new ObjectId(sessionId)}, {$set: sessionData})
     }
 
+    public async getChartPreview(sessionId: string) {
+        const session = await this.getInteractiveSession(sessionId)
+        if (!session) {
+            throw new Error('Session not defined!')
+        }
+        // Push temporary results into songs
+        this.newChart(session.seriesName, {
+            name: session.chartName,
+            date: new Date(session.date),
+            songs: session.placedSongs
+        })   
+    }
+
     public newSeries(params: Record<string, unknown>): Promise<unknown> {
         console.log('insert new series', params?.name)
         return this.db.collection(CHART_COLLECTION).insertOne({
@@ -141,7 +154,7 @@ export class ChartDb {
         })
     }
 
-    public async newChart(seriesName: string, params: ChartParams): Promise<unknown> {
+    public async newChart(seriesName: string, params: ChartParams, sessionId?: string): Promise<unknown> {
         if (!params.name) {
             throw new Error('Chart name has not been specified')
         }
@@ -154,11 +167,11 @@ export class ChartDb {
         let position = 1;
         for (const song of params.songs) {
             const newChartPositions = [{ chart: params.name, position }]
-            if (song.id) {
+            if (song._id) {
                 // Update chart position of song (series + chart)
                 // If the song isn't in the following chart, mark it as a 'dropout' in that chart
                 if (nextChart) {
-                    const songObject = await this.db.collection(SONG_COLLECTION).findOne({_id: new ObjectId(song.id as ObjectId)})
+                    const songObject = await this.db.collection(SONG_COLLECTION).findOne({_id: new ObjectId(song._id)})
                     const nextChartInSong = songObject?.charts[seriesName].find(
                         (chart: Record<string, string>) => chart.chart === nextChart
                     )
@@ -167,18 +180,20 @@ export class ChartDb {
                     }
                 }
                 await this.db.collection<Song>(SONG_COLLECTION).updateOne(
-                    { _id: new ObjectId(song.id as ObjectId) },
+                    { _id: new ObjectId(song._id) },
                     { $push: { [`charts.${seriesName}`]: {$each: newChartPositions }} }
                 )
             }
             else {
-                const artists = song.artists;
-                const artistDisplay = song.artistDisplay
                 const title = song.title;
-                // Determine list of artist Ids involved with song (creating new artists if necessary)
+                const artistDisplay = song.artistDisplay
                 const artistIds = []
-                for (const artist of artists as string[]) {
-                    artistIds.push(await updateArtists(this.db.collection(ARTIST_COLLECTION), artist))
+                if (song.artists) {
+                    const artists = song.artists;
+                    // Determine list of artist Ids involved with song (creating new artists if necessary)
+                    for (const artist of artists) {
+                        artistIds.push(await updateArtists(this.db.collection(ARTIST_COLLECTION), artist))
+                    }
                 }
                 if (nextChart) {
                     newChartPositions.push({chart: nextChart, position: DROPOUT})
@@ -190,12 +205,12 @@ export class ChartDb {
                     artistDisplay,
                     charts: { [seriesName]: newChartPositions }
                 })
-                song.id = newSong.insertedId
+                song._id = newSong.insertedId.toString()
             }
             position++;
         }
         // Find dropouts from the last chart and mark them as such
-        const songIds = params.songs.map(song => new ObjectId(song.id as ObjectId))
+        const songIds = params.songs.map(song => new ObjectId(song._id || ''))
         const previousCharts = await (await this.getPreviousChartsByDate(seriesName, params.date)).toArray()
         const previousChart = previousCharts[0]
         if (previousChart) {

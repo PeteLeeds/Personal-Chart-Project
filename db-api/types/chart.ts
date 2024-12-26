@@ -29,7 +29,10 @@ export interface Session extends PutSessionParams {
 }
 
 export interface SessionSong {
-    _id?: ObjectId,
+    _id?: string,
     artistDisplay: string,
     title: string
+    // TODO: Once session migration is complete for both basic and interactive charts,
+    // Review whether the below is still needed
+    artists?: string[]
 }
