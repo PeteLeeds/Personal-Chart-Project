@@ -100,7 +100,7 @@ export class CreateBasicChartComponent implements OnInit {
       chartSongs = songs.map(song => {
       if (song.exists) {
         console.log('song', song)
-        return {pos: song.pos, id: song.song._id, exists: song.exists};
+        return {pos: song.pos, _id: song.song._id, exists: song.exists};
       }
       else {
         const indexOfFirstHyphen = song.songString.indexOf(' - ')

@@ -81,6 +81,10 @@ export class ChartService {
     return this.httpClient.get<Session>(`${BASE_URL}/series/session/${sessionId}`)
   }
 
+  public getChartPreview(sessionId: string): Observable<Session> {
+    return this.httpClient.get<Session>(`${BASE_URL}/series/session/${sessionId}/preview`)
+  }
+
   public updateChart(seriesName: string, chartName: string, newChartData: Chart) {
     return this.httpClient.put<string>(`${BASE_URL}/series/${seriesName}/${chartName}`, newChartData)
   }

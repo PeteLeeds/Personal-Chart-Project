@@ -37,7 +37,7 @@ interface NewSong extends CheckedSong {
 }
 
 interface ExistingSong {
-    id: string;
+    _id: string;
     pos?: number;
     exists: boolean;
 }
