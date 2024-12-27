@@ -1,8 +1,10 @@
+import { ObjectId } from "mongodb"
 import { sortSongs } from "../common/sort-songs"
 
 const SELECTED_SERIES = 'test series'
 
 const BASE_SONG_INFO = {
+    _id: new ObjectId('abc'),
     title: 'test',
     artistDisplay: 'test',
     artistIds: []

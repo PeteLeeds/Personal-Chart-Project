@@ -27,8 +27,8 @@ export class NewSongsComponent implements OnInit {
   }
 
   public open(songs: FormattedSong[]): Promise<FormattedSong[]> {
-    console.log('songs', songs)
     this.chartSongs = songs;
+    console.log('songs', this.chartSongs)
     return this.baseModal.open() as Promise<FormattedSong[]>;
   }
 

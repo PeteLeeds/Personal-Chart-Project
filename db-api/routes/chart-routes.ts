@@ -148,7 +148,7 @@ export class ChartRouter {
         router.post('/session/:sessionId/complete', async (req, res) => {
             console.log('Get chart preview')
             res.json(
-                await (res.locals.db as Database).chartDb.createChartFromSession(req.params.sessionId)
+                await (res.locals.db as Database).chartDb.createChartFromSession(req.params.sessionId, req.body.newSongs)
             )
         })
         

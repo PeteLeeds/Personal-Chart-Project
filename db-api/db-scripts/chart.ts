@@ -170,6 +170,18 @@ export class ChartDb {
         return;
     }
 
+    public async getArtistIds(song: Song | SessionSong): Promise<ObjectId[]> {
+        const artistIds = []
+        if (song.artists) {
+            const artists = song.artists;
+            // Determine list of artist Ids involved with song (creating new artists if necessary)
+            for (const artist of artists) {
+                artistIds.push(await updateArtists(this.db.collection(ARTIST_COLLECTION), artist as string))
+            }
+        }
+        return artistIds
+    }
+
     public async newChart(seriesName: string, params: ChartParams, sessionId?: string): Promise<unknown> {
         if (!params.name) {
             throw new Error('Chart name has not been specified')
@@ -223,14 +235,7 @@ export class ChartDb {
             else {
                 const title = song.title;
                 const artistDisplay = song.artistDisplay
-                const artistIds = []
-                if (song.artists) {
-                    const artists = song.artists;
-                    // Determine list of artist Ids involved with song (creating new artists if necessary)
-                    for (const artist of artists) {
-                        artistIds.push(await updateArtists(this.db.collection(ARTIST_COLLECTION), artist))
-                    }
-                }
+                const artistIds = await this.getArtistIds(song)
                 if (nextChart) {
                     newChartPositions.push({chart: nextChart, position: DROPOUT, ...sessionIdParam})
                 }
@@ -287,7 +292,7 @@ export class ChartDb {
         return;
     }
 
-    public async createChartFromSession(sessionId: string): Promise<{name: string}> {
+    public async createChartFromSession(sessionId: string, newSongs: Song[]): Promise<{name: string}> {
         const session = await this.getInteractiveSession(sessionId)
         if (!session) {
             throw new Error('Session not defined!')
@@ -296,6 +301,14 @@ export class ChartDb {
             {[`charts.${session.seriesName}.sessionId`]: sessionId},
             { $unset: { [`charts.${session.seriesName}.$.sessionId`]: "" } }
         )
+        for (const song of newSongs) {
+            const artistIds = await this.getArtistIds(song)
+            console.log('ids', artistIds)
+            await this.db.collection(SONG_COLLECTION).updateOne(
+                { _id: new ObjectId(song._id) },
+                { $set: {artistIds}}
+            )
+        }
         await this.db.collection(CHART_COLLECTION).updateOne(
             {[`charts.sessionId`]: sessionId},
             { $unset: { [`charts.$.sessionId`]: "" } }

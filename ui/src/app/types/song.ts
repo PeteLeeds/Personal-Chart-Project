@@ -14,6 +14,7 @@ export interface AbstractSongInfo extends Song {
     position: number;
     chartRuns?: ChartPosition[][];
     series?: string[]
+    artistIds?: string[]
 }
 
 export interface FullSongInfo extends Song {

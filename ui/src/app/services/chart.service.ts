@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Chart, ChartParams, FullChart, PutSessionParams, Session } from '../types/chart';
-import { FullSongInfo } from '../types/song';
+import { AbstractSongInfo, FormattedSong, FullSongInfo } from '../types/song';
 import { Series } from '../types/series';
 import { getQueryString } from '../shared/get-query-string';
 import { map } from 'rxjs/operators';
@@ -93,7 +93,7 @@ export class ChartService {
     return this.httpClient.put<string>(`${BASE_URL}/series/session/${sessionId}`, sessionParams)
   }
 
-  public completeSession(sessionId: string): Observable<{name: string}> {
-    return this.httpClient.post<{name: string}>(`${BASE_URL}/series/session/${sessionId}/complete`, {})
+  public completeSession(sessionId: string, newSongs: FormattedSong[]): Observable<{name: string}> {
+    return this.httpClient.post<{name: string}>(`${BASE_URL}/series/session/${sessionId}/complete`, {newSongs})
   }
 }

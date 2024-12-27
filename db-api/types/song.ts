@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { Artist } from "./artist";
 
 export interface SongInChart {
@@ -8,10 +9,11 @@ export interface SongInChart {
 }
 
 export interface Song {
+    _id: ObjectId;
     title: string;
     artistIds: string[];
     artistDisplay: string;
-    artists?: Artist[]
+    artists?: string[] | Artist[]
     charts?: Record<string, SongInChart[]>
     chartRuns?: SongInChart[][]
     debut?: string

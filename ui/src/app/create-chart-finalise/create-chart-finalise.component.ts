@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ChartService } from '../services/chart.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { FullChart } from '../types/chart';
+import { NewSongsComponent } from '../modals/new-songs/new-songs.component';
+import { preEmptArtistName } from '../shared/pre-empt-artist-name';
 
 @Component({
   selector: 'app-create-chart-finalise',
@@ -11,6 +13,8 @@ import { FullChart } from '../types/chart';
   styleUrls: ['../styles/common-styles.css', './create-chart-finalise.component.css']
 })
 export class CreateChartFinaliseComponent {
+  @ViewChild('newSongsModal') private newSongsModal: NewSongsComponent;
+
   private chartService: ChartService
   private activatedRoute: ActivatedRoute
   private sessionId: string
@@ -35,8 +39,16 @@ export class CreateChartFinaliseComponent {
     })
   }
 
-  public submit(): void {
-    this.chartService.completeSession(this.sessionId).subscribe((res) => {
+  public async submit(): Promise<void> {
+    console.log(this.chartPreview.songs)
+    const songsToFormat = this.chartPreview.songs.filter(song => song.artistIds.length == 0).map(song => {
+      return {
+      ...song,
+      artists: preEmptArtistName(song.title, song.artistDisplay),
+      exists: false
+    }})
+    const newSongs = await this.newSongsModal.open(songsToFormat);
+    this.chartService.completeSession(this.sessionId, newSongs).subscribe((res) => {
       this.router.navigate(['../../../..', res.name], { relativeTo: this.activatedRoute })
     })
   }
