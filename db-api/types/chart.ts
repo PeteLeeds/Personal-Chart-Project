@@ -7,7 +7,7 @@ export interface ChartParams extends Chart {
 
 export interface Chart {
     name: string;
-    date: Date;
+    date: string;
 }
 
 export interface InteractiveChartParams extends Chart {

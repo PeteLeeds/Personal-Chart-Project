@@ -3,6 +3,7 @@ import { AbstractControl, FormControl, FormGroup, ValidatorFn } from '@angular/f
 import { ChartService } from 'src/app/services/chart.service';
 import { EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import moment from 'moment';
 
 @Component({
   selector: 'app-enter-songs',
@@ -69,10 +70,12 @@ export class EnterSongsComponent {
     }
 
     public onSubmit() {
+      const chartParams = {...this.chartForm.getRawValue()}
       if (this.useDateAsTitle) {
-        this.chartForm.value.name = this.chartForm.value.date.toDateString();
+        chartParams.date = moment(chartParams.date).toDate()
+        chartParams.name = chartParams.date.toDateString();
       }
-      this.chartService.initiateInteractiveChartCreation(this.seriesName, this.chartForm.value).subscribe(res => {
+      this.chartService.initiateInteractiveChartCreation(this.seriesName, chartParams).subscribe(res => {
         this.router.navigate([res.sessionId, 'rank'], {relativeTo: this.activatedRoute})
       })
     }

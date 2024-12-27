@@ -15,7 +15,7 @@ const DROPOUT = -1
 // Probably need to move this into a file common to ui and db-api
 export interface ChartParams {
     name: string;
-    date: Date;
+    date: string;
     songs: SessionSong[]
 }
 
@@ -48,7 +48,7 @@ export class ChartDb {
         ]).toArray()
     }
 
-    private async getXPreviousCharts(seriesName: String, date: Date, number: Number): Promise<string[]> {
+    private async getXPreviousCharts(seriesName: String, date: string, number: Number): Promise<string[]> {
         const previousCharts = await this.db.collection(CHART_COLLECTION).aggregate<Chart>([
             { '$match': { name: seriesName } },
             {'$unwind': '$charts'},
@@ -141,7 +141,7 @@ export class ChartDb {
         // Push temporary results into songs
         this.newChart(session.seriesName, {
             name: session.chartName,
-            date: new Date(session.date),
+            date: session.date,
             songs: session.placedSongs
         })   
     }
@@ -166,7 +166,11 @@ export class ChartDb {
         // Update each required song.
         let position = 1;
         for (const song of params.songs) {
-            const newChartPositions = [{ chart: params.name, position }]
+            const newChartPositions = [{ 
+                chart: params.name, 
+                position,
+                ...(sessionId ? {sessionId} : {})
+            }]
             if (song._id) {
                 // Update chart position of song (series + chart)
                 // If the song isn't in the following chart, mark it as a 'dropout' in that chart
@@ -238,7 +242,8 @@ export class ChartDb {
                 $push: {
                     charts: {
                         name: params.name,
-                        date: params.date
+                        date: params.date,
+                        ...(sessionId ? {sessionId} : {})
                     }
                 }
             })
@@ -367,7 +372,7 @@ export class ChartDb {
         return this.getPreviousChartsByDate(series, chartDate)
     }
 
-    public async getPreviousChartsByDate(series: string, chartDate: Date): Promise<AggregationCursor<Chart>> {
+    public async getPreviousChartsByDate(series: string, chartDate: string): Promise<AggregationCursor<Chart>> {
         const aggregateDb = [
             { $match: { name: series } },
             { $unwind: "$charts" },
@@ -390,7 +395,7 @@ export class ChartDb {
         return this.getNextChartByDate(series, chartDate)
     }
 
-    public async getNextChartByDate(series: string, chartDate: Date): Promise<string> {
+    public async getNextChartByDate(series: string, chartDate: string): Promise<string> {
         const aggregateDb = [
             { $match: { name: series } },
             { $unwind: "$charts" },
