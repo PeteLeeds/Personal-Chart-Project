@@ -154,14 +154,29 @@ export class ChartDb {
         })
     }
 
+    public async updateChartWeek(songId: string, seriesName: string, chartName: string, songParams: Record<string, string | number>, sessionId?: string): Promise<void> {
+        const updateResponse = await this.db.collection(SONG_COLLECTION).updateOne(
+            { _id: new ObjectId(songId), [`charts.${seriesName}.chart`]: chartName, [`charts.${seriesName}.sessionId`]: sessionId }, 
+            { '$set': { 'charts.$': songParams } }
+        )
+        if (updateResponse.matchedCount == 0) {
+            await this.db.collection<Song>(SONG_COLLECTION).updateOne(
+                { _id: new ObjectId(songId) },
+                { $push: { [`charts.${seriesName}`]: songParams } }
+            )
+        }
+        return;
+    }
+
     public async newChart(seriesName: string, params: ChartParams, sessionId?: string): Promise<unknown> {
         if (!params.name) {
             throw new Error('Chart name has not been specified')
         }
+        const sessionIdParam: Record<string, string> = sessionId ? {sessionId} : {}
         const chartParams = {
             name: params.name,
             date: params.date,
-            ...(sessionId ? {sessionId} : {})
+            ...sessionIdParam
         }
         const existing = await this.db.collection(CHART_COLLECTION).findOne({ $and: [{ "name": seriesName }, { "charts.name": params.name }] })
         if (existing) {
@@ -187,9 +202,10 @@ export class ChartDb {
             const newChartPositions = [{ 
                 chart: params.name, 
                 position,
-                ...(sessionId ? {sessionId} : {})
+                ...sessionIdParam
             }]
             if (song._id) {
+                await this.updateChartWeek(song._id, seriesName, params.name, newChartPositions[0], sessionId)
                 // Update chart position of song (series + chart)
                 // If the song isn't in the following chart, mark it as a 'dropout' in that chart
                 if (nextChart) {
@@ -198,13 +214,9 @@ export class ChartDb {
                         (chart: Record<string, string>) => chart.chart === nextChart
                     )
                     if (nextChartInSong.length === 0) {
-                        newChartPositions.push({chart: nextChart, position: DROPOUT})
+                        await this.updateChartWeek(song._id, seriesName, params.name, {chart: nextChart, position: DROPOUT, ...sessionIdParam}, sessionId)
                     }
                 }
-                await this.db.collection<Song>(SONG_COLLECTION).updateOne(
-                    { _id: new ObjectId(song._id) },
-                    { $push: { [`charts.${seriesName}`]: {$each: newChartPositions }} }
-                )
             }
             else {
                 const title = song.title;
@@ -218,7 +230,7 @@ export class ChartDb {
                     }
                 }
                 if (nextChart) {
-                    newChartPositions.push({chart: nextChart, position: DROPOUT})
+                    newChartPositions.push({chart: nextChart, position: DROPOUT, ...sessionIdParam})
                 }
                 // Insert the new song
                 const newSong = await this.db.collection(SONG_COLLECTION).insertOne({
@@ -251,7 +263,7 @@ export class ChartDb {
                     }
                     ]
                 },
-                { $push: { [`charts.${seriesName}`]: {chart: params.name, position: DROPOUT} } }
+                { $push: { [`charts.${seriesName}`]: {chart: params.name, position: DROPOUT, ...sessionIdParam} } }
             )
         }
         return;
