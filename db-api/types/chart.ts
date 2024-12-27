@@ -13,6 +13,7 @@ export interface Chart {
 export interface InteractiveChartParams extends Chart {
     includeSongs: Boolean;
     numberOfCharts: Number;
+    cutOffNumber: number;
     songs: string;
     revealOrder: 'random' | 'inOrder'
 }
@@ -26,6 +27,7 @@ export interface Session extends PutSessionParams {
     seriesName: string,
     chartName: string,
     date: string,
+    cutOffNumber: number,
 }
 
 export interface SessionSong {

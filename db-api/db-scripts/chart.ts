@@ -116,6 +116,7 @@ export class ChartDb {
             seriesName,
             chartName: params.name,
             date: params.date,
+            cutOffNumber: params.cutOffNumber,
             songOrder: songs,
             placedSongs: []
         })
@@ -134,6 +135,9 @@ export class ChartDb {
         const session = await this.getInteractiveSession(sessionId)
         if (!session) {
             throw new Error('Session not defined!')
+        }
+        if (session.cutOffNumber < session.placedSongs.length) {
+            session.placedSongs = session.placedSongs.slice(0, session.cutOffNumber)
         }
         // Push temporary results into songs
         await this.newChart(session.seriesName, {

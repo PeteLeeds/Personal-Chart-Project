@@ -20,6 +20,7 @@ export class EnterSongsComponent {
       date: new FormControl<Date>(new Date()),
       includeSongs: new FormControl<Boolean>(false),
       numberOfCharts: new FormControl<Number>(1),
+      cutOffNumber: new FormControl<Number>(40),
       songs: new FormControl<string>('', this.hyphenValidator()),
       revealOrder: new FormControl<'random' | 'inOrder'>('random')
     });
