@@ -140,11 +140,12 @@ export class ChartDb {
             throw new Error('Session not defined!')
         }
         // Push temporary results into songs
-        this.newChart(session.seriesName, {
+        await this.newChart(session.seriesName, {
             name: session.chartName,
             date: session.date,
             songs: session.placedSongs
-        }, sessionId)   
+        }, sessionId)
+        return this.getChart(session.seriesName, session.chartName)
     }
 
     public newSeries(params: Record<string, unknown>): Promise<unknown> {

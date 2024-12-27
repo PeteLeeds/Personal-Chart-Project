@@ -81,8 +81,8 @@ export class ChartService {
     return this.httpClient.get<Session>(`${BASE_URL}/series/session/${sessionId}`)
   }
 
-  public getChartPreview(sessionId: string): Observable<Session> {
-    return this.httpClient.get<Session>(`${BASE_URL}/series/session/${sessionId}/preview`)
+  public getChartPreview(sessionId: string): Observable<FullChart> {
+    return this.httpClient.get<FullChart>(`${BASE_URL}/series/session/${sessionId}/preview`)
   }
 
   public updateChart(seriesName: string, chartName: string, newChartData: Chart) {

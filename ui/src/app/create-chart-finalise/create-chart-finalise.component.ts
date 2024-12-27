@@ -3,17 +3,18 @@ import { ChartService } from '../services/chart.service';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
+import { FullChart } from '../types/chart';
 
 @Component({
   selector: 'app-create-chart-finalise',
   templateUrl: './create-chart-finalise.component.html',
-  styleUrls: ['./create-chart-finalise.component.css']
+  styleUrls: ['../styles/common-styles.css', './create-chart-finalise.component.css']
 })
 export class CreateChartFinaliseComponent {
   private chartService: ChartService
   private activatedRoute: ActivatedRoute
   private sessionId: string
-  public chartPreview;
+  public chartPreview: FullChart;
 
   constructor(chartService: ChartService, activatedRoute: ActivatedRoute) {
     this.chartService = chartService
@@ -26,7 +27,7 @@ export class CreateChartFinaliseComponent {
         this.sessionId = params.session
         return this.chartService.getChartPreview(this.sessionId)
       }
-      return of({})
+      return of({} as FullChart)
     })).subscribe(res => {
       this.chartPreview = res
     })
