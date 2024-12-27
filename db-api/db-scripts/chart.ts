@@ -31,10 +31,6 @@ export class ChartDb {
         console.log('initialised Chart class')
     }
 
-    /*public getChart(): Promise<Record<string, unknown>[]> {
-        return this.db.collection(SONG_COLLECTION).find().toArray()
-    }*/
-
     public getChartsInSeries(seriesName: string, params: Record<string, string>) {
         const page = parseInt(params.page)
         const order = parseInt(params.order)
@@ -145,7 +141,7 @@ export class ChartDb {
             date: session.date,
             songs: session.placedSongs
         }, sessionId)
-        return this.getChart(session.seriesName, session.chartName)
+        return this.getChart(session.seriesName, session.chartName, undefined, sessionId)
     }
 
     public newSeries(params: Record<string, unknown>): Promise<unknown> {
@@ -342,9 +338,9 @@ export class ChartDb {
         },]
     }
 
-    public async getChart(series: string, chartName: string, size?: string) {
+    public async getChart(series: string, chartName: string, size?: string, sessionId?: string) {
         const songs = await (await this.getChartSongs(series, chartName, size)).toArray()
-        const previousCharts = await (await this.getPreviousCharts(series, chartName)).toArray()
+        const previousCharts = await (await this.getPreviousCharts(series, chartName, sessionId)).toArray()
         const nextChart = await this.getNextChart(series, chartName)
 
         const prevChartNames = previousCharts.map(chart => chart.name);
@@ -398,7 +394,7 @@ export class ChartDb {
         ])
     }
 
-    public async getPreviousCharts(series: string, chart: string): Promise<AggregationCursor<Chart>> {
+    public async getPreviousCharts(series: string, chart: string, sessionId?: string): Promise<AggregationCursor<Chart>> {
         const chartDateArray = await (this.db.collection(CHART_COLLECTION).aggregate([
             { $match: { name: series } },
             { $unwind: "$charts" },
@@ -407,10 +403,10 @@ export class ChartDb {
         ]).toArray())
         const chartDate = chartDateArray[0].date
         console.log('get previous', JSON.stringify(chart));
-        return this.getPreviousChartsByDate(series, chartDate)
+        return this.getPreviousChartsByDate(series, chartDate, sessionId)
     }
 
-    public async getPreviousChartsByDate(series: string, chartDate: string): Promise<AggregationCursor<Chart>> {
+    public async getPreviousChartsByDate(series: string, chartDate: string, sessionId?: string): Promise<AggregationCursor<Chart>> {
         const aggregateDb = [
             { $match: { name: series } },
             { $unwind: "$charts" },
@@ -418,7 +414,10 @@ export class ChartDb {
             { $match: {
                 $and: [
                     {date: { $lte: chartDate } },
-                    {sessionId: {$exists: false}}
+                    {$or: [
+                        {sessionId: {$exists: false}},
+                        {sessionId}
+                    ]}
                 ]} },
             { $sort: { date: -1 } },
         ]
