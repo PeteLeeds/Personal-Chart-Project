@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ChartService } from '../services/chart.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { FullChart } from '../types/chart';
@@ -14,10 +14,12 @@ export class CreateChartFinaliseComponent {
   private chartService: ChartService
   private activatedRoute: ActivatedRoute
   private sessionId: string
+  private router: Router
   public chartPreview: FullChart;
 
-  constructor(chartService: ChartService, activatedRoute: ActivatedRoute) {
+  constructor(chartService: ChartService, router: Router, activatedRoute: ActivatedRoute) {
     this.chartService = chartService
+    this.router = router
     this.activatedRoute = activatedRoute
   }
 
@@ -30,6 +32,12 @@ export class CreateChartFinaliseComponent {
       return of({} as FullChart)
     })).subscribe(res => {
       this.chartPreview = res
+    })
+  }
+
+  public submit(): void {
+    this.chartService.completeSession(this.sessionId).subscribe((res) => {
+      this.router.navigate(['../../../..', res.name], { relativeTo: this.activatedRoute })
     })
   }
 }

@@ -92,4 +92,8 @@ export class ChartService {
   public updateSession(sessionId: string, sessionParams: PutSessionParams) {
     return this.httpClient.put<string>(`${BASE_URL}/series/session/${sessionId}`, sessionParams)
   }
+
+  public completeSession(sessionId: string): Observable<{name: string}> {
+    return this.httpClient.post<{name: string}>(`${BASE_URL}/series/session/${sessionId}/complete`, {})
+  }
 }

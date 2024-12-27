@@ -26,8 +26,8 @@
         </table>
     </ng-container>
     <div class="row">
-        <button>Submit</button>
-        <button>Go Back</button>
+        <button (click)="submit()">Submit</button>
+        <a [routerLink]="['..', 'rank']"><button>Go Back</button></a>
     </div>
 </div>
 

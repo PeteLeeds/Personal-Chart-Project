@@ -283,6 +283,25 @@ export class ChartDb {
         return;
     }
 
+    public async createChartFromSession(sessionId: string): Promise<{name: string}> {
+        const session = await this.getInteractiveSession(sessionId)
+        if (!session) {
+            throw new Error('Session not defined!')
+        }
+        await this.db.collection(SONG_COLLECTION).updateMany(
+            {[`charts.${session.seriesName}.sessionId`]: sessionId},
+            { $unset: { [`charts.${session.seriesName}.$.sessionId`]: "" } }
+        )
+        await this.db.collection(CHART_COLLECTION).updateOne(
+            {[`charts.sessionId`]: sessionId},
+            { $unset: { [`charts.$.sessionId`]: "" } }
+        )
+        await this.db.collection(SESSION_COLLECTION).deleteOne(
+            {_id: new ObjectId(sessionId)}
+        )
+        return {name: session.chartName}
+    }
+
     public listSeries(): FindCursor<any> {
         return this.db.collection(CHART_COLLECTION).find();
     }
