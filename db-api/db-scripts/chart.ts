@@ -266,6 +266,22 @@ export class ChartDb {
                 { $push: { [`charts.${seriesName}`]: {chart: params.name, position: DROPOUT, ...sessionIdParam} } }
             )
         }
+        if (sessionId && existing) {
+            // Delete things no longer in chart
+            await this.db.collection<Song>(SONG_COLLECTION).updateMany(
+                { _id: { $nin: songIds } },
+                { 
+                    $pull: { 
+                        [`charts.${seriesName}`]: {
+                            $and: [
+                                { sessionId: sessionId }, 
+                                { position: { $ne: DROPOUT } }
+                            ]
+                        }
+                    }
+                }
+            );
+        }
         return;
     }
 
