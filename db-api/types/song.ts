@@ -4,6 +4,7 @@ export interface SongInChart {
     chart: string,
     position: number,
     date: string
+    sessionId?: string
 }
 
 export interface Song {

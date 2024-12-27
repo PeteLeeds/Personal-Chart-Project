@@ -42,6 +42,7 @@ export class ChartDb {
             { '$match': { name: seriesName } },
             {'$unwind': '$charts'},
             {'$replaceRoot': {'newRoot': '$charts'}},
+            { '$match': { 'sessionId': { '$exists': false } } },
             {'$sort': {'date': order}},
             {'$skip': page * 20},
             {'$limit': 20}
@@ -157,7 +158,7 @@ export class ChartDb {
     public async updateChartWeek(songId: string, seriesName: string, chartName: string, songParams: Record<string, string | number>, sessionId?: string): Promise<void> {
         const updateResponse = await this.db.collection(SONG_COLLECTION).updateOne(
             { _id: new ObjectId(songId), [`charts.${seriesName}.chart`]: chartName, [`charts.${seriesName}.sessionId`]: sessionId }, 
-            { '$set': { 'charts.$': songParams } }
+            { '$set': { [`charts.${seriesName}.$`]: songParams } }
         )
         if (updateResponse.matchedCount == 0) {
             await this.db.collection<Song>(SONG_COLLECTION).updateOne(
@@ -413,7 +414,11 @@ export class ChartDb {
             { $match: { name: series } },
             { $unwind: "$charts" },
             { $replaceRoot: { newRoot: "$charts" } },
-            { $match: { date: { $lte: chartDate } } },
+            { $match: {
+                $and: [
+                    {date: { $lte: chartDate } },
+                    {sessionId: {$exists: false}}
+                ]} },
             { $sort: { date: -1 } },
         ]
         return this.db.collection(CHART_COLLECTION).aggregate(aggregateDb);
@@ -436,7 +441,11 @@ export class ChartDb {
             { $match: { name: series } },
             { $unwind: "$charts" },
             { $replaceRoot: { newRoot: "$charts" } },
-            { $match: { date: { $gt: chartDate } } },
+            { $match: {
+                $and: [
+                    {date: { $gt: chartDate } },
+                    {sessionId: {$exists: false}}
+                ]} },            
             { $sort: { date: 1 } },
             { $limit: 1 },
         ]

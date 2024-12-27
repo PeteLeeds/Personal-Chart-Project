@@ -5,7 +5,7 @@ const DROPOUT = -1
 export function formatSong(song: Song, seriesName: string): void {
     if (song.charts && song.charts[seriesName]) {
         song.series = Object.keys(song.charts)
-        song.charts[seriesName] = song.charts[seriesName].filter(chart => chart.position != DROPOUT)
+        song.charts[seriesName] = song.charts[seriesName].filter(chart => chart.position != DROPOUT && !chart.sessionId)
         // Sort in ascending order so that peak is at position 0
         song.charts[seriesName].sort((a, b) => a.position - b.position);
         song.peak = song.charts[seriesName][0].position
