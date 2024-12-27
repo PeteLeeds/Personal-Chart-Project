@@ -1,4 +1,4 @@
-import { AggregationCursor, Db, FindCursor, ObjectId } from "mongodb"
+import { AggregationCursor, Db, FindCursor, ObjectId, UpdateResult } from "mongodb"
 import { Song } from "../types/song";
 import { updateArtists } from "./common/update-artists";
 import { Chart, InteractiveChartParams, PutSessionParams, Session, SessionSong } from "../types/chart";
@@ -143,7 +143,7 @@ export class ChartDb {
             name: session.chartName,
             date: session.date,
             songs: session.placedSongs
-        })   
+        }, sessionId)   
     }
 
     public newSeries(params: Record<string, unknown>): Promise<unknown> {
@@ -158,9 +158,27 @@ export class ChartDb {
         if (!params.name) {
             throw new Error('Chart name has not been specified')
         }
+        const chartParams = {
+            name: params.name,
+            date: params.date,
+            ...(sessionId ? {sessionId} : {})
+        }
         const existing = await this.db.collection(CHART_COLLECTION).findOne({ $and: [{ "name": seriesName }, { "charts.name": params.name }] })
         if (existing) {
-            throw new Error('Chart names within a series must be unique')
+            if (sessionId) {
+                await this.db.collection(CHART_COLLECTION).updateOne({ name: seriesName, 'charts.sessionId': sessionId }, { '$set': { 'charts.$': chartParams } })
+            } else {
+                throw new Error('Chart names within a series must be unique')
+            }
+        } else {
+            // Insert the chart
+            await this.db.collection<Chart>(CHART_COLLECTION).updateOne({ name: seriesName },
+                {
+                    $push: {
+                        charts: chartParams
+                    }
+                }
+            )
         }
         const nextChart = await this.getNextChartByDate(seriesName, params.date)
         // Update each required song.
@@ -236,17 +254,7 @@ export class ChartDb {
                 { $push: { [`charts.${seriesName}`]: {chart: params.name, position: DROPOUT} } }
             )
         }
-        // Insert the chart
-        return this.db.collection<Chart>(CHART_COLLECTION).updateOne({ name: seriesName },
-            {
-                $push: {
-                    charts: {
-                        name: params.name,
-                        date: params.date,
-                        ...(sessionId ? {sessionId} : {})
-                    }
-                }
-            })
+        return;
     }
 
     public listSeries(): FindCursor<any> {
