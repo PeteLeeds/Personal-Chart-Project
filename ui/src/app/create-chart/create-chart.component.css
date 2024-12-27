@@ -1,26 +1,10 @@
-.top-navbar {
-    padding: 5px;
+.centre {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    background-color: #949191;
 }
 
-li {
-    float: left;
-}
-
-li a:hover {
-    background-color: #111;
-}
-
-ul {
-    list-style-type: none;
-}
-
-a {
-    background-color: #949191;
-    text-decoration: none;
-    color: white;
-    padding: 10px;
-    display: block;
+.row {
+    display: flex;
+    margin: 1rem 0;
 }

@@ -17,6 +17,7 @@ export class RankSongsComponent {
 
     public sessionId: string
     public session: Session
+    public insertButtonsToDisplay: number[]
 
     public constructor(activatedRoute: ActivatedRoute, chartService: ChartService) {
       this.activatedRoute = activatedRoute
@@ -42,6 +43,14 @@ export class RankSongsComponent {
         placedSongs: this.session.placedSongs,
         songOrder: this.session.songOrder
       }).subscribe()
+    }
+
+    public setInsertButtonsToDisplay(valueHoveredOver: number): void {
+      this.insertButtonsToDisplay = [valueHoveredOver - 1, valueHoveredOver]
+    }
+
+    public removeInsertButtons(): void {
+      this.insertButtonsToDisplay = []
     }
 
 }
