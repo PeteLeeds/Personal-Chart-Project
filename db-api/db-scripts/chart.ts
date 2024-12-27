@@ -215,7 +215,7 @@ export class ChartDb {
                     const nextChartInSong = songObject?.charts[seriesName].find(
                         (chart: Record<string, string>) => chart.chart === nextChart
                     )
-                    if (nextChartInSong.length === 0) {
+                    if (nextChartInSong?.length === 0) {
                         await this.updateChartWeek(song._id, seriesName, params.name, {chart: nextChart, position: DROPOUT, ...sessionIdParam}, sessionId)
                     }
                 }
