@@ -336,6 +336,9 @@ export class ChartDb {
     public getRecentCharts(): AggregationCursor<Chart[]> {
         return this.db.collection(CHART_COLLECTION).aggregate([
             {'$unwind': '$charts'},
+            { '$match': 
+                {'charts.sessionId': {$exists: false}},
+            },
             {'$sort': {'charts.date': -1}},
             {'$limit': 5},
             {'$project': {
