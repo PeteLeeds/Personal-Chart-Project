@@ -192,7 +192,11 @@ export class ChartDb {
             date: params.date,
             ...sessionIdParam
         }
-        const existing = await this.db.collection(CHART_COLLECTION).findOne({ $and: [{ "name": seriesName }, { "charts.name": params.name }] })
+        const existing = await this.db.collection(CHART_COLLECTION).findOne({ $and: [
+            { "name": seriesName },
+            { "charts.name": params.name },
+            ...[sessionId ? {sessionId} : []]
+        ] })
         if (existing) {
             if (sessionId) {
                 await this.db.collection(CHART_COLLECTION).updateOne({ name: seriesName, 'charts.sessionId': sessionId }, { '$set': { 'charts.$': chartParams } })
@@ -357,7 +361,7 @@ export class ChartDb {
         }]
     }
 
-    private getSongsPipeline(series: string, chartName: string, size?: string) {
+    private getSongsPipeline(series: string, chartName: string, size?: string, sessionId?: string) {
         return [{
             $match: {
                 [`charts.${series}`]: {
@@ -367,7 +371,11 @@ export class ChartDb {
                         position: {
                             $ne: DROPOUT,
                             ...(size ? { $lte: parseInt(size) } : {})
-                        }
+                        },
+                        $or: [
+                            {sessionId:  {$exists: false}},
+                            ...(sessionId ? [{sessionId:  {$eq: sessionId}}] : []),
+                        ]
                     }
                 }
             }
@@ -375,7 +383,7 @@ export class ChartDb {
     }
 
     public async getChart(series: string, chartName: string, size?: string, sessionId?: string) {
-        const songs = await (await this.getChartSongs(series, chartName, size)).toArray()
+        const songs = await (await this.getChartSongs(series, chartName, size, sessionId)).toArray()
         const previousCharts = await (await this.getPreviousCharts(series, chartName, sessionId)).toArray()
         const nextChart = await this.getNextChart(series, chartName)
 
@@ -387,7 +395,17 @@ export class ChartDb {
             }
             const currentSeries = song.charts[series]
             const charts = currentSeries.filter(
-                chart => prevChartNames.includes(chart.chart) && chart.position != DROPOUT
+                chart => {
+                    if (chart.position == DROPOUT) {
+                        return false
+                    } else if (prevChartNames.includes(chart.chart)) {
+                        if (prevChartNames[0] == chart.chart && sessionId && chart.sessionId != sessionId) {
+                            return false
+                        }
+                        return true
+                    }
+                    return false
+                }
             );
             const lastChartRecord = charts.find(chart => chart.chart === prevChartNames[1])
             charts.sort((a, b) => a.position - b.position);
@@ -406,10 +424,10 @@ export class ChartDb {
         }
     }
 
-    public async getChartSongs(series: string, chartName: string, size?: string): Promise<AggregationCursor<Song>> {
+    public async getChartSongs(series: string, chartName: string, size?: string, sessionId?: string): Promise<AggregationCursor<Song>> {
         return this.db.collection(SONG_COLLECTION).aggregate([
             // Find all the songs in this chart
-            ...this.getSongsPipeline(series, chartName, size),
+            ...this.getSongsPipeline(series, chartName, size, sessionId),
             ...this.getSizePipeline(series, size),
             // Remove all chart info for the songs besides the specified chart
             {
@@ -418,7 +436,13 @@ export class ChartDb {
                         $filter: {
                             input: `$charts.${series}`,
                             as: 'chart',
-                            cond: { $eq: [`$$chart.chart`, chartName] }
+                            cond: { $and: [
+                                {$eq: [`$$chart.chart`, chartName]},
+                                {$or: [
+                                    { $eq: [ { $type: "$$chart.sessionId" }, "missing" ] },
+                                    {$eq: [ '$$chart.sessionId', sessionId]}
+                                ]}
+                            ] }
                         }
                     },
                 }
