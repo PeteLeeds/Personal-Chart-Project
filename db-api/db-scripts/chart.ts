@@ -195,7 +195,7 @@ export class ChartDb {
         const existing = await this.db.collection(CHART_COLLECTION).findOne({ $and: [
             { "name": seriesName },
             { "charts.name": params.name },
-            ...[sessionId ? {sessionId} : []]
+            ...(sessionId ? [ {"charts.sessionId": sessionId}] : [])
         ] })
         if (existing) {
             if (sessionId) {
@@ -251,6 +251,12 @@ export class ChartDb {
                     charts: { [seriesName]: newChartPositions }
                 })
                 song._id = newSong.insertedId.toString()
+                if (sessionId) {
+                    this.db.collection(SESSION_COLLECTION).updateOne(
+                        {_id: new ObjectId(sessionId), 'placedSongs.artistDisplay': song.artistDisplay, 'placedSongs.title': song.title},
+                        { $set: {'placedSongs.$._id': song._id} }
+                    )
+                }
             }
             position++;
         }
@@ -407,7 +413,7 @@ export class ChartDb {
                     return false
                 }
             );
-            const lastChartRecord = charts.find(chart => chart.chart === prevChartNames[1])
+            const lastChartRecord = charts.find(chart => chart.chart === prevChartNames[1] && !chart.sessionId)
             charts.sort((a, b) => a.position - b.position);
             return {
               ...song,
