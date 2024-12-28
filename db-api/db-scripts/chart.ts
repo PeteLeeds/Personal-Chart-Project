@@ -1,21 +1,22 @@
-import { AggregationCursor, Db, FindCursor, ObjectId } from "mongodb"
+import { AggregationCursor, Db, FindCursor, ObjectId, UpdateResult } from "mongodb"
 import { Song } from "../types/song";
 import { updateArtists } from "./common/update-artists";
-import { Chart } from "../types/chart";
+import { Chart, InteractiveChartParams, PutSessionParams, Session, SessionSong } from "../types/chart";
 import { getTop40ChartRun, splitChartRun } from "./common/chart-run";
-import { formatSong } from "./common/format-song";
+import { ObjectSet } from "./common/object-set";
 
 const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
 const CHART_COLLECTION = 'series'
+const SESSION_COLLECTION = 'interactive-sessions'
 
 const DROPOUT = -1
 
 // Probably need to move this into a file common to ui and db-api
 export interface ChartParams {
     name: string;
-    date: Date;
-    songs: Record<string, unknown>[]
+    date: string;
+    songs: SessionSong[]
 }
 
 export class ChartDb {
@@ -30,10 +31,6 @@ export class ChartDb {
         console.log('initialised Chart class')
     }
 
-    /*public getChart(): Promise<Record<string, unknown>[]> {
-        return this.db.collection(SONG_COLLECTION).find().toArray()
-    }*/
-
     public getChartsInSeries(seriesName: string, params: Record<string, string>) {
         const page = parseInt(params.page)
         const order = parseInt(params.order)
@@ -41,10 +38,114 @@ export class ChartDb {
             { '$match': { name: seriesName } },
             {'$unwind': '$charts'},
             {'$replaceRoot': {'newRoot': '$charts'}},
+            { '$match': { 'sessionId': { '$exists': false } } },
             {'$sort': {'date': order}},
             {'$skip': page * 20},
             {'$limit': 20}
         ]).toArray()
+    }
+
+    private async getXPreviousCharts(seriesName: String, date: string, number: Number): Promise<string[]> {
+        const previousCharts = await this.db.collection(CHART_COLLECTION).aggregate<Chart>([
+            { '$match': { name: seriesName } },
+            {'$unwind': '$charts'},
+            {'$replaceRoot': {'newRoot': '$charts'}},
+            { '$match': {$and: [{ date: {'$lt': date} }, {sessionId: {$exists: false}}] }},
+            {'$sort': {'date': -1}},
+            {'$limit': number},
+        ]).toArray()
+        return previousCharts.map(chart => chart.name)
+    }
+
+    private async getSongsFromCharts(series: string, charts: string[]): Promise<Record<string, string>[]> {
+        const fullSongArray = []
+        for (const chart of charts) {
+            const chartSongs = await this.db.collection(SONG_COLLECTION).aggregate<Record<string, string>>([
+                ...this.getSongsPipeline(series, chart),
+                { '$project': {
+                    title: 1,
+                    artistDisplay: 1,
+                    _id: 1
+                }}
+            ]).toArray()
+            fullSongArray.push(...chartSongs)
+        }
+        const songArray = [...new ObjectSet<Record<string, string>>(fullSongArray)]
+        return songArray
+    }
+
+    public getNewSongs(songs: string): Record<string, string>[] {
+        if (songs.length === 0) {
+            return []
+        }
+        const songArray = songs.split('\n');
+        return songArray.map(song => {
+            const indexOfFirstHyphen = song.indexOf(' - ')
+            let artist = song.slice(0, indexOfFirstHyphen);
+            let title = song.slice(indexOfFirstHyphen + 3);
+            return {
+                artistDisplay: artist.trim(),
+                title: title.trim()
+            }
+        })
+    }
+
+    private shuffle(array: unknown[]): void {
+        let currentIndex = array.length;
+
+        while (currentIndex != 0) {
+
+            let randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+        }
+    }
+
+    public async initiateInteractiveChartCreation(seriesName: string, params: InteractiveChartParams): Promise<Record<string, string>> {
+        const prevCharts = await this.getXPreviousCharts(seriesName, params.date, params.numberOfCharts)
+        const songs = [
+            ...await this.getSongsFromCharts(seriesName, prevCharts),
+            ...this.getNewSongs(params.songs)
+        ]
+        if (params.revealOrder == 'random') {
+            this.shuffle(songs)
+        }
+        const insertedItem = await this.db.collection(SESSION_COLLECTION).insertOne({
+            seriesName,
+            chartName: params.name,
+            date: params.date,
+            cutOffNumber: params.cutOffNumber,
+            songOrder: songs,
+            placedSongs: []
+        })
+        return {sessionId: insertedItem.insertedId.toString()}
+    }
+
+    public getInteractiveSession(sessionId: string): Promise<Session | null> {
+        return this.db.collection(SESSION_COLLECTION).findOne<Session>({_id: new ObjectId(sessionId)})
+    }
+
+    public updateSession(sessionId: string, sessionData: PutSessionParams): Promise<UpdateResult<Document>> {
+        return this.db.collection(SESSION_COLLECTION).updateOne({_id: new ObjectId(sessionId)}, {$set: sessionData})
+    }
+
+    public async getChartPreview(sessionId: string) {
+        const session = await this.getInteractiveSession(sessionId)
+        if (!session) {
+            throw new Error('Session not defined!')
+        }
+        if (session.cutOffNumber < session.placedSongs.length) {
+            session.placedSongs = session.placedSongs.slice(0, session.cutOffNumber)
+        }
+        // Push temporary results into songs
+        await this.newChart(session.seriesName, {
+            name: session.chartName,
+            date: session.date,
+            songs: session.placedSongs
+        }, sessionId)
+        return this.getChart(session.seriesName, session.chartName, undefined, sessionId)
     }
 
     public newSeries(params: Record<string, unknown>): Promise<unknown> {
@@ -55,47 +156,92 @@ export class ChartDb {
         })
     }
 
-    public async newChart(seriesName: string, params: ChartParams): Promise<unknown> {
+    public async updateChartWeek(songId: string, seriesName: string, chartName: string, songParams: Record<string, string | number>, sessionId?: string): Promise<void> {
+        const updateResponse = await this.db.collection(SONG_COLLECTION).updateOne(
+            { _id: new ObjectId(songId), [`charts.${seriesName}.chart`]: chartName, [`charts.${seriesName}.sessionId`]: sessionId }, 
+            { '$set': { [`charts.${seriesName}.$`]: songParams } }
+        )
+        if (updateResponse.matchedCount == 0) {
+            await this.db.collection<Song>(SONG_COLLECTION).updateOne(
+                { _id: new ObjectId(songId) },
+                { $push: { [`charts.${seriesName}`]: songParams } }
+            )
+        }
+        return;
+    }
+
+    public async getArtistIds(song: Song | SessionSong): Promise<ObjectId[]> {
+        const artistIds = []
+        if (song.artists) {
+            const artists = song.artists;
+            // Determine list of artist Ids involved with song (creating new artists if necessary)
+            for (const artist of artists) {
+                artistIds.push(await updateArtists(this.db.collection(ARTIST_COLLECTION), artist as string))
+            }
+        }
+        return artistIds
+    }
+
+    public async newChart(seriesName: string, params: ChartParams, sessionId?: string): Promise<unknown> {
         if (!params.name) {
             throw new Error('Chart name has not been specified')
         }
-        const existing = await this.db.collection(CHART_COLLECTION).findOne({ $and: [{ "name": seriesName }, { "charts.name": params.name }] })
+        const sessionIdParam: Record<string, string> = sessionId ? {sessionId} : {}
+        const chartParams = {
+            name: params.name,
+            date: params.date,
+            ...sessionIdParam
+        }
+        const existing = await this.db.collection(CHART_COLLECTION).findOne({ $and: [
+            { "name": seriesName },
+            { "charts.name": params.name },
+            ...(sessionId ? [ {"charts.sessionId": sessionId}] : [])
+        ] })
         if (existing) {
-            throw new Error('Chart names within a series must be unique')
+            if (sessionId) {
+                await this.db.collection(CHART_COLLECTION).updateOne({ name: seriesName, 'charts.sessionId': sessionId }, { '$set': { 'charts.$': chartParams } })
+            } else {
+                throw new Error('Chart names within a series must be unique')
+            }
+        } else {
+            // Insert the chart
+            await this.db.collection<Chart>(CHART_COLLECTION).updateOne({ name: seriesName },
+                {
+                    $push: {
+                        charts: chartParams
+                    }
+                }
+            )
         }
         const nextChart = await this.getNextChartByDate(seriesName, params.date)
         // Update each required song.
         let position = 1;
         for (const song of params.songs) {
-            const newChartPositions = [{ chart: params.name, position }]
-            if (song.id) {
+            const newChartPositions = [{ 
+                chart: params.name, 
+                position,
+                ...sessionIdParam
+            }]
+            if (song._id) {
+                await this.updateChartWeek(song._id, seriesName, params.name, newChartPositions[0], sessionId)
                 // Update chart position of song (series + chart)
                 // If the song isn't in the following chart, mark it as a 'dropout' in that chart
                 if (nextChart) {
-                    const songObject = await this.db.collection(SONG_COLLECTION).findOne({_id: new ObjectId(song.id as ObjectId)})
+                    const songObject = await this.db.collection(SONG_COLLECTION).findOne({_id: new ObjectId(song._id)})
                     const nextChartInSong = songObject?.charts[seriesName].find(
                         (chart: Record<string, string>) => chart.chart === nextChart
                     )
-                    if (nextChartInSong.length === 0) {
-                        newChartPositions.push({chart: nextChart, position: DROPOUT})
+                    if (nextChartInSong?.length === 0) {
+                        await this.updateChartWeek(song._id, seriesName, params.name, {chart: nextChart, position: DROPOUT, ...sessionIdParam}, sessionId)
                     }
                 }
-                await this.db.collection<Song>(SONG_COLLECTION).updateOne(
-                    { _id: new ObjectId(song.id as ObjectId) },
-                    { $push: { [`charts.${seriesName}`]: {$each: newChartPositions }} }
-                )
             }
             else {
-                const artists = song.artists;
-                const artistDisplay = song.artistDisplay
                 const title = song.title;
-                // Determine list of artist Ids involved with song (creating new artists if necessary)
-                const artistIds = []
-                for (const artist of artists as string[]) {
-                    artistIds.push(await updateArtists(this.db.collection(ARTIST_COLLECTION), artist))
-                }
+                const artistDisplay = song.artistDisplay
+                const artistIds = await this.getArtistIds(song)
                 if (nextChart) {
-                    newChartPositions.push({chart: nextChart, position: DROPOUT})
+                    newChartPositions.push({chart: nextChart, position: DROPOUT, ...sessionIdParam})
                 }
                 // Insert the new song
                 const newSong = await this.db.collection(SONG_COLLECTION).insertOne({
@@ -104,12 +250,18 @@ export class ChartDb {
                     artistDisplay,
                     charts: { [seriesName]: newChartPositions }
                 })
-                song.id = newSong.insertedId
+                song._id = newSong.insertedId.toString()
+                if (sessionId) {
+                    this.db.collection(SESSION_COLLECTION).updateOne(
+                        {_id: new ObjectId(sessionId), 'placedSongs.artistDisplay': song.artistDisplay, 'placedSongs.title': song.title},
+                        { $set: {'placedSongs.$._id': song._id} }
+                    )
+                }
             }
             position++;
         }
         // Find dropouts from the last chart and mark them as such
-        const songIds = params.songs.map(song => new ObjectId(song.id as ObjectId))
+        const songIds = params.songs.map(song => new ObjectId(song._id || ''))
         const previousCharts = await (await this.getPreviousChartsByDate(seriesName, params.date)).toArray()
         const previousChart = previousCharts[0]
         if (previousChart) {
@@ -128,19 +280,53 @@ export class ChartDb {
                     }
                     ]
                 },
-                { $push: { [`charts.${seriesName}`]: {chart: params.name, position: DROPOUT} } }
+                { $push: { [`charts.${seriesName}`]: {chart: params.name, position: DROPOUT, ...sessionIdParam} } }
             )
         }
-        // Insert the chart
-        return this.db.collection<Chart>(CHART_COLLECTION).updateOne({ name: seriesName },
-            {
-                $push: {
-                    charts: {
-                        name: params.name,
-                        date: params.date
+        if (sessionId && existing) {
+            // Delete things no longer in chart
+            await this.db.collection<Song>(SONG_COLLECTION).updateMany(
+                { _id: { $nin: songIds } },
+                { 
+                    $pull: { 
+                        [`charts.${seriesName}`]: {
+                            $and: [
+                                { sessionId: sessionId }, 
+                                { position: { $ne: DROPOUT } }
+                            ]
+                        }
                     }
                 }
-            })
+            );
+        }
+        return;
+    }
+
+    public async createChartFromSession(sessionId: string, newSongs: Song[]): Promise<{name: string}> {
+        const session = await this.getInteractiveSession(sessionId)
+        if (!session) {
+            throw new Error('Session not defined!')
+        }
+        await this.db.collection(SONG_COLLECTION).updateMany(
+            {[`charts.${session.seriesName}.sessionId`]: sessionId},
+            { $unset: { [`charts.${session.seriesName}.$.sessionId`]: "" } }
+        )
+        for (const song of newSongs) {
+            const artistIds = await this.getArtistIds(song)
+            console.log('ids', artistIds)
+            await this.db.collection(SONG_COLLECTION).updateOne(
+                { _id: new ObjectId(song._id) },
+                { $set: {artistIds}}
+            )
+        }
+        await this.db.collection(CHART_COLLECTION).updateOne(
+            {[`charts.sessionId`]: sessionId},
+            { $unset: { [`charts.$.sessionId`]: "" } }
+        )
+        await this.db.collection(SESSION_COLLECTION).deleteOne(
+            {_id: new ObjectId(sessionId)}
+        )
+        return {name: session.chartName}
     }
 
     public listSeries(): FindCursor<any> {
@@ -150,6 +336,9 @@ export class ChartDb {
     public getRecentCharts(): AggregationCursor<Chart[]> {
         return this.db.collection(CHART_COLLECTION).aggregate([
             {'$unwind': '$charts'},
+            { '$match': 
+                {'charts.sessionId': {$exists: false}},
+            },
             {'$sort': {'charts.date': -1}},
             {'$limit': 5},
             {'$project': {
@@ -181,9 +370,30 @@ export class ChartDb {
         }]
     }
 
-    public async getChart(series: string, chartName: string, size?: string) {
-        const songs = await (await this.getChartSongs(series, chartName, size)).toArray()
-        const previousCharts = await (await this.getPreviousCharts(series, chartName)).toArray()
+    private getSongsPipeline(series: string, chartName: string, size?: string, sessionId?: string) {
+        return [{
+            $match: {
+                [`charts.${series}`]: {
+                    $elemMatch:
+                    {
+                        chart: chartName,
+                        position: {
+                            $ne: DROPOUT,
+                            ...(size ? { $lte: parseInt(size) } : {})
+                        },
+                        $or: [
+                            {sessionId:  {$exists: false}},
+                            ...(sessionId ? [{sessionId:  {$eq: sessionId}}] : []),
+                        ]
+                    }
+                }
+            }
+        },]
+    }
+
+    public async getChart(series: string, chartName: string, size?: string, sessionId?: string) {
+        const songs = await (await this.getChartSongs(series, chartName, size, sessionId)).toArray()
+        const previousCharts = await (await this.getPreviousCharts(series, chartName, sessionId)).toArray()
         const nextChart = await this.getNextChart(series, chartName)
 
         const prevChartNames = previousCharts.map(chart => chart.name);
@@ -194,9 +404,19 @@ export class ChartDb {
             }
             const currentSeries = song.charts[series]
             const charts = currentSeries.filter(
-                chart => prevChartNames.includes(chart.chart) && chart.position != DROPOUT
+                chart => {
+                    if (chart.position == DROPOUT) {
+                        return false
+                    } else if (prevChartNames.includes(chart.chart)) {
+                        if (prevChartNames[0] == chart.chart && sessionId && chart.sessionId != sessionId) {
+                            return false
+                        }
+                        return true
+                    }
+                    return false
+                }
             );
-            const lastChartRecord = charts.find(chart => chart.chart === prevChartNames[1])
+            const lastChartRecord = charts.find(chart => chart.chart === prevChartNames[1] && !chart.sessionId)
             charts.sort((a, b) => a.position - b.position);
             return {
               ...song,
@@ -213,23 +433,10 @@ export class ChartDb {
         }
     }
 
-    public async getChartSongs(series: string, chartName: string, size?: string): Promise<AggregationCursor<Song>> {
+    public async getChartSongs(series: string, chartName: string, size?: string, sessionId?: string): Promise<AggregationCursor<Song>> {
         return this.db.collection(SONG_COLLECTION).aggregate([
             // Find all the songs in this chart
-            {
-                $match: {
-                    [`charts.${series}`]: {
-                        $elemMatch:
-                        {
-                            chart: chartName,
-                            position: {
-                                $ne: DROPOUT,
-                                ...(size ? { $lte: parseInt(size) } : {})
-                            }
-                        }
-                    }
-                }
-            },
+            ...this.getSongsPipeline(series, chartName, size, sessionId),
             ...this.getSizePipeline(series, size),
             // Remove all chart info for the songs besides the specified chart
             {
@@ -238,7 +445,13 @@ export class ChartDb {
                         $filter: {
                             input: `$charts.${series}`,
                             as: 'chart',
-                            cond: { $eq: [`$$chart.chart`, chartName] }
+                            cond: { $and: [
+                                {$eq: [`$$chart.chart`, chartName]},
+                                {$or: [
+                                    { $eq: [ { $type: "$$chart.sessionId" }, "missing" ] },
+                                    {$eq: [ '$$chart.sessionId', sessionId]}
+                                ]}
+                            ] }
                         }
                     },
                 }
@@ -250,7 +463,7 @@ export class ChartDb {
         ])
     }
 
-    public async getPreviousCharts(series: string, chart: string): Promise<AggregationCursor<Chart>> {
+    public async getPreviousCharts(series: string, chart: string, sessionId?: string): Promise<AggregationCursor<Chart>> {
         const chartDateArray = await (this.db.collection(CHART_COLLECTION).aggregate([
             { $match: { name: series } },
             { $unwind: "$charts" },
@@ -259,15 +472,22 @@ export class ChartDb {
         ]).toArray())
         const chartDate = chartDateArray[0].date
         console.log('get previous', JSON.stringify(chart));
-        return this.getPreviousChartsByDate(series, chartDate)
+        return this.getPreviousChartsByDate(series, chartDate, sessionId)
     }
 
-    public async getPreviousChartsByDate(series: string, chartDate: Date): Promise<AggregationCursor<Chart>> {
+    public async getPreviousChartsByDate(series: string, chartDate: string, sessionId?: string): Promise<AggregationCursor<Chart>> {
         const aggregateDb = [
             { $match: { name: series } },
             { $unwind: "$charts" },
             { $replaceRoot: { newRoot: "$charts" } },
-            { $match: { date: { $lte: chartDate } } },
+            { $match: {
+                $and: [
+                    {date: { $lte: chartDate } },
+                    {$or: [
+                        {sessionId: {$exists: false}},
+                        {sessionId}
+                    ]}
+                ]} },
             { $sort: { date: -1 } },
         ]
         return this.db.collection(CHART_COLLECTION).aggregate(aggregateDb);
@@ -285,12 +505,16 @@ export class ChartDb {
         return this.getNextChartByDate(series, chartDate)
     }
 
-    public async getNextChartByDate(series: string, chartDate: Date): Promise<string> {
+    public async getNextChartByDate(series: string, chartDate: string): Promise<string> {
         const aggregateDb = [
             { $match: { name: series } },
             { $unwind: "$charts" },
             { $replaceRoot: { newRoot: "$charts" } },
-            { $match: { date: { $gt: chartDate } } },
+            { $match: {
+                $and: [
+                    {date: { $gt: chartDate } },
+                    {sessionId: {$exists: false}}
+                ]} },            
             { $sort: { date: 1 } },
             { $limit: 1 },
         ]

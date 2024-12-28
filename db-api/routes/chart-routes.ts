@@ -29,16 +29,16 @@ export class ChartRouter {
         /**
          * Return an existing chart series
          */
-        router.get('/:name', async (req, res) => {
+        router.get('/:seriesName', async (req, res) => {
             console.log('list charts')
             res.json(
-                await (res.locals.db as Database).chartDb.getChartsInSeries(req.params.name, req.query as Record<string, string>)
+                await (res.locals.db as Database).chartDb.getChartsInSeries(req.params.seriesName, req.query as Record<string, string>)
             )
         })
 
-        router.delete('/:name', async (req, res) => {
+        router.delete('/:seriesName', async (req, res) => {
             console.log('delete series')
-            res.json(await (res.locals.db as Database).chartDb.deleteSeries(req.params.name))
+            res.json(await (res.locals.db as Database).chartDb.deleteSeries(req.params.seriesName))
         })
 
         /**
@@ -52,23 +52,33 @@ export class ChartRouter {
         })
 
         /**
+         * Initiate interactive chart
+         */
+        router.post('/:seriesName/interactive', async (req, res) => {
+            console.log('Initiate interactive chart series')
+            res.json(
+                await (res.locals.db as Database).chartDb.initiateInteractiveChartCreation(req.params.seriesName, req.body)
+            )
+        })
+
+        /**
          * Create a new chart within a series
          */
-        router.post('/:name/chart', async (req, res) => {
+        router.post('/:seriesName/chart', async (req, res) => {
             console.log('Create new chart')
             res.json(
-                await (res.locals.db as Database).chartDb.newChart(req.params.name, req.body.params)
+                await (res.locals.db as Database).chartDb.newChart(req.params.seriesName, req.body.params)
             )
         })
 
         /**
         * Return a chart within a series
         */
-        router.get('/:name/chart/:chartName', async (req, res) => {
-            console.log('Search new chart', req.params.name, req.params.chartName)
+        router.get('/:seriesName/chart/:chartName', async (req, res) => {
+            console.log('Search new chart', req.params.seriesName, req.params.chartName)
             // Preferably we would like it prettier than this
             res.json(
-                await (res.locals.db as Database).chartDb.getChart(req.params.name, req.params.chartName, req.query?.size as string)
+                await (res.locals.db as Database).chartDb.getChart(req.params.seriesName, req.params.chartName, req.query?.size as string)
             )
         })
 
@@ -109,6 +119,47 @@ export class ChartRouter {
             console.log('Get chart string', req.params.chart)
             res.json(
                 await (res.locals.db as Database).chartDb.getFormattedChartString(req.params.series, req.params.chart)
+            )
+        })
+
+        /**
+         * Get interactive session
+         */
+        router.get('/session/:sessionId', async (req, res) => {
+            console.log('Get interactive session')
+            res.json(
+                await (res.locals.db as Database).chartDb.getInteractiveSession(req.params.sessionId)
+            )
+        })
+
+        /**
+         * Get chart preview
+         */
+        router.get('/session/:sessionId/preview', async (req, res) => {
+            console.log('Get chart preview')
+            res.json(
+                await (res.locals.db as Database).chartDb.getChartPreview(req.params.sessionId)
+            )
+        })
+
+        /**
+         * Create chart from session
+         */
+        router.post('/session/:sessionId/complete', async (req, res) => {
+            console.log('Get chart preview')
+            res.json(
+                await (res.locals.db as Database).chartDb.createChartFromSession(req.params.sessionId, req.body.newSongs)
+            )
+        })
+        
+
+        /**
+         * Update interactive session
+         */
+        router.put('/session/:sessionId', async (req, res) => {
+            console.log('Get interactive session')
+            res.json(
+                await (res.locals.db as Database).chartDb.updateSession(req.params.sessionId, req.body)
             )
         })
 

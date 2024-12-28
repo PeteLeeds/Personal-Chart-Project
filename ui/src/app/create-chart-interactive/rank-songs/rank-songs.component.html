@@ -1,0 +1,28 @@
+<div class="centre">
+    <h1>Rank Songs</h1>
+    <div class="song-to-place centre" *ngIf="session && session.songOrder.length != 0">
+        <p>Please select where you would like to place the following song:</p>
+        <div class="song-box centre">
+            <p *ngIf="session?.songOrder.length">
+                {{session.songOrder[0].artistDisplay}} - {{session.songOrder[0].title}}
+            </p>
+        </div>
+    </div>
+    <table *ngIf="session?.placedSongs" (mouseleave)="removeInsertButtons()">
+        <tr class="centre">
+            <button class="insert-button" 
+            *ngIf="session && session.songOrder.length != 0 && 
+                (session.placedSongs.length == 0 || (insertButtonsToDisplay && insertButtonsToDisplay.includes(0)))" 
+            (click)="addSong(0)">Insert Here</button>
+        </tr>
+        <ng-container *ngFor="let song of session.placedSongs; let i = index">
+            <tr class="centre">
+                <div (mouseenter)="setInsertButtonsToDisplay(i)" class="song-box centre">
+                    <p>{{song.artistDisplay}} - {{song.title}}</p>
+                </div>
+                <button class="insert-button" *ngIf="session && session.songOrder.length != 0 && insertButtonsToDisplay.includes(i)" (click)="addSong(i + 1)">Insert Here</button>
+            </tr>
+        </ng-container>
+    </table>
+    <a [routerLink]="['..', 'finalise']"><button *ngIf="session && session.songOrder.length === 0">Continue</button></a>
+</div>

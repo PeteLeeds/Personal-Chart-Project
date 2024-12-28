@@ -1,0 +1,36 @@
+<div class="centre">
+    <h1>Finalise Chart</h1>
+    <ng-container *ngIf="chartPreview; else loading">
+        <table class="song-table">
+            <tr>
+                <th>Pos</th>
+                <th>Last Week</th>
+                <th>Song</th>
+                <th>Peak</th>
+                <th>Weeks</th>
+            </tr>
+            <ng-container *ngFor="let song of chartPreview.songs">
+                <tr class="select-option">
+                    <td class="text-center">{{song.position}}</td>
+                    <td class="text-center">{{song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NEW')}}</td>
+                    <td>
+                        <div class="song-title">
+                            <div><b>{{song.title}}</b></div>
+                            <div><i>{{song.artistDisplay}}</i></div>
+                        </div>
+                    </td>
+                    <td class="text-center">{{song.peak}}</td>
+                    <td class="text-center">{{song.weeksOn}}</td>
+                </tr>
+            </ng-container>
+        </table>
+    </ng-container>
+    <div class="row">
+        <button (click)="submit()">Submit</button>
+        <a [routerLink]="['..', 'rank']"><button>Go Back</button></a>
+    </div>
+</div>
+
+<ng-template #loading><mat-spinner></mat-spinner></ng-template>
+
+<new-songs-modal #newSongsModal></new-songs-modal>

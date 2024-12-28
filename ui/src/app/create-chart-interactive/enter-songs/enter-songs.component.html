@@ -1,0 +1,46 @@
+<h2>Please select the songs you want to rank for this chart</h2>
+
+<form [formGroup]="chartForm" (ngSubmit)="onSubmit()">
+    <div class="input-option">
+        <label for="chart-name">Chart Name: </label>
+        <input id="chart-name" type="text" formControlName="name">
+        <input type="checkbox" [(ngModel)]="useDateAsTitle" (change)="onCheckboxChange()"
+            [ngModelOptions]="{standalone: true}">
+        Use date as title
+    </div>
+    <div class="input-option">
+        <label>Chart Date:
+            <input [matDatepicker]="chartDatepicker" formControlName="date">
+            <mat-datepicker-toggle [for]="chartDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #chartDatepicker></mat-datepicker>
+        </label>
+    </div>
+    <div class="centre">
+        <label>
+            Count the top <input type="number" value="40" formControlName="cutOffNumber"> songs in the chart
+        </label>
+    </div>
+    <div>
+        <label>
+            <input type="checkbox" formControlName="includeSongs">
+            Include all songs from the past <input type="number" value="1" formControlName="numberOfCharts"> charts
+        </label>
+    </div>
+    <div class="input-option">
+        <p>Plus the following songs:</p>
+        <p class="subtext">(Please enter the artist and title of each song in order, separated by hyphens)</p>
+        <textarea id="chart-text" type="text" formControlName="songs"></textarea>
+    </div>
+    <div>
+        <p>Reveal Songs in Order:</p>
+        <mat-radio-group formControlName="revealOrder">
+            <mat-radio-button value="random">Random</mat-radio-button>
+            <mat-radio-button value="inOrder">In order (existing chart -> previous charts -> new songs)</mat-radio-button>
+        </mat-radio-group>
+    </div>
+    <table>
+        <tr>
+            <td><button type="submit" class="submit-chart" [disabled]="!chartForm.valid">Submit</button></td>
+        </tr>
+    </table>
+</form>

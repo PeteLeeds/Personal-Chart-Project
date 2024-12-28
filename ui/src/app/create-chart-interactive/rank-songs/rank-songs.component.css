@@ -1,0 +1,16 @@
+.centre {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.song-box {
+    width: 25vw;
+    border: 0.1rem solid black;
+    padding: -0.5rem 0.5rem;
+    background-color:rgb(249, 249, 249)
+}
+
+.song-to-place {
+    margin-bottom: 2rem;
+}

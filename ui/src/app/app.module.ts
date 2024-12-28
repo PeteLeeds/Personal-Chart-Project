@@ -7,6 +7,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatMomentDateModule} from '@angular/material-moment-adapter'
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatRadioModule} from '@angular/material/radio';
 import { ClipboardModule } from 'ngx-clipboard';
  
 import { AppRoutingModule } from './app-routing.module';
@@ -21,7 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CommonModule } from '@angular/common';
 import { ChartSelectComponent } from './chart-select/chart-select.component';
-import { CreateChartComponent } from './create-chart/create-chart.component';
+import { CreateBasicChartComponent } from './create-chart-basic/create-chart-basic.component';
 import { SongDisplayComponent } from './song-display/song-display.component';
 import { SongComponent } from './song/song.component';
 import { ArtistComponent } from './artist/artist.component';
@@ -32,6 +33,10 @@ import { SearchComponent } from './shared/search/search.component'
 import { ChartEditComponent } from './chart-edit/chart-edit.component';
 import { TotalsComponent } from './totals/totals.component';
 import { HomeComponent } from './home/home.component';
+import { CreateChartComponent } from './create-chart/create-chart.component';
+import { EnterSongsComponent } from './create-chart-interactive/enter-songs/enter-songs.component';
+import { RankSongsComponent } from './create-chart-interactive/rank-songs/rank-songs.component';
+import { CreateChartFinaliseComponent } from './create-chart-finalise/create-chart-finalise.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +48,7 @@ import { HomeComponent } from './home/home.component';
     CreateSeriesComponent,
     DeleteItemComponent,
     CreateChartComponent,
+    CreateBasicChartComponent,
     NewSongsComponent,
     SongDisplayComponent,
     SongComponent,
@@ -53,7 +59,10 @@ import { HomeComponent } from './home/home.component';
     SearchComponent,
     ChartEditComponent,
     TotalsComponent,
-    HomeComponent
+    HomeComponent,
+    EnterSongsComponent,
+    RankSongsComponent,
+    CreateChartFinaliseComponent
   ],
   imports: [
     BrowserModule,
@@ -70,6 +79,7 @@ import { HomeComponent } from './home/home.component';
     MatFormFieldModule,
     ClipboardModule,
     MatProgressSpinnerModule,
+    MatRadioModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
