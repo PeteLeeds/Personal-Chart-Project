@@ -89,7 +89,7 @@ export class ChartService {
     return this.httpClient.put<string>(`${BASE_URL}/series/${seriesName}/${chartName}`, newChartData)
   }
 
-  public updateSession(sessionId: string, sessionParams: PutSessionParams) {
+  public updateSession(sessionId: string, sessionParams: PutSessionParams): Observable<string> {
     return this.httpClient.put<string>(`${BASE_URL}/series/session/${sessionId}`, sessionParams)
   }
 

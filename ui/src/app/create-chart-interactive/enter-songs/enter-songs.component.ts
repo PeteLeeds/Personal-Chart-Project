@@ -1,7 +1,6 @@
-import { Component, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { ChartService } from 'src/app/services/chart.service';
-import { EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import moment from 'moment';
 
@@ -45,7 +44,7 @@ export class EnterSongsComponent {
 
     // If we're using reactive forms we are unable to use the [disabled] attribute
     // therefore we need to explicitly disable/enable the textbox
-    public onCheckboxChange() {
+    public onCheckboxChange(): void {
       if (this.useDateAsTitle) {
         this.chartForm.controls.name.setValue("");
         this.chartForm.controls.name.disable();
@@ -70,7 +69,7 @@ export class EnterSongsComponent {
       }
     }
 
-    public onSubmit() {
+    public onSubmit(): void {
       const chartParams = {...this.chartForm.getRawValue()}
       if (this.useDateAsTitle) {
         chartParams.date = moment(chartParams.date).toDate()

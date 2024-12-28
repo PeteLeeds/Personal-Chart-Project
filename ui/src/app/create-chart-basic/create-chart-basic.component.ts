@@ -52,7 +52,7 @@ export class CreateBasicChartComponent implements OnInit {
 
   // If we're using reactive forms we are unable to use the [disabled] attribute
   // therefore we need to explicitly disable/enable the textbox
-  public onCheckboxChange() {
+  public onCheckboxChange(): void {
     if (this.useDateAsTitle) {
       this.chartForm.controls.name.setValue("");
       this.chartForm.controls.name.disable();
@@ -74,7 +74,7 @@ export class CreateBasicChartComponent implements OnInit {
     }
   }
 
-  public onSubmit() {
+  public onSubmit(): void {
     this.checkingSongs = true
     const songs = this.chartForm.controls.songs.value.split('\n');
     const chartParams = {...this.chartForm.getRawValue()}

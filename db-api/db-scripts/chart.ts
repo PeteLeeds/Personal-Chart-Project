@@ -50,7 +50,7 @@ export class ChartDb {
             { '$match': { name: seriesName } },
             {'$unwind': '$charts'},
             {'$replaceRoot': {'newRoot': '$charts'}},
-            { '$match': { date: {'$lt': date} } },
+            { '$match': {$and: [{ date: {'$lt': date} }, {sessionId: {$exists: false}}] }},
             {'$sort': {'date': -1}},
             {'$limit': number},
         ]).toArray()
@@ -127,7 +127,7 @@ export class ChartDb {
         return this.db.collection(SESSION_COLLECTION).findOne<Session>({_id: new ObjectId(sessionId)})
     }
 
-    public updateSession(sessionId: string, sessionData: PutSessionParams) {
+    public updateSession(sessionId: string, sessionData: PutSessionParams): Promise<UpdateResult<Document>> {
         return this.db.collection(SESSION_COLLECTION).updateOne({_id: new ObjectId(sessionId)}, {$set: sessionData})
     }
 
