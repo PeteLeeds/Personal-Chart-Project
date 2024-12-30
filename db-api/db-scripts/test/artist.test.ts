@@ -4,7 +4,7 @@ import { sortSongs } from "../common/sort-songs"
 const SELECTED_SERIES = 'test series'
 
 const BASE_SONG_INFO = {
-    _id: new ObjectId('abc'),
+    _id: new ObjectId('123456789012345678901234'),
     title: 'test',
     artistDisplay: 'test',
     artistIds: []
