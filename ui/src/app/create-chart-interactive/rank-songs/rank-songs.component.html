@@ -7,6 +7,7 @@
                 {{session.songOrder[0].artistDisplay}} - {{session.songOrder[0].title}}
             </p>
         </div>
+        <button  *ngIf="session && session.songOrder.length > 1" class="centre move-button" (click)="moveToBack()">Move to back of queue</button>
     </div>
     <div class="song-to-place centre"  *ngIf="songToMove != null">
         <p>

@@ -37,6 +37,13 @@ export class RankSongsComponent {
       })
     }
 
+    private updateCurrentSession() {
+      this.chartService.updateSession(this.sessionId, {
+        placedSongs: this.session.placedSongs,
+        songOrder: this.session.songOrder
+      }).subscribe()
+    }
+
     public addSong(position: number): void {
       if (this.songToMove != null) {
         const movingSong = this.session.placedSongs[this.songToMove]
@@ -48,10 +55,7 @@ export class RankSongsComponent {
         this.session.placedSongs.splice(position, 0, this.session.songOrder[0])
         this.session.songOrder.shift()
       }
-      this.chartService.updateSession(this.sessionId, {
-        placedSongs: this.session.placedSongs,
-        songOrder: this.session.songOrder
-      }).subscribe()
+      this.updateCurrentSession()
     }
 
     public setInsertButtonsToDisplay(valueHoveredOver: number): void {
@@ -69,6 +73,12 @@ export class RankSongsComponent {
         this.songToMove = position
       }
       console.log(this.songToMove)
+    }
+
+    public moveToBack(): void {
+      this.session.songOrder.push(this.session.songOrder[0])
+      this.session.songOrder.shift()
+      this.updateCurrentSession()
     }
 
 }

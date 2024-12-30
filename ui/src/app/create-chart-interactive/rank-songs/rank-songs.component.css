@@ -22,3 +22,7 @@
 .clickable {
     cursor: pointer;
 }
+
+.move-button {
+    width: 15rem
+}
