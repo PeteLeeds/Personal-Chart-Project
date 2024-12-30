@@ -14,3 +14,15 @@
 .song-to-place {
     margin-bottom: 2rem;
 }
+
+.selected {
+    background-color: lightblue;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.move-button {
+    width: 15rem
+}

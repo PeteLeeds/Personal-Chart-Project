@@ -18,6 +18,7 @@ export class RankSongsComponent {
     public sessionId: string
     public session: Session
     public insertButtonsToDisplay: number[]
+    public songToMove: number
 
     public constructor(activatedRoute: ActivatedRoute, chartService: ChartService) {
       this.activatedRoute = activatedRoute
@@ -36,13 +37,25 @@ export class RankSongsComponent {
       })
     }
 
-    public addSong(position: number): void {
-      this.session.placedSongs.splice(position, 0, this.session.songOrder[0])
-      this.session.songOrder.shift()
+    private updateCurrentSession() {
       this.chartService.updateSession(this.sessionId, {
         placedSongs: this.session.placedSongs,
         songOrder: this.session.songOrder
       }).subscribe()
+    }
+
+    public addSong(position: number): void {
+      if (this.songToMove != null) {
+        const movingSong = this.session.placedSongs[this.songToMove]
+        this.session.placedSongs[this.songToMove] = null
+        this.session.placedSongs.splice(position, 0, movingSong)
+        this.session.placedSongs = this.session.placedSongs.filter(song => !!song)
+        this.songToMove = null
+      } else {
+        this.session.placedSongs.splice(position, 0, this.session.songOrder[0])
+        this.session.songOrder.shift()
+      }
+      this.updateCurrentSession()
     }
 
     public setInsertButtonsToDisplay(valueHoveredOver: number): void {
@@ -51,6 +64,21 @@ export class RankSongsComponent {
 
     public removeInsertButtons(): void {
       this.insertButtonsToDisplay = []
+    }
+
+    public selectSongToMove(position: number): void {
+      if (this.songToMove == position) {
+        this.songToMove = null
+      } else {
+        this.songToMove = position
+      }
+      console.log(this.songToMove)
+    }
+
+    public moveToBack(): void {
+      this.session.songOrder.push(this.session.songOrder[0])
+      this.session.songOrder.shift()
+      this.updateCurrentSession()
     }
 
 }
