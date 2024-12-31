@@ -26,3 +26,30 @@
 .move-button {
     width: 15rem
 }
+
+.row {
+    display: flex;
+}
+
+.number-box {
+    width: 2.5vw;
+    border: 0.1rem solid black;
+    margin: 0rem 0.5rem 0rem 0rem;
+    background-color:rgb(249, 249, 249)
+}
+
+.right {
+    float: right;
+    margin: 1rem;
+}
+
+fa-icon {
+    color: grey;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.icon-selected {
+    background-color: darkgray;
+    color: white;
+}

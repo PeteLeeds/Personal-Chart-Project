@@ -4,6 +4,7 @@ import { of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { ChartService } from 'src/app/services/chart.service';
 import { Session } from 'src/app/types/chart';
+import { faListOl } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-rank-songs',
@@ -19,6 +20,9 @@ export class RankSongsComponent {
     public session: Session
     public insertButtonsToDisplay: number[]
     public songToMove: number
+    public showNumbers = false
+
+    faListOl = faListOl
 
     public constructor(activatedRoute: ActivatedRoute, chartService: ChartService) {
       this.activatedRoute = activatedRoute
@@ -79,6 +83,10 @@ export class RankSongsComponent {
       this.session.songOrder.push(this.session.songOrder[0])
       this.session.songOrder.shift()
       this.updateCurrentSession()
+    }
+
+    public toggleNumbers(): void {
+      this.showNumbers = !this.showNumbers
     }
 
 }
