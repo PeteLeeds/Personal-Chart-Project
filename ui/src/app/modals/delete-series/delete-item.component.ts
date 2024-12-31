@@ -32,7 +32,7 @@ export class DeleteItemComponent implements OnInit {
     modalTitle: `Delete ${this.type}`,
     dismissButtonLabel: 'Cancel',
     // An 'x' in the corner should eventually be sufficient
-    closeButtonLabel: 'Delete',
+    completeButtonLabel: 'Delete',
     onClose: () => new Promise<void>((resolve) => {
       console.log(`Delete ${this.type}`);
       if (this.type === 'series') {

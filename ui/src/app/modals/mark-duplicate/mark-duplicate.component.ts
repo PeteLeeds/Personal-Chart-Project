@@ -41,7 +41,7 @@ export class MarkDuplicateComponent implements OnInit {
   public modalConfig: ModalConfig = {
     modalTitle: 'Mark Duplicate',
     dismissButtonLabel: 'Close',
-    closeButtonLabel: 'Mark Duplicate',
+    completeButtonLabel: 'Mark Duplicate',
     onClose: () => new Promise<string>((resolve) => {
       const subscription = this.type === 'song'
                           ? this.songService.mergeSongs(this.id, this.selectedId)

@@ -3,6 +3,7 @@ import { AbstractControl, FormControl, FormGroup, ValidatorFn } from '@angular/f
 import { ChartService } from 'src/app/services/chart.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import moment from 'moment';
+import { hyphenValidator } from 'src/app/shared/hyphen-validator';
 
 @Component({
   selector: 'app-enter-songs',
@@ -20,7 +21,7 @@ export class EnterSongsComponent {
       includeSongs: new FormControl<Boolean>(false),
       numberOfCharts: new FormControl<Number>(1),
       cutOffNumber: new FormControl<Number>(40),
-      songs: new FormControl<string>('', this.hyphenValidator()),
+      songs: new FormControl<string>('', hyphenValidator()),
       revealOrder: new FormControl<'random' | 'inOrder'>('random')
     });
 
@@ -51,21 +52,6 @@ export class EnterSongsComponent {
       }
       else {
         this.chartForm.controls.name.enable();
-      }
-    }
-
-    public hyphenValidator(): ValidatorFn {
-      return (control: AbstractControl): { [key: string]: any } | null => {
-        if (control.value.length == 0) {
-          return null
-        }
-        const songs = control.value.split('\n');
-        for (const song of (songs as string[])) {
-          if (!song.includes('-')) {
-            return { 'hyphenValidator': control.value }
-          }
-        }
-        return null
       }
     }
 

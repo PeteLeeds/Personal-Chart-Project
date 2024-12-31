@@ -18,7 +18,7 @@ export class SeriesSelectComponent implements OnInit {
   private router: Router;
   public seriesList = []
 
-  public modalConfig: ModalConfig = {modalTitle: 'Create new Series', dismissButtonLabel: 'dismiss', closeButtonLabel: 'close'}
+  public modalConfig: ModalConfig = {modalTitle: 'Create new Series', dismissButtonLabel: 'dismiss', completeButtonLabel: 'close'}
 
   constructor(chartService: ChartService, activatedRoute: ActivatedRoute, router: Router) {
     this.chartService = chartService

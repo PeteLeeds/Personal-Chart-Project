@@ -1,3 +1,7 @@
+<div class="row right">
+    <div (click)="toggleNumbers()" title="Show Numbers"><fa-icon [icon]="faListOl" class="fa-lg" [class.icon-selected]="showNumbers == true"></fa-icon></div>
+    <div (click)="openAddSongsModal()" title="Add More Songs"><fa-icon [icon]="faPlus" class="fa-lg"></fa-icon></div>
+</div>
 <div class="centre">
     <h1>Rank Songs</h1>
     <div class="song-to-place centre" *ngIf="session && session.songOrder.length != 0 && songToMove == null">
@@ -17,18 +21,25 @@
     <table *ngIf="session?.placedSongs" (mouseleave)="removeInsertButtons()">
         <tr class="centre">
             <button class="insert-button" 
-            *ngIf="session && session.songOrder.length != 0 && 
+            *ngIf="session && (session.songOrder.length != 0 || songToMove != null) && 
                 (session.placedSongs.length == 0 || (insertButtonsToDisplay && insertButtonsToDisplay.includes(0)))" 
             (click)="addSong(0)">Insert Here</button>
         </tr>
         <ng-container *ngFor="let song of session.placedSongs; let i = index">
             <tr class="centre">
-                <div (click)="selectSongToMove(i)" (mouseenter)="setInsertButtonsToDisplay(i)" class="song-box centre clickable" [class.selected]="i === songToMove">
-                    <p>{{song.artistDisplay}} - {{song.title}}</p>
+                <div class="row">
+                    <div *ngIf="showNumbers == true" class="number-box centre">
+                        <p>{{i + 1}}</p>
+                    </div>
+                    <div (click)="selectSongToMove(i)" (mouseenter)="setInsertButtonsToDisplay(i)" class="song-box centre clickable" [class.selected]="i === songToMove">
+                        <p>{{song.artistDisplay}} - {{song.title}}</p>
+                    </div>
                 </div>
-                <button class="insert-button" *ngIf="session && session.songOrder.length != 0 && insertButtonsToDisplay.includes(i)" (click)="addSong(i + 1)">Insert Here</button>
+                <button class="insert-button" *ngIf="session && (session.songOrder.length != 0 || songToMove != null) && insertButtonsToDisplay.includes(i)" (click)="addSong(i + 1)">Insert Here</button>
             </tr>
         </ng-container>
     </table>
     <a [routerLink]="['..', 'finalise']"><button *ngIf="session && session.songOrder.length === 0">Continue</button></a>
 </div>
+
+<add-songs-modal #addSongsModal></add-songs-modal>

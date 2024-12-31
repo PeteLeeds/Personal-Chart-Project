@@ -14,10 +14,10 @@
                     {{ modalConfig.dismissButtonLabel }}
                 </button>
                 <!-- Can't bind to *ngIf because it isn't a known property of button? -->
-                <button type="button" (click)="close()"
+                <button type="button" (click)="complete()"
                     *ngIf="modalConfig.hideCloseButton === undefined || !modalConfig.hideCloseButton()"
                     [disabled]="modalConfig.disableCloseButton !== undefined && modalConfig.disableCloseButton()">
-                    {{ modalConfig.closeButtonLabel }}
+                    {{ modalConfig.completeButtonLabel }}
                 </button>
             </div>
         </div>

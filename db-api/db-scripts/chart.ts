@@ -239,18 +239,23 @@ export class ChartDb {
             else {
                 const title = song.title;
                 const artistDisplay = song.artistDisplay
-                const artistIds = await this.getArtistIds(song)
-                if (nextChart) {
-                    newChartPositions.push({chart: nextChart, position: DROPOUT, ...sessionIdParam})
+                const existingSong = await this.db.collection<Song>(SONG_COLLECTION).findOne({ $and: [{ artistDisplay }, { title }] })
+                if (existingSong) {
+                    song._id = existingSong._id.toString()
+                } else {
+                    const artistIds = await this.getArtistIds(song)
+                    if (nextChart) {
+                        newChartPositions.push({chart: nextChart, position: DROPOUT, ...sessionIdParam})
+                    }
+                    // Insert the new song
+                    const newSong = await this.db.collection(SONG_COLLECTION).insertOne({
+                        title,
+                        artistIds,
+                        artistDisplay,
+                        charts: { [seriesName]: newChartPositions }
+                    })
+                    song._id = newSong.insertedId.toString()
                 }
-                // Insert the new song
-                const newSong = await this.db.collection(SONG_COLLECTION).insertOne({
-                    title,
-                    artistIds,
-                    artistDisplay,
-                    charts: { [seriesName]: newChartPositions }
-                })
-                song._id = newSong.insertedId.toString()
                 if (sessionId) {
                     this.db.collection(SESSION_COLLECTION).updateOne(
                         {_id: new ObjectId(sessionId), 'placedSongs.artistDisplay': song.artistDisplay, 'placedSongs.title': song.title},

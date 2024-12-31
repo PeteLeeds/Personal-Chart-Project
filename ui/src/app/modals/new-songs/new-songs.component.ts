@@ -20,7 +20,7 @@ export class NewSongsComponent implements OnInit {
     modalTitle: 'New Songs',
     dismissButtonLabel: 'Close',
     // An 'x' in the corner should eventually be sufficient
-    closeButtonLabel: 'Confirm',
+    completeButtonLabel: 'Confirm',
     onClose: () => new Promise<unknown>((resolve) => {
       resolve(this.chartSongs)
     })

@@ -1,0 +1,7 @@
+<custom-modal #modal [modalConfig]="modalConfig">
+    <b>Enter the names of the songs, separated by hyphens</b>
+    <form [formGroup]="addSongsForm">
+        <textarea type="text" formControlName="songs"></textarea>
+    </form>
+    The songs will be added to the end of the current order
+</custom-modal>

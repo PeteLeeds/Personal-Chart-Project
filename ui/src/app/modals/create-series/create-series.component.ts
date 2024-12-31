@@ -25,7 +25,7 @@ export class CreateSeriesComponent implements OnInit {
   public modalConfig: ModalConfig = {
     modalTitle: 'Create Series',
     dismissButtonLabel: 'Close',
-    closeButtonLabel: 'Create',
+    completeButtonLabel: 'Create',
     onClose: () => new Promise<string>((resolve) => {
       console.log('create', this.seriesName);
       this.chartService.createSeries(this.seriesName).subscribe(() => {
