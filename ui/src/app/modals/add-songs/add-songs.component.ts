@@ -20,7 +20,7 @@ export class AddSongsComponent {
   public modalConfig: ModalConfig = {
     modalTitle: 'Add Songs',
     dismissButtonLabel: 'Close',
-    closeButtonLabel: 'Add Songs',
+    completeButtonLabel: 'Add Songs',
     disableCloseButton: () => !this.addSongsForm.valid,
     onClose: () => new Promise<SessionSong[]>((resolve) => {
         const newSongs = this.formatSongs(this.addSongsForm.value.songs)

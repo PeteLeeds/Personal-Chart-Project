@@ -40,13 +40,13 @@ export class ModalTemplateComponent implements OnInit {
     }
   }
 
-  async close() {
+  async complete() {
     let returnVal: unknown;
     if (this.modalConfig.shouldClose === undefined || await this.modalConfig.shouldClose()) {
       if (this.modalConfig.onClose) {
         returnVal = await this.modalConfig.onClose();
       }
-      console.log("Closing with", returnVal)
+      console.log("Completing with", returnVal)
       this.modalRef.close(returnVal)
     }
   }
