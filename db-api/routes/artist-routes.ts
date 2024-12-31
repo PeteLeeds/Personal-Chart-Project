@@ -29,9 +29,7 @@ export class ArtistRouter {
             )
         })
 
-        // Ideally the head of the GET would be the count
-        // But for some reason it doesn't like that
-        // So I've included another route here
+        // If we call HEAD, we automatically call GET, so a new route is needed here
         router.head('/count', async (req, res) => {
             console.log('GET COUNT')
             const count = (await (res.locals.db as Database).artistDb.getArtistCount(req.query)).toString();

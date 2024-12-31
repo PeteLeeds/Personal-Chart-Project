@@ -12,8 +12,6 @@ import { getFullChartRun } from '../shared/get-chart-run';
 import { AbstractSongInfo } from '../types/song';
 import { faMusic } from '@fortawesome/free-solid-svg-icons';
 
-const DROPOUT = -1
-
 @Component({
   selector: 'app-song-display',
   templateUrl: './song-display.component.html',

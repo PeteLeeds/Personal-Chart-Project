@@ -25,7 +25,6 @@ export class SongService {
   public checkIfSongExists(songString: string, pos: number): Observable<CheckedSong> {
     let httpSongString = songString
     const httpCodeReplacementArray = [['/', '%2F'], ['?', '%3F'], ['\\', '%5C']]
-    // Slashes don't just 'work' as the HTML interprets them as a different URL
     for (const codeReplacement of httpCodeReplacementArray) {
       while (httpSongString.includes(codeReplacement[0])) {
         let indexToReplace = httpSongString.indexOf(codeReplacement[0]);
@@ -55,7 +54,7 @@ export class SongService {
 
   public updateSong(id: string, newDetails: Partial<FullSongInfo>): Observable<unknown> {
     return this.httpClient.put(`${BASE_URL}/song/${id}`, newDetails).pipe(
-      map((res => {})), catchError(error => {throw error})
+      map((() => {})), catchError(error => {throw error})
     )
   }
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core'; // First, import Input
+import { Component, EventEmitter, Input, Output } from '@angular/core'; // First, import Input
 
 @Component({
     selector: 'search',

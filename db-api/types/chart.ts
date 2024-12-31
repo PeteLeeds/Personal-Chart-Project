@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { Song } from "./song";
 
 export interface ChartParams extends Chart {

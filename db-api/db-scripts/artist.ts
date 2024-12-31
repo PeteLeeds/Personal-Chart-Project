@@ -10,8 +10,6 @@ import { formatSong } from "./common/format-song";
 const SONG_COLLECTION = 'songs'
 const ARTIST_COLLECTION = 'artists'
 
-const DROPOUT = -1
-
 export class ArtistDb {
     private db: Db;
 
