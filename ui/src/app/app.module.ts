@@ -37,6 +37,7 @@ import { CreateChartComponent } from './create-chart/create-chart.component';
 import { EnterSongsComponent } from './create-chart-interactive/enter-songs/enter-songs.component';
 import { RankSongsComponent } from './create-chart-interactive/rank-songs/rank-songs.component';
 import { CreateChartFinaliseComponent } from './create-chart-finalise/create-chart-finalise.component';
+import { AddSongsComponent } from './modals/add-songs/add-songs.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { CreateChartFinaliseComponent } from './create-chart-finalise/create-cha
     HomeComponent,
     EnterSongsComponent,
     RankSongsComponent,
-    CreateChartFinaliseComponent
+    CreateChartFinaliseComponent,
+    AddSongsComponent
   ],
   imports: [
     BrowserModule,

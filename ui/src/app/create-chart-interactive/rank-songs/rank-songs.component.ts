@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { ChartService } from 'src/app/services/chart.service';
-import { Session } from 'src/app/types/chart';
-import { faListOl } from '@fortawesome/free-solid-svg-icons';
+import { Session, SessionSong } from 'src/app/types/chart';
+import { faListOl, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { AddSongsComponent } from 'src/app/modals/add-songs/add-songs.component';
 
 @Component({
   selector: 'app-rank-songs',
@@ -12,6 +13,7 @@ import { faListOl } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['../../styles/common-styles.css', './rank-songs.component.css']
 })
 export class RankSongsComponent {
+    @ViewChild('addSongsModal') private addSongsModal: AddSongsComponent;
 
     private activatedRoute: ActivatedRoute
     private chartService: ChartService
@@ -23,6 +25,7 @@ export class RankSongsComponent {
     public showNumbers = false
 
     faListOl = faListOl
+    faPlus = faPlus
 
     public constructor(activatedRoute: ActivatedRoute, chartService: ChartService) {
       this.activatedRoute = activatedRoute
@@ -87,6 +90,12 @@ export class RankSongsComponent {
 
     public toggleNumbers(): void {
       this.showNumbers = !this.showNumbers
+    }
+
+    public async openAddSongsModal(): Promise<void> {
+      let newSongs = await this.addSongsModal.open() as SessionSong[]
+      this.session.songOrder.push(...newSongs)
+      this.updateCurrentSession()
     }
 
 }

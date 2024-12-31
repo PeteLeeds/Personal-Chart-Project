@@ -41,6 +41,10 @@ button:hover, .button:hover {
     cursor: pointer;
 }
 
+button:disabled {
+    background-color: darkgray;
+}
+
 .text-center {
     text-align: center;
 }

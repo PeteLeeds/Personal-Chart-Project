@@ -9,6 +9,7 @@ import { SongService } from '../services/song.service';
 import { CheckedSong, FormattedSong } from '../types/song';
 import moment from 'moment';
 import { preEmptArtistName } from '../shared/pre-empt-artist-name';
+import { hyphenValidator } from '../shared/hyphen-validator';
 
 @Component({
   selector: 'app-create-chart',
@@ -32,7 +33,7 @@ export class CreateBasicChartComponent implements OnInit {
   public chartForm = new FormGroup({
     name: new FormControl<string>({ value: '', disabled: this.useDateAsTitle },  Validators.required),
     date: new FormControl<Date>(new Date()),
-    songs: new FormControl<string>('', this.hyphenValidator()),
+    songs: new FormControl<string>('', hyphenValidator()),
   });
 
   constructor(chartService: ChartService, songService: SongService, activatedRoute: ActivatedRoute, router: Router) { 
@@ -59,18 +60,6 @@ export class CreateBasicChartComponent implements OnInit {
     }
     else {
       this.chartForm.controls.name.enable();
-    }
-  }
-
-  public hyphenValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      const songs = control.value.split('\n');
-      for (const song of (songs as string[])) {
-        if (!song.includes('-')) {
-          return { 'hyphenValidator': control.value }
-        }
-      }
-      return null
     }
   }
 

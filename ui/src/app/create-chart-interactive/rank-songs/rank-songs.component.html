@@ -1,5 +1,6 @@
 <div class="row right">
     <div (click)="toggleNumbers()" title="Show Numbers"><fa-icon [icon]="faListOl" class="fa-lg" [class.icon-selected]="showNumbers == true"></fa-icon></div>
+    <div (click)="openAddSongsModal()" title="Add More Songs"><fa-icon [icon]="faPlus" class="fa-lg"></fa-icon></div>
 </div>
 <div class="centre">
     <h1>Rank Songs</h1>
@@ -40,3 +41,5 @@
     </table>
     <a [routerLink]="['..', 'finalise']"><button *ngIf="session && session.songOrder.length === 0">Continue</button></a>
 </div>
+
+<add-songs-modal #addSongsModal></add-songs-modal>
