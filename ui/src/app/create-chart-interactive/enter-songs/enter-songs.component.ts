@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ChartService } from 'src/app/services/chart.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import moment from 'moment';

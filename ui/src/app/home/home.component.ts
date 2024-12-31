@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CreateSeriesComponent } from '../modals/create-series/create-series.component';
 import { ChartService } from '../services/chart.service';
 
 @Component({
@@ -9,7 +8,6 @@ import { ChartService } from '../services/chart.service';
   styleUrls: ['../styles/common-styles.css', './home.component.css']
 })
 export class HomeComponent implements OnInit {
-  @ViewChild('createSeriesModal') private createSeriesModal: CreateSeriesComponent;
   private chartService: ChartService
   private subscriptions: Subscription[] = []
   public recentCharts = []

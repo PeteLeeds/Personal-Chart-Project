@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterLink, Routes, UrlSegment } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router, Routes, UrlSegment } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BehaviorSubject, of } from 'rxjs';
 import { ChartService } from '../services/chart.service';

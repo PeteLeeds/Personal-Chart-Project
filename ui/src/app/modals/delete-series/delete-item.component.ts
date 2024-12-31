@@ -31,7 +31,6 @@ export class DeleteItemComponent implements OnInit {
   public modalConfig: ModalConfig = {
     modalTitle: `Delete ${this.type}`,
     dismissButtonLabel: 'Cancel',
-    // An 'x' in the corner should eventually be sufficient
     completeButtonLabel: 'Delete',
     onClose: () => new Promise<void>((resolve) => {
       console.log(`Delete ${this.type}`);

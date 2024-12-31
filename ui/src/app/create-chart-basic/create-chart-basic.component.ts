@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -97,8 +97,6 @@ export class CreateBasicChartComponent implements OnInit {
         let artist = song.songString.slice(0, indexOfFirstHyphen);
         let title = song.songString.slice(indexOfFirstHyphen + 3);
         artist = artist.trim(); title = title.trim();
-        // Initially set artist as both and let the user change it if there is more than one artist
-        // If we're clever we can add better artist detection here
         return {pos: song.pos, artistDisplay: artist, artists: preEmptArtistName(title, artist), title, exists: song.exists};
       }
     })
