@@ -14,7 +14,6 @@ export function preEmptArtistName(title: string, artistDisplay: string): string[
         artistList.push(artistDisplay.slice(0, startOfConjunction - 1).trim())
         artistList.push(featuredArtist.trim())
         artistsAdded = true
-        // More than one conjunction would confuse this simple system too much
         break
       }
     }
@@ -28,7 +27,6 @@ export function preEmptArtistName(title: string, artistDisplay: string): string[
         const endPos = title.includes(")", startPos) ? title.indexOf(")", startPos) : title.length - 1
         const featuredArtist = title.slice(startPos, endPos)
         artistList.push(featuredArtist.trim())
-        // More than one conjunction would confuse this simple system too much
         break
       }
     }

@@ -1,4 +1,4 @@
-import { FullSongInfo, Song } from "./song";
+import { Song } from "./song";
 
 export interface Artist {
     _id: string;

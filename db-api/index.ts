@@ -1,4 +1,4 @@
-import { Db, MongoClient } from 'mongodb'
+import { MongoClient } from 'mongodb'
 import { ChartDb } from './db-scripts/chart';
 import { MONGO_DB, MONGO_URI } from './config'
 import Express from 'express'

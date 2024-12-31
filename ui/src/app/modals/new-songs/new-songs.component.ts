@@ -19,7 +19,6 @@ export class NewSongsComponent implements OnInit {
   public modalConfig: ModalConfig = {
     modalTitle: 'New Songs',
     dismissButtonLabel: 'Close',
-    // An 'x' in the corner should eventually be sufficient
     completeButtonLabel: 'Confirm',
     onClose: () => new Promise<unknown>((resolve) => {
       resolve(this.chartSongs)

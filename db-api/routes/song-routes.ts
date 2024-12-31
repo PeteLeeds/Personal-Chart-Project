@@ -2,9 +2,6 @@ import { Router } from "express";
 import { Database } from "..";
 
 export class SongRouter {
-    private static getDb(res: Record<string, Record<string, unknown>>): Database {
-        return res.locals.db as Database
-    }
 
     public static async create() {
         const router = Router()
@@ -22,7 +19,7 @@ export class SongRouter {
             )
         })
 
-        // If we call HEAD, we automatically call GET - which is why it wasn't working before
+        // If we call HEAD, we automatically call GET, so a new route is needed here
         router.head('/find', async (req, res) => {
             console.log('GET COUNT')
             const count = (await (res.locals.db as Database).songDb.getSongCount(req.query)).toString();
