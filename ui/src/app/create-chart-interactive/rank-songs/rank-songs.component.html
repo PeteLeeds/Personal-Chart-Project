@@ -1,4 +1,4 @@
-<!-- <div class="row right">
+<div class="row right">
     <div (click)="toggleNumbers()" title="Show Numbers"><fa-icon [icon]="faListOl" class="fa-lg" [class.icon-selected]="showNumbers == true"></fa-icon></div>
     <div (click)="openAddSongsModal()" title="Add More Songs"><fa-icon [icon]="faPlus" class="fa-lg"></fa-icon></div>
 </div>
@@ -18,7 +18,7 @@
             You have selected a song in the ranking. Move this to where you wish, or click again to return to placing new songs.
         </p>
     </div>
-    <table *ngIf="session?.placedSongs" (mouseleave)="removeInsertButtons()">
+    <!-- <table *ngIf="session?.placedSongs" (mouseleave)="removeInsertButtons()">
         <tr class="centre">
             <button class="insert-button" 
             *ngIf="session && (session.songOrder.length != 0 || songToMove != null) && 
@@ -38,8 +38,8 @@
                 <button class="insert-button" *ngIf="session && (session.songOrder.length != 0 || songToMove != null) && insertButtonsToDisplay.includes(i)" (click)="addSong(i + 1)">Insert Here</button>
             </tr>
         </ng-container>
-    </table>
-    <a [routerLink]="['..', 'finalise']"><button *ngIf="session && session.songOrder.length === 0">Continue</button></a>
+    </table> -->
+    <!-- <a [routerLink]="['..', 'finalise']"><button *ngIf="session && session.songOrder.length === 0">Continue</button></a> -->
 </div>
 
-<add-songs-modal #addSongsModal></add-songs-modal> -->
+<!-- <add-songs-modal #addSongsModal></add-songs-modal> -->
