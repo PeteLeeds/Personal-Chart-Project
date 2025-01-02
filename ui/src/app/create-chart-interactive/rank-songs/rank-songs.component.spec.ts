@@ -5,23 +5,19 @@ import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
+const MOCK_ACTIVATED_ROUTE = {
+  params: of({ session: 'test' }),
+};
+
 describe('RankSongsComponent', () => {
   let component: RankSongsComponent;
   let fixture: ComponentFixture<RankSongsComponent>;
-
-  const mockActivatedRoute = {
-    params: of({ session: 'test' }),
-  };
   
 
   beforeEach(async () => {
-  });
-
-
-  it('should create', async () => {
     await TestBed.configureTestingModule({
       providers: [
-        {provide: ActivatedRoute, useValue: mockActivatedRoute},
+        {provide: ActivatedRoute, useValue: MOCK_ACTIVATED_ROUTE},
       ], 
       imports: [HttpClientModule],
       declarations: [ RankSongsComponent ]
@@ -31,6 +27,13 @@ describe('RankSongsComponent', () => {
     fixture = TestBed.createComponent(RankSongsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture.destroy();
+  });
+
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
