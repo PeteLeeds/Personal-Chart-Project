@@ -15,6 +15,10 @@ describe('RankSongsComponent', () => {
   
 
   beforeEach(async () => {
+  });
+
+
+  it('should create', async () => {
     await TestBed.configureTestingModule({
       providers: [
         {provide: ActivatedRoute, useValue: mockActivatedRoute},
@@ -27,13 +31,6 @@ describe('RankSongsComponent', () => {
     fixture = TestBed.createComponent(RankSongsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  afterEach(() => {
-    fixture.destroy();
-  });
-
-  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
