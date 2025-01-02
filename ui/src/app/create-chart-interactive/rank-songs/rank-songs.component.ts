@@ -67,37 +67,37 @@ export class RankSongsComponent {
       this.updateCurrentSession()
     }
 
-    public setInsertButtonsToDisplay(valueHoveredOver: number): void {
-      this.insertButtonsToDisplay = [valueHoveredOver - 1, valueHoveredOver]
-    }
+    // public setInsertButtonsToDisplay(valueHoveredOver: number): void {
+    //   this.insertButtonsToDisplay = [valueHoveredOver - 1, valueHoveredOver]
+    // }
 
-    public removeInsertButtons(): void {
-      this.insertButtonsToDisplay = []
-    }
+    // public removeInsertButtons(): void {
+    //   this.insertButtonsToDisplay = []
+    // }
 
-    public selectSongToMove(position: number): void {
-      if (this.songToMove == position) {
-        this.songToMove = null
-      } else {
-        this.songToMove = position
-      }
-      console.log(this.songToMove)
-    }
+    // public selectSongToMove(position: number): void {
+    //   if (this.songToMove == position) {
+    //     this.songToMove = null
+    //   } else {
+    //     this.songToMove = position
+    //   }
+    //   console.log(this.songToMove)
+    // }
 
-    public moveToBack(): void {
-      this.session.songOrder.push(this.session.songOrder[0])
-      this.session.songOrder.shift()
-      this.updateCurrentSession()
-    }
+    // public moveToBack(): void {
+    //   this.session.songOrder.push(this.session.songOrder[0])
+    //   this.session.songOrder.shift()
+    //   this.updateCurrentSession()
+    // }
 
-    public toggleNumbers(): void {
-      this.showNumbers = !this.showNumbers
-    }
+    // public toggleNumbers(): void {
+    //   this.showNumbers = !this.showNumbers
+    // }
 
-    public async openAddSongsModal(): Promise<void> {
-      // let newSongs = await this.addSongsModal.open() as SessionSong[]
-      // this.session.songOrder.push(...newSongs)
-      // this.updateCurrentSession()
-    }
+    // public async openAddSongsModal(): Promise<void> {
+    //   // let newSongs = await this.addSongsModal.open() as SessionSong[]
+    //   // this.session.songOrder.push(...newSongs)
+    //   // this.updateCurrentSession()
+    // }
 
 }
