@@ -18,14 +18,14 @@
             You have selected a song in the ranking. Move this to where you wish, or click again to return to placing new songs.
         </p>
     </div>
-    <!-- <table *ngIf="session?.placedSongs" (mouseleave)="removeInsertButtons()">
+    <table *ngIf="session?.placedSongs" (mouseleave)="removeInsertButtons()">
         <tr class="centre">
             <button class="insert-button" 
             *ngIf="session && (session.songOrder.length != 0 || songToMove != null) && 
                 (session.placedSongs.length == 0 || (insertButtonsToDisplay && insertButtonsToDisplay.includes(0)))" 
             (click)="addSong(0)">Insert Here</button>
         </tr>
-        <ng-container *ngFor="let song of session.placedSongs; let i = index">
+        <!-- <ng-container *ngFor="let song of session.placedSongs; let i = index">
             <tr class="centre">
                 <div class="row">
                     <div *ngIf="showNumbers == true" class="number-box centre">
@@ -37,9 +37,9 @@
                 </div>
                 <button class="insert-button" *ngIf="session && (session.songOrder.length != 0 || songToMove != null) && insertButtonsToDisplay.includes(i)" (click)="addSong(i + 1)">Insert Here</button>
             </tr>
-        </ng-container>
+        </ng-container> -->
     </table>
-    <a [routerLink]="['..', 'finalise']"><button *ngIf="session && session.songOrder.length === 0">Continue</button></a> -->
+    <!-- <a [routerLink]="['..', 'finalise']"><button *ngIf="session && session.songOrder.length === 0">Continue</button></a> -->
 </div>
 
 <!-- <add-songs-modal #addSongsModal></add-songs-modal> -->
