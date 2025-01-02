@@ -53,51 +53,51 @@ export class RankSongsComponent {
     //   }).subscribe()
     }
 
-    public addSong(position: number): void {
-      if (this.songToMove != null) {
-        const movingSong = this.session.placedSongs[this.songToMove]
-        this.session.placedSongs[this.songToMove] = null
-        this.session.placedSongs.splice(position, 0, movingSong)
-        this.session.placedSongs = this.session.placedSongs.filter(song => !!song)
-        this.songToMove = null
-      } else {
-        this.session.placedSongs.splice(position, 0, this.session.songOrder[0])
-        this.session.songOrder.shift()
-      }
-      this.updateCurrentSession()
-    }
-
-    // public setInsertButtonsToDisplay(valueHoveredOver: number): void {
-    //   this.insertButtonsToDisplay = [valueHoveredOver - 1, valueHoveredOver]
-    // }
-
-    // public removeInsertButtons(): void {
-    //   this.insertButtonsToDisplay = []
-    // }
-
-    // public selectSongToMove(position: number): void {
-    //   if (this.songToMove == position) {
+    // public addSong(position: number): void {
+    //   if (this.songToMove != null) {
+    //     const movingSong = this.session.placedSongs[this.songToMove]
+    //     this.session.placedSongs[this.songToMove] = null
+    //     this.session.placedSongs.splice(position, 0, movingSong)
+    //     this.session.placedSongs = this.session.placedSongs.filter(song => !!song)
     //     this.songToMove = null
     //   } else {
-    //     this.songToMove = position
+    //     this.session.placedSongs.splice(position, 0, this.session.songOrder[0])
+    //     this.session.songOrder.shift()
     //   }
-    //   console.log(this.songToMove)
-    // }
-
-    // public moveToBack(): void {
-    //   this.session.songOrder.push(this.session.songOrder[0])
-    //   this.session.songOrder.shift()
     //   this.updateCurrentSession()
     // }
 
-    // public toggleNumbers(): void {
-    //   this.showNumbers = !this.showNumbers
-    // }
+    public setInsertButtonsToDisplay(valueHoveredOver: number): void {
+      this.insertButtonsToDisplay = [valueHoveredOver - 1, valueHoveredOver]
+    }
 
-    // public async openAddSongsModal(): Promise<void> {
-    //   // let newSongs = await this.addSongsModal.open() as SessionSong[]
-    //   // this.session.songOrder.push(...newSongs)
-    //   // this.updateCurrentSession()
-    // }
+    public removeInsertButtons(): void {
+      this.insertButtonsToDisplay = []
+    }
+
+    public selectSongToMove(position: number): void {
+      if (this.songToMove == position) {
+        this.songToMove = null
+      } else {
+        this.songToMove = position
+      }
+      console.log(this.songToMove)
+    }
+
+    public moveToBack(): void {
+      this.session.songOrder.push(this.session.songOrder[0])
+      this.session.songOrder.shift()
+      this.updateCurrentSession()
+    }
+
+    public toggleNumbers(): void {
+      this.showNumbers = !this.showNumbers
+    }
+
+    public async openAddSongsModal(): Promise<void> {
+      // let newSongs = await this.addSongsModal.open() as SessionSong[]
+      // this.session.songOrder.push(...newSongs)
+      // this.updateCurrentSession()
+    }
 
 }
