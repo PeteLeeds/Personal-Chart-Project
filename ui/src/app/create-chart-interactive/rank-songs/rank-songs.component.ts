@@ -53,19 +53,19 @@ export class RankSongsComponent {
     //   }).subscribe()
     }
 
-    // public addSong(position: number): void {
-    //   if (this.songToMove != null) {
-    //     const movingSong = this.session.placedSongs[this.songToMove]
-    //     this.session.placedSongs[this.songToMove] = null
-    //     this.session.placedSongs.splice(position, 0, movingSong)
-    //     this.session.placedSongs = this.session.placedSongs.filter(song => !!song)
-    //     this.songToMove = null
-    //   } else {
-    //     this.session.placedSongs.splice(position, 0, this.session.songOrder[0])
-    //     this.session.songOrder.shift()
-    //   }
-    //   this.updateCurrentSession()
-    // }
+    public addSong(position: number): void {
+      if (this.songToMove != null) {
+        // const movingSong = this.session.placedSongs[this.songToMove]
+        // this.session.placedSongs[this.songToMove] = null
+        // this.session.placedSongs.splice(position, 0, movingSong)
+        // this.session.placedSongs = this.session.placedSongs.filter(song => !!song)
+        // this.songToMove = null
+      } else {
+        this.session.placedSongs.splice(position, 0, this.session.songOrder[0])
+        this.session.songOrder.shift()
+      }
+      this.updateCurrentSession()
+    }
 
     public setInsertButtonsToDisplay(valueHoveredOver: number): void {
       this.insertButtonsToDisplay = [valueHoveredOver - 1, valueHoveredOver]
