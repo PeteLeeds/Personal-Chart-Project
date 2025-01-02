@@ -57,9 +57,10 @@ export class RankSongsComponent {
       if (this.songToMove != null) {
         const movingSong = this.session.placedSongs[this.songToMove]
         this.session.placedSongs[this.songToMove] = null
-        this.session.placedSongs.splice(position, 0, movingSong)
-        this.session.placedSongs = this.session.placedSongs.filter(song => !!song)
-        this.songToMove = null
+        movingSong; position;
+        // this.session.placedSongs.splice(position, 0, movingSong)
+        // this.session.placedSongs = this.session.placedSongs.filter(song => !!song)
+        // this.songToMove = null
       } else {
         // this.session.placedSongs.splice(position, 0, this.session.songOrder[0])
         // this.session.songOrder.shift()
