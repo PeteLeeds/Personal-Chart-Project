@@ -13,6 +13,7 @@ export interface Song {
     title: string;
     artistIds: string[];
     artistDisplay: string;
+    position?: number;
     artists?: string[] | Artist[]
     charts?: Record<string, SongInChart[]>
     chartRuns?: SongInChart[][]
