@@ -375,7 +375,7 @@ export class ChartDb {
         }]
     }
 
-    private getSongsPipeline(series: string, chartName: string, size?: string, sessionId?: string) {
+    private getSongsPipeline(series: string, chartName: string, size?: string, sessionId?: string, dropouts = false) {
         return [{
             $match: {
                 [`charts.${series}`]: {
@@ -383,7 +383,7 @@ export class ChartDb {
                     {
                         chart: chartName,
                         position: {
-                            $ne: DROPOUT,
+                            ...(!dropouts ? {$ne: DROPOUT} : {$exists: true}),
                             ...(size ? { $lte: parseInt(size) } : {})
                         },
                         $or: [
@@ -438,10 +438,25 @@ export class ChartDb {
         }
     }
 
-    public async getChartSongs(series: string, chartName: string, size?: string, sessionId?: string): Promise<AggregationCursor<Song>> {
+    public getSortPipelineBasedOnDropouts(dropouts: boolean): Record<string, unknown>[] {
+        if (dropouts) {
+            return [
+                {
+                    $addFields: {
+                      sortKey: { $cond: { if: { $eq: ["$position", -1] }, then: 1, else: 0 } }
+                    }
+                },
+                { $sort: { 'sortKey': 1, 'position': 1 } },
+                { $project: { sortKey: 0 } }
+            ]
+        }
+        return [{ $sort: { 'position': 1 } }]
+    }
+
+    public async getChartSongs(series: string, chartName: string, size?: string, sessionId?: string, dropouts = false): Promise<AggregationCursor<Song>> {
         return this.db.collection(SONG_COLLECTION).aggregate([
             // Find all the songs in this chart
-            ...this.getSongsPipeline(series, chartName, size, sessionId),
+            ...this.getSongsPipeline(series, chartName, size, sessionId, dropouts),
             ...this.getSizePipeline(series, size),
             // Remove all chart info for the songs besides the specified chart
             {
@@ -464,7 +479,7 @@ export class ChartDb {
             { $unwind: '$chartInfo' },
             { $addFields: { position: '$chartInfo.position' } },
             { $project: { chartInfo: 0 } },
-            { $sort: { 'position': 1 } }
+            ...this.getSortPipelineBasedOnDropouts(dropouts)
         ])
     }
 
@@ -543,8 +558,10 @@ export class ChartDb {
     }
 
     public async getFormattedChartString(series: string, chartName: string, size?: string): Promise<Record<string, string>> {
-        const songs = await (await this.getChartSongs(series, chartName, size)).toArray()
+        const songs = await (await this.getChartSongs(series, chartName, size, undefined, true)).toArray()
         const previousCharts = await (await this.getPreviousCharts(series, chartName)).toArray()
+
+        const dropoutSongStrings = []
 
         let formattedChartString = ""
         for (let i = 0; i < songs.length; i++) {
@@ -574,7 +591,7 @@ export class ChartDb {
             activeChartPositions.sort((a, b) => a.position - b.position);
             song.peak = activeChartPositions[0].position
             const lastWeekString = `${song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NE')}`
-            let positionString = `[b]${i + 1}[/b] [${lastWeekString}]`
+            let positionString = `[b]${song.position == -1 ? 'xx' : song.position}[/b] [${lastWeekString}]`
             if (i >= 40 && lastWeekString == 'NE') {
                 positionString = `[color=#FF0000]${positionString}[/color]`
             }
@@ -591,7 +608,18 @@ export class ChartDb {
                 const peakString = song.peak == i + 1 ? `[b]${song.peak}[/b]` : song.peak
                 songString += ` (Pk: ${peakString})`
             }
-            formattedChartString += `${songString}\n`
+            if (song.position == -1 && song.lastWeek && song.lastWeek != -1) {
+                dropoutSongStrings.push({string: songString, lastWeek: song.lastWeek})
+            } else {
+                formattedChartString += `${songString}\n`
+            }
+        }
+        if (dropoutSongStrings.length > 0) {
+            dropoutSongStrings.sort((a, b) => a.lastWeek - b.lastWeek)
+            formattedChartString += '\n'
+            for (const songString of dropoutSongStrings) {
+                formattedChartString += `${songString.string}\n`
+            }
         }
         if (songs.length > 40) {
             formattedChartString += `[/size]`
