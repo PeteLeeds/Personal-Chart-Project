@@ -4,9 +4,10 @@ import { ModalTemplateComponent } from '../modal-template/modal-template.compone
 import { ModalConfig } from '../modal.config';
 
 @Component({
-  selector: 'delete-item-modal',
-  templateUrl: './delete-item.component.html',
-  styleUrls: ['./delete-item.component.css']
+    selector: 'delete-item-modal',
+    templateUrl: './delete-item.component.html',
+    styleUrls: ['./delete-item.component.css'],
+    standalone: false
 })
 export class DeleteItemComponent implements OnInit {
   @ViewChild('modal') private baseModal: ModalTemplateComponent;

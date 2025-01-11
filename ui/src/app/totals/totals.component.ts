@@ -6,9 +6,10 @@ import { ExportToCsv } from 'export-to-csv';
 import { getFullChartRun } from '../shared/get-chart-run';
 
 @Component({
-  selector: 'totals',
-  templateUrl: './totals.component.html',
-  styleUrls: ['../styles/common-styles.css', './totals.component.css']
+    selector: 'totals',
+    templateUrl: './totals.component.html',
+    styleUrls: ['../styles/common-styles.css', './totals.component.css'],
+    standalone: false
 })
 export class TotalsComponent {
 

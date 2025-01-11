@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router, Routes } from '@angular/router';
@@ -7,8 +7,11 @@ import { of } from 'rxjs';
 import { ChartService } from '../services/chart.service';
 
 import { SeriesSelectComponent } from './series-select.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-@Component({})
+@Component({
+    standalone: false
+})
 class TestChartDisplayComponent {}
 
 const routes: Routes = [
@@ -30,17 +33,18 @@ describe('SeriesSelectComponent', () => {
     );
 
     @Component({
-      selector: 'create-series-modal',
-    })
+    selector: 'create-series-modal',
+    standalone: false
+})
     class MockCreateSeriesComponent {
       public open = () => {return 'Test Series'}
     }
     
     await TestBed.configureTestingModule({
-      declarations: [ SeriesSelectComponent, MockCreateSeriesComponent ],
-      imports: [ HttpClientTestingModule, RouterTestingModule.withRoutes(routes) ],
-      providers: [{provide: ChartService, useValue: mockChartService}]
-    })
+    declarations: [SeriesSelectComponent, MockCreateSeriesComponent],
+    imports: [RouterTestingModule.withRoutes(routes)],
+    providers: [{ provide: ChartService, useValue: mockChartService }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
     .compileComponents();
     router = TestBed.inject(Router);
     fixture = TestBed.createComponent(SeriesSelectComponent);

@@ -6,9 +6,10 @@ import moment from 'moment';
 import { hyphenValidator } from 'src/app/shared/hyphen-validator';
 
 @Component({
-  selector: 'app-enter-songs',
-  templateUrl: './enter-songs.component.html',
-  styleUrls: ['../../styles/common-styles.css', './enter-songs.component.css']
+    selector: 'app-enter-songs',
+    templateUrl: './enter-songs.component.html',
+    styleUrls: ['../../styles/common-styles.css', './enter-songs.component.css'],
+    standalone: false
 })
 export class EnterSongsComponent {
 

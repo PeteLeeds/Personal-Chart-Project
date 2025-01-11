@@ -5,12 +5,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { CreateChartComponent } from './create-chart.component';
 
 @Component({
-  template: `Basic`,
+    template: `Basic`,
+    standalone: false
 })
 class TestBasicComponent {}
 
 @Component({
-  template: `Interactive`,
+    template: `Interactive`,
+    standalone: false
 })
 class TestInteractiveComponent {}
 

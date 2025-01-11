@@ -12,9 +12,10 @@ import { ClipboardService } from 'ngx-clipboard';
 const CHART_SIZES = [10, 20, 40, 75]
 
 @Component({
-  selector: 'app-chart-display',
-  templateUrl: './chart-display.component.html',
-  styleUrls: [ '../styles/common-styles.css', './chart-display.component.css']
+    selector: 'app-chart-display',
+    templateUrl: './chart-display.component.html',
+    styleUrls: ['../styles/common-styles.css', './chart-display.component.css'],
+    standalone: false
 })
 
 export class ChartDisplayComponent implements OnInit {

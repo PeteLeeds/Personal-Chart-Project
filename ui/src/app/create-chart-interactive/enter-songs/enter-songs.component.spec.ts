@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EnterSongsComponent } from './enter-songs.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
@@ -17,13 +17,14 @@ describe('EnterSongsComponent', () => {
   };
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({     
-      providers: [
-        {provide: ActivatedRoute, useValue: mockActivatedRoute},
-      ], 
-      imports: [HttpClientModule],
-      declarations: [ EnterSongsComponent ]
-    })
+    await TestBed.configureTestingModule({
+    declarations: [EnterSongsComponent],
+    imports: [],
+    providers: [
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        provideHttpClient(withInterceptorsFromDi()),
+    ]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(EnterSongsComponent);

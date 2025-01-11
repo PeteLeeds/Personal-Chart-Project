@@ -5,27 +5,32 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 
 @Component({
-  template: `Home`,
+    template: `Home`,
+    standalone: false
 })
 class TestHomeComponent {}
 
 @Component({
-  template: `Series`,
+    template: `Series`,
+    standalone: false
 })
 class TestSeriesSelectComponent {}
 
 @Component({
-  template: `Song`,
+    template: `Song`,
+    standalone: false
 })
 class TestSongComponent {}
 
 @Component({
-  template: `Artist`,
+    template: `Artist`,
+    standalone: false
 })
 class TestArtistComponent {}
 
 @Component({
-  template: `Totals`,
+    template: `Totals`,
+    standalone: false
 })
 class TestTotalsComponent {}
 

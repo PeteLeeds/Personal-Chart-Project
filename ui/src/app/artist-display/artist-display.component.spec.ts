@@ -1,7 +1,8 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from "@angular/router/testing";
 import { ArtistDisplayComponent } from './artist-display.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 
 describe('ArtistDisplayComponent', () => {
@@ -10,9 +11,10 @@ describe('ArtistDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ArtistDisplayComponent ],
-      imports: [ HttpClientTestingModule, RouterTestingModule ],
-    })
+    declarations: [ArtistDisplayComponent],
+    imports: [RouterTestingModule],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
     .compileComponents();
   });
 

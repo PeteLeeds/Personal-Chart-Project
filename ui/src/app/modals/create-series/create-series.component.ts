@@ -4,9 +4,10 @@ import { ModalTemplateComponent } from '../modal-template/modal-template.compone
 import { ModalConfig } from '../modal.config';
 
 @Component({
-  selector: 'create-series-modal',
-  templateUrl: './create-series.component.html',
-  styleUrls: ['./create-series.component.css']
+    selector: 'create-series-modal',
+    templateUrl: './create-series.component.html',
+    styleUrls: ['./create-series.component.css'],
+    standalone: false
 })
 export class CreateSeriesComponent implements OnInit {
   @ViewChild('modal') private baseModal: ModalTemplateComponent;

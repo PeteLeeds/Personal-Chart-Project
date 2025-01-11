@@ -6,9 +6,10 @@ import { ModalConfig } from '../modals/modal.config';
 import { ChartService } from '../services/chart.service';
 
 @Component({
-  selector: 'app-series-select',
-  templateUrl: './series-select.component.html',
-  styleUrls: ['../styles/common-styles.css', './series-select.component.css']
+    selector: 'app-series-select',
+    templateUrl: './series-select.component.html',
+    styleUrls: ['../styles/common-styles.css', './series-select.component.css'],
+    standalone: false
 })
 export class SeriesSelectComponent implements OnInit {
   @ViewChild('createSeriesModal') private createSeriesModal: CreateSeriesComponent;

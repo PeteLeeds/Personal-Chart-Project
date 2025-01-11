@@ -3,9 +3,10 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalConfig } from '../modal.config';
 
 @Component({
-  selector: 'custom-modal',
-  templateUrl: './modal-template.component.html',
-  styleUrls: ['../../styles/common-styles.css', './modal-template.component.scss']
+    selector: 'custom-modal',
+    templateUrl: './modal-template.component.html',
+    styleUrls: ['../../styles/common-styles.css', './modal-template.component.scss'],
+    standalone: false
 })
 export class ModalTemplateComponent implements OnInit {
   @Input() public modalConfig: ModalConfig

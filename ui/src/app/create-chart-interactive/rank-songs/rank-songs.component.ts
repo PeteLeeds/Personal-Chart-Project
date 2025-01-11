@@ -8,9 +8,10 @@ import { faListOl, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { AddSongsComponent } from 'src/app/modals/add-songs/add-songs.component';
 
 @Component({
-  selector: 'app-rank-songs',
-  templateUrl: './rank-songs.component.html',
-  styleUrls: ['../../styles/common-styles.css', './rank-songs.component.css']
+    selector: 'app-rank-songs',
+    templateUrl: './rank-songs.component.html',
+    styleUrls: ['../../styles/common-styles.css', './rank-songs.component.css'],
+    standalone: false
 })
 export class RankSongsComponent {
     @ViewChild('addSongsModal') private addSongsModal: AddSongsComponent;

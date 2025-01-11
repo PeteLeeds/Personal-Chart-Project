@@ -4,9 +4,10 @@ import { ArtistService } from '../services/artist.service';
 import { Artist } from '../types/artist';
 
 @Component({
-  selector: 'app-artist',
-  templateUrl: './artist.component.html',
-  styleUrls: ['../styles/common-styles.css', './artist.component.css']
+    selector: 'app-artist',
+    templateUrl: './artist.component.html',
+    styleUrls: ['../styles/common-styles.css', './artist.component.css'],
+    standalone: false
 })
 export class ArtistComponent implements OnInit {
   private artistService: ArtistService;
