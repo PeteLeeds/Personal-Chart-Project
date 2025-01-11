@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -39,51 +39,44 @@ import { RankSongsComponent } from './create-chart-interactive/rank-songs/rank-s
 import { CreateChartFinaliseComponent } from './create-chart-finalise/create-chart-finalise.component';
 import { AddSongsComponent } from './modals/add-songs/add-songs.component';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    ChartDisplayComponent,
-    ChartSelectComponent,
-    SeriesSelectComponent,
-    ModalTemplateComponent,
-    CreateSeriesComponent,
-    DeleteItemComponent,
-    CreateChartComponent,
-    CreateBasicChartComponent,
-    NewSongsComponent,
-    SongDisplayComponent,
-    SongComponent,
-    ArtistComponent,
-    ArtistDisplayComponent,
-    ArtistSelectorComponent,
-    MarkDuplicateComponent,
-    SearchComponent,
-    ChartEditComponent,
-    TotalsComponent,
-    HomeComponent,
-    EnterSongsComponent,
-    RankSongsComponent,
-    CreateChartFinaliseComponent,
-    AddSongsComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    CommonModule,
-    ReactiveFormsModule,
-    MatDatepickerModule,
-    MatMomentDateModule,
-    BrowserAnimationsModule,
-    FontAwesomeModule,
-    MatSelectModule,
-    MatFormFieldModule,
-    ClipboardModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        ChartDisplayComponent,
+        ChartSelectComponent,
+        SeriesSelectComponent,
+        ModalTemplateComponent,
+        CreateSeriesComponent,
+        DeleteItemComponent,
+        CreateChartComponent,
+        CreateBasicChartComponent,
+        NewSongsComponent,
+        SongDisplayComponent,
+        SongComponent,
+        ArtistComponent,
+        ArtistDisplayComponent,
+        ArtistSelectorComponent,
+        MarkDuplicateComponent,
+        SearchComponent,
+        ChartEditComponent,
+        TotalsComponent,
+        HomeComponent,
+        EnterSongsComponent,
+        RankSongsComponent,
+        CreateChartFinaliseComponent,
+        AddSongsComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        CommonModule,
+        ReactiveFormsModule,
+        MatDatepickerModule,
+        MatMomentDateModule,
+        BrowserAnimationsModule,
+        FontAwesomeModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        ClipboardModule,
+        MatProgressSpinnerModule,
+        MatRadioModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }

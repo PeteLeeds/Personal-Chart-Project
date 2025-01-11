@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router, Routes, UrlSegment } from '@angular/router';
@@ -7,6 +7,7 @@ import { BehaviorSubject, of } from 'rxjs';
 import { ChartService } from '../services/chart.service';
 
 import { ChartDisplayComponent } from './chart-display.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ChartDisplayComponent', () => {
   let component: ChartDisplayComponent;
@@ -66,12 +67,15 @@ describe('ChartDisplayComponent', () => {
     );
 
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes(routes)],
-      declarations: [ChartDisplayComponent],
-      providers: [
-        {provide: ChartService, useValue: mockChartService},
-        {provide: ActivatedRoute, useValue: new ActivatedRouterMock()},
-      ]})
+    declarations: [ChartDisplayComponent],
+    imports: [RouterTestingModule.withRoutes(routes)],
+    providers: [
+        { provide: ChartService, useValue: mockChartService },
+        { provide: ActivatedRoute, useValue: new ActivatedRouterMock() },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
       .compileComponents();
       router = TestBed.inject(Router);
       fixture = TestBed.createComponent(ChartDisplayComponent);

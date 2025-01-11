@@ -1,10 +1,11 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { CreateBasicChartComponent } from './create-chart-basic.component';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('CreateBasicChartComponent', () => {
   let component: CreateBasicChartComponent;
@@ -18,12 +19,14 @@ describe('CreateBasicChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule, RouterTestingModule ],
-      declarations: [ CreateBasicChartComponent ],
-      providers: [
-        { provide: ActivatedRoute, useValue: mockActivatedRoute }
-      ]
-    })
+    declarations: [CreateBasicChartComponent],
+    imports: [RouterTestingModule],
+    providers: [
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
     .compileComponents();
   });
 
