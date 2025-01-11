@@ -8,9 +8,10 @@ import { NewSongsComponent } from '../modals/new-songs/new-songs.component';
 import { preEmptArtistName } from '../shared/pre-empt-artist-name';
 
 @Component({
-  selector: 'app-create-chart-finalise',
-  templateUrl: './create-chart-finalise.component.html',
-  styleUrls: ['../styles/common-styles.css', './create-chart-finalise.component.css']
+    selector: 'app-create-chart-finalise',
+    templateUrl: './create-chart-finalise.component.html',
+    styleUrls: ['../styles/common-styles.css', './create-chart-finalise.component.css'],
+    standalone: false
 })
 export class CreateChartFinaliseComponent {
   @ViewChild('newSongsModal') private newSongsModal: NewSongsComponent;

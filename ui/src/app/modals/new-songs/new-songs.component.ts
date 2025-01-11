@@ -5,9 +5,10 @@ import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { FormattedSong } from 'src/app/types/song';
 
 @Component({
-  selector: 'new-songs-modal',
-  templateUrl: './new-songs.component.html',
-  styleUrls: ['./new-songs.component.css']
+    selector: 'new-songs-modal',
+    templateUrl: './new-songs.component.html',
+    styleUrls: ['./new-songs.component.css'],
+    standalone: false
 })
 export class NewSongsComponent implements OnInit {
   @ViewChild('modal') private baseModal: ModalTemplateComponent;

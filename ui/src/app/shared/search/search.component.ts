@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core'; // First
 @Component({
     selector: 'search',
     templateUrl: './search.component.html',
+    standalone: false
 })
 export class SearchComponent {
   @Input() type: 'song' | 'artist'

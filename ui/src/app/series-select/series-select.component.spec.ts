@@ -9,7 +9,9 @@ import { ChartService } from '../services/chart.service';
 import { SeriesSelectComponent } from './series-select.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-@Component({})
+@Component({
+    standalone: false
+})
 class TestChartDisplayComponent {}
 
 const routes: Routes = [
@@ -31,8 +33,9 @@ describe('SeriesSelectComponent', () => {
     );
 
     @Component({
-      selector: 'create-series-modal',
-    })
+    selector: 'create-series-modal',
+    standalone: false
+})
     class MockCreateSeriesComponent {
       public open = () => {return 'Test Series'}
     }

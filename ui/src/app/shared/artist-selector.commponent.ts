@@ -4,6 +4,7 @@ import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 @Component({
     selector: 'artist-selector',
     templateUrl: './artist-selector.component.html',
+    standalone: false
 })
 export class ArtistSelectorComponent {
   @Input() artists = []; // decorate the property with @Input()

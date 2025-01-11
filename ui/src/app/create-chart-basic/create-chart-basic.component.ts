@@ -12,9 +12,10 @@ import { preEmptArtistName } from '../shared/pre-empt-artist-name';
 import { hyphenValidator } from '../shared/hyphen-validator';
 
 @Component({
-  selector: 'app-create-chart',
-  templateUrl: './create-chart-basic.component.html',
-  styleUrls: ['./create-chart-basic.component.css']
+    selector: 'app-create-chart',
+    templateUrl: './create-chart-basic.component.html',
+    styleUrls: ['./create-chart-basic.component.css'],
+    standalone: false
 })
 export class CreateBasicChartComponent implements OnInit {
   @ViewChild('newSongsModal') private newSongsModal: NewSongsComponent;

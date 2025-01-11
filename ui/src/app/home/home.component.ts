@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { ChartService } from '../services/chart.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['../styles/common-styles.css', './home.component.css']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['../styles/common-styles.css', './home.component.css'],
+    standalone: false
 })
 export class HomeComponent implements OnInit {
   private chartService: ChartService

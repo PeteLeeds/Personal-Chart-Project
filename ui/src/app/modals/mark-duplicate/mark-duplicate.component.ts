@@ -8,9 +8,10 @@ import { Observable } from 'rxjs';
 import { Artist } from 'src/app/types/artist';
 
 @Component({
-  selector: 'mark-duplicate-modal',
-  templateUrl: './mark-duplicate.component.html',
-  styleUrls: ['./mark-duplicate.component.css']
+    selector: 'mark-duplicate-modal',
+    templateUrl: './mark-duplicate.component.html',
+    styleUrls: ['./mark-duplicate.component.css'],
+    standalone: false
 })
 export class MarkDuplicateComponent implements OnInit {
   @ViewChild('modal') private baseModal: ModalTemplateComponent;

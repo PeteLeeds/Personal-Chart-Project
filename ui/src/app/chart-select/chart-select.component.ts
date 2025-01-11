@@ -8,9 +8,10 @@ import { ChartService } from '../services/chart.service';
 import { Chart } from '../types/chart';
 
 @Component({
-  selector: 'app-chart-select',
-  templateUrl: './chart-select.component.html',
-  styleUrls: ['../styles/common-styles.css', './chart-select.component.css']
+    selector: 'app-chart-select',
+    templateUrl: './chart-select.component.html',
+    styleUrls: ['../styles/common-styles.css', './chart-select.component.css'],
+    standalone: false
 })
 export class ChartSelectComponent implements OnInit {
   @ViewChild('deleteItemModal') private deleteItemModal: DeleteItemComponent;

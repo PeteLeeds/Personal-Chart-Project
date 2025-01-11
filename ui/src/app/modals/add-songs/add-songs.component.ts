@@ -6,9 +6,10 @@ import { hyphenValidator } from 'src/app/shared/hyphen-validator';
 import { SessionSong } from 'src/app/types/chart';
 
 @Component({
-  selector: 'add-songs-modal',
-  templateUrl: './add-songs.component.html',
-  styleUrls: ['./add-songs.component.css']
+    selector: 'add-songs-modal',
+    templateUrl: './add-songs.component.html',
+    styleUrls: ['./add-songs.component.css'],
+    standalone: false
 })
 export class AddSongsComponent {
   @ViewChild('modal') private baseModal: ModalTemplateComponent;

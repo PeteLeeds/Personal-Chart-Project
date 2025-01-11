@@ -13,9 +13,10 @@ import { AbstractSongInfo } from '../types/song';
 import { faMusic } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-song-display',
-  templateUrl: './song-display.component.html',
-  styleUrls: ['../styles/common-styles.css', './song-display.component.css']
+    selector: 'app-song-display',
+    templateUrl: './song-display.component.html',
+    styleUrls: ['../styles/common-styles.css', './song-display.component.css'],
+    standalone: false
 })
 export class SongDisplayComponent implements OnInit {
   @ViewChild('markDuplicateModal') private markDuplicateModal: MarkDuplicateComponent;

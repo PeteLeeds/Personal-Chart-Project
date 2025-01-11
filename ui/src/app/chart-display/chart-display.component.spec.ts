@@ -26,7 +26,9 @@ describe('ChartDisplayComponent', () => {
     public snapshot = new ActivatedRouteSnapshot();
   }
 
-  @Component({})
+  @Component({
+    standalone: false
+})
   class TestSongComponent {}
 
   const routes: Routes = [

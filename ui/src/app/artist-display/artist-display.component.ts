@@ -10,9 +10,10 @@ import { Artist } from '../types/artist';
 import { faGuitar } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-artist-display',
-  templateUrl: './artist-display.component.html',
-  styleUrls: ['../styles/common-styles.css', './artist-display.component.css']
+    selector: 'app-artist-display',
+    templateUrl: './artist-display.component.html',
+    styleUrls: ['../styles/common-styles.css', './artist-display.component.css'],
+    standalone: false
 })
 export class ArtistDisplayComponent implements OnInit {
   @ViewChild('markDuplicateModal') private markDuplicateModal: MarkDuplicateComponent;

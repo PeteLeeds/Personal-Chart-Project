@@ -9,7 +9,8 @@ import moment from "moment";
 @Component({
     selector: 'app-chart-edit',
     templateUrl: './chart-edit.component.html',
-    styleUrls: ['./chart-edit.component.css']
+    styleUrls: ['./chart-edit.component.css'],
+    standalone: false
 })
 
 export class ChartEditComponent {
