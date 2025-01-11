@@ -13,6 +13,12 @@
 
 .song-to-place {
     margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: white;
+    border-bottom: 1px solid black;
 }
 
 .selected {
@@ -52,4 +58,8 @@ fa-icon {
 .icon-selected {
     background-color: darkgray;
     color: white;
+}
+
+p {
+    text-align: center;
 }
