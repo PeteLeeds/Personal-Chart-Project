@@ -39,10 +39,10 @@ export function getTop40ChartRun(chartRuns: SongInChart[][]): string {
         runString += `${chart.position}${runString.length == 0 ? '' : '-'}`
         top40Reached = true
       } else if (top40Reached) {
-        potentialRun += `${potentialRun.length == 0 ? '[color=#708090]' : ''}${chart.position}${runString.length == 0 ? '' : '-'}`
+        potentialRun += `${potentialRun.length == 0 ? '[color=#708090]' : ''}${chart.position}${runString.length == 1 ? '' : '-'}`
       }
     } 
-    if (chartRuns.length - 1 > i) {
+    if (chartRuns.length - 1 > i && runString.length > 1) {
       potentialRun += `${potentialRun.length == 0 ? '[color=#708090]' : ''}xx-`
     }
   }
