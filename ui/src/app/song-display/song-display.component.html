@@ -76,7 +76,7 @@
             <div class="chart-run-container">
                 <a *ngFor="let val of run" class="position-link"
                     [routerLink]="['/series', selectedSeries, 'chart', val.chart]">
-                    <div class="position" [class.peak]="val.position === peak">
+                    <div class="position" [class.peak]="val.position === songInfo.peak">
                         <span class="tooltiptext">{{val.chart}}</span>
                         <p><b>{{val.position}}</b></p>
                     </div>
