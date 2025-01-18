@@ -57,11 +57,16 @@ export class ChartDb {
         return previousCharts.map(chart => chart.name)
     }
 
-    private async getSongsFromCharts(series: string, charts: string[]): Promise<Record<string, string>[]> {
+    private async getSongsFromCharts(series: string, charts: string[], sort: boolean): Promise<Record<string, string>[]> {
         const fullSongArray = []
         for (const chart of charts) {
             const chartSongs = await this.db.collection(SONG_COLLECTION).aggregate<Record<string, string>>([
                 ...this.getSongsPipeline(series, chart),
+                ...(sort ? [
+                    ...this.replaceChartInfoWithPositionPipeline(series, chart),
+                    ...this.getSortPipelineBasedOnDropouts(false)] 
+                    : []
+                ),
                 { '$project': {
                     title: 1,
                     artistDisplay: 1,
@@ -106,7 +111,7 @@ export class ChartDb {
     public async initiateInteractiveChartCreation(seriesName: string, params: InteractiveChartParams): Promise<Record<string, string>> {
         const prevCharts = await this.getXPreviousCharts(seriesName, params.date, params.numberOfCharts)
         const songs = [
-            ...await this.getSongsFromCharts(seriesName, prevCharts),
+            ...await this.getSongsFromCharts(seriesName, prevCharts, params.revealOrder == 'inOrder'),
             ...this.getNewSongs(params.songs)
         ]
         if (params.revealOrder == 'random') {
@@ -453,14 +458,10 @@ export class ChartDb {
         return [{ $sort: { 'position': 1 } }]
     }
 
-    public async getChartSongs(series: string, chartName: string, size?: string, sessionId?: string, dropouts = false): Promise<AggregationCursor<Song>> {
-        return this.db.collection(SONG_COLLECTION).aggregate([
-            // Find all the songs in this chart
-            ...this.getSongsPipeline(series, chartName, size, sessionId, dropouts),
-            ...this.getSizePipeline(series, size),
-            // Remove all chart info for the songs besides the specified chart
-            {
-                $addFields: {
+    public replaceChartInfoWithPositionPipeline(series: string, chartName: string, sessionId?: string,): Record<string, unknown>[] {
+        // Remove all chart info for the songs besides the specified chart
+        return [
+            { $addFields: {
                     chartInfo: {
                         $filter: {
                             input: `$charts.${series}`,
@@ -479,6 +480,15 @@ export class ChartDb {
             { $unwind: '$chartInfo' },
             { $addFields: { position: '$chartInfo.position' } },
             { $project: { chartInfo: 0 } },
+        ]
+    }
+
+    public async getChartSongs(series: string, chartName: string, size?: string, sessionId?: string, dropouts = false): Promise<AggregationCursor<Song>> {
+        return this.db.collection(SONG_COLLECTION).aggregate([
+            // Find all the songs in this chart
+            ...this.getSongsPipeline(series, chartName, size, sessionId, dropouts),
+            ...this.getSizePipeline(series, size),
+            ...this.replaceChartInfoWithPositionPipeline(series, chartName, sessionId),
             ...this.getSortPipelineBasedOnDropouts(dropouts)
         ])
     }
