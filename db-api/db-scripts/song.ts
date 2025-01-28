@@ -69,7 +69,7 @@ export class SongDb {
             this.getMatchPipeline(params),
             {'$count': 'song_count'}
         ]).toArray();
-        return count_object[0].song_count
+        return count_object.length > 0 ? count_object[0].song_count : 0
     }
 
     public async findSong(details: string) {
