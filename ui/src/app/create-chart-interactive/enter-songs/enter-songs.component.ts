@@ -24,7 +24,7 @@ export class EnterSongsComponent {
       numberOfCharts: new FormControl<Number>(1),
       cutOffNumber: new FormControl<Number>(40),
       songs: new FormControl<string>('', hyphenValidator()),
-      revealOrder: new FormControl<'random' | 'inOrder'>('random')
+      revealOrder: new FormControl<'random' | 'inOrder'>('inOrder')
     });
 
     private router: Router
