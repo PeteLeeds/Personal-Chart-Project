@@ -22,7 +22,7 @@ export class EnterSongsComponent {
       date: new FormControl<Date>(new Date()),
       includeSongs: new FormControl<Boolean>(false),
       numberOfCharts: new FormControl<Number>(1),
-      cutOffNumber: new FormControl<Number>(40),
+      cutOffNumber: new FormControl<Number>(100),
       songs: new FormControl<string>('', hyphenValidator()),
       revealOrder: new FormControl<'random' | 'inOrder'>('inOrder')
     });
