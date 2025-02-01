@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { ChartService } from 'src/app/services/chart.service';
 import { Session, SessionSong } from 'src/app/types/chart';
@@ -18,6 +18,7 @@ export class RankSongsComponent {
 
     private activatedRoute: ActivatedRoute
     private chartService: ChartService
+    private subscriptions: Subscription[] = []
 
     public sessionId: string
     public session: Session
@@ -34,7 +35,7 @@ export class RankSongsComponent {
     }
 
     ngOnInit(): void {
-      this.activatedRoute.params.pipe(mergeMap(params => {
+      this.subscriptions.push(this.activatedRoute.params.pipe(mergeMap(params => {
         if (params.session) {
           this.sessionId = params.session
           return this.chartService.getInteractiveSession(this.sessionId)
@@ -42,7 +43,7 @@ export class RankSongsComponent {
         return of({} as Session)
       })).subscribe(res => {
         this.session = res
-      })
+      }))
     }
 
     private updateCurrentSession() {
@@ -97,6 +98,12 @@ export class RankSongsComponent {
       let newSongs = await this.addSongsModal.open() as SessionSong[]
       this.session.songOrder.push(...newSongs)
       this.updateCurrentSession()
+    }
+
+    public ngOnDestroy(): void {
+      for (const subscription of this.subscriptions) {
+        subscription.unsubscribe();
+      }
     }
 
 }

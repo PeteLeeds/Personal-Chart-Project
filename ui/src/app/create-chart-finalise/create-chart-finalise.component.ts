@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ChartService } from '../services/chart.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { FullChart } from '../types/chart';
 import { NewSongsComponent } from '../modals/new-songs/new-songs.component';
@@ -20,6 +20,7 @@ export class CreateChartFinaliseComponent {
   private activatedRoute: ActivatedRoute
   private sessionId: string
   private router: Router
+  private subscriptions: Subscription[] = []
   public chartPreview: FullChart;
 
   constructor(chartService: ChartService, router: Router, activatedRoute: ActivatedRoute) {
@@ -29,7 +30,7 @@ export class CreateChartFinaliseComponent {
   }
 
   public ngOnInit(): void {
-    this.activatedRoute.params.pipe(mergeMap(params => {
+    this.subscriptions.push(this.activatedRoute.params.pipe(mergeMap(params => {
       if (params.session) {
         this.sessionId = params.session
         return this.chartService.getChartPreview(this.sessionId)
@@ -37,7 +38,7 @@ export class CreateChartFinaliseComponent {
       return of({} as FullChart)
     })).subscribe(res => {
       this.chartPreview = res
-    })
+    }))
   }
 
   public async submit(): Promise<void> {
@@ -52,5 +53,11 @@ export class CreateChartFinaliseComponent {
     this.chartService.completeSession(this.sessionId, newSongs).subscribe((res) => {
       this.router.navigate(['../../../..', res.name], { relativeTo: this.activatedRoute })
     })
+  }
+
+  public ngOnDestroy(): void {
+    for (const subscription of this.subscriptions) {
+      subscription.unsubscribe();
+    }
   }
 }
