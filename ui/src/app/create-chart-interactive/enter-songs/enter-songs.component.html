@@ -17,7 +17,7 @@
     </div>
     <div class="centre">
         <label>
-            Count the top <input type="number" value="40" formControlName="cutOffNumber"> songs in the chart
+            Count the top <input type="number" value="100" formControlName="cutOffNumber"> songs in the chart
         </label>
     </div>
     <div>
@@ -34,8 +34,8 @@
     <div>
         <p>Reveal Songs in Order:</p>
         <mat-radio-group formControlName="revealOrder">
-            <mat-radio-button value="random">Random</mat-radio-button>
             <mat-radio-button value="inOrder">In order (existing chart -> previous charts -> new songs)</mat-radio-button>
+            <mat-radio-button value="random">Random</mat-radio-button>
         </mat-radio-group>
     </div>
     <table>
