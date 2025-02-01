@@ -4,6 +4,7 @@ import { ChartService } from 'src/app/services/chart.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import moment from 'moment';
 import { hyphenValidator } from 'src/app/shared/hyphen-validator';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-enter-songs',
@@ -28,6 +29,7 @@ export class EnterSongsComponent {
 
     private router: Router
     private activatedRoute: ActivatedRoute
+    private subscriptions: Subscription[] = []
 
     public seriesName: string
 
@@ -38,11 +40,11 @@ export class EnterSongsComponent {
     }
 
     ngOnInit(): void {
-      this.activatedRoute.parent.params.subscribe((params => {
+      this.subscriptions.push(this.activatedRoute.parent.params.subscribe((params => {
         if (params.series) {
           this.seriesName = params.series
         }
-    }))}
+    })))}
 
     // If we're using reactive forms we are unable to use the [disabled] attribute
     // therefore we need to explicitly disable/enable the textbox
@@ -65,6 +67,12 @@ export class EnterSongsComponent {
       this.chartService.initiateInteractiveChartCreation(this.seriesName, chartParams).subscribe(res => {
         this.router.navigate([res.sessionId, 'rank'], {relativeTo: this.activatedRoute})
       })
+    }
+
+    public ngOnDestroy(): void {
+      for (const subscription of this.subscriptions) {
+        subscription.unsubscribe();
+      }
     }
 
 }
