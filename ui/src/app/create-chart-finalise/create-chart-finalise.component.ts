@@ -40,6 +40,8 @@ export class CreateChartFinaliseComponent {
       return of({} as FullChart)
     })).subscribe(res => {
       this.chartPreview = res
+    }, err => {
+      console.warn('Error retrieving subscription', err)
     }))
   }
 
