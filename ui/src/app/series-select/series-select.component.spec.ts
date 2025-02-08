@@ -8,6 +8,7 @@ import { ChartService } from '../services/chart.service';
 
 import { SeriesSelectComponent } from './series-select.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { CreateSeriesComponent } from '../modals/create-series/create-series.component';
 
 @Component({
     standalone: false
@@ -32,7 +33,7 @@ describe('SeriesSelectComponent', () => {
       }
     );
 
-    @Component({ selector: 'create-series-modal' })
+    @Component({ selector: 'create-series-modal', standalone: true })
     class MockCreateSeriesComponent {
       public open = () => {return 'Test Series'}
     }
@@ -40,7 +41,11 @@ describe('SeriesSelectComponent', () => {
     await TestBed.configureTestingModule({
     imports: [RouterTestingModule.withRoutes(routes), SeriesSelectComponent, MockCreateSeriesComponent],
     providers: [{ provide: ChartService, useValue: mockChartService }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+    }).overrideComponent(SeriesSelectComponent, {
+      remove: { imports: [ CreateSeriesComponent ] },
+      add: { imports: [ MockCreateSeriesComponent ] }
+    })
+
     .compileComponents();
     router = TestBed.inject(Router);
     fixture = TestBed.createComponent(SeriesSelectComponent);
@@ -71,6 +76,7 @@ describe('SeriesSelectComponent', () => {
     const link = fixture.nativeElement.querySelector('div.button')
     link.click()
     tick(1)
+    console.log('CALLS', navigateSpy.calls.all())
     const calledUrl = navigateSpy.calls.first().args[0].toString()
     expect(calledUrl).toContain('/Test%20Series/chart');
   }));
