@@ -42,8 +42,7 @@ export const routes: Routes = [
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule.withRoutes(routes), TestSeriesSelectComponent],
-    declarations: [AppComponent],
+    imports: [RouterTestingModule.withRoutes(routes), TestSeriesSelectComponent, AppComponent],
 }).compileComponents();
   });
 
