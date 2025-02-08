@@ -1,17 +1,20 @@
 import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { ChartService } from 'src/app/services/chart.service';
 import { Session, SessionSong } from 'src/app/types/chart';
 import { faListOl, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { AddSongsComponent } from 'src/app/modals/add-songs/add-songs.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { NgIf, NgFor } from '@angular/common';
+import { AddSongsComponent as AddSongsComponent_1 } from '../../modals/add-songs/add-songs.component';
 
 @Component({
     selector: 'app-rank-songs',
     templateUrl: './rank-songs.component.html',
     styleUrls: ['../../styles/common-styles.css', './rank-songs.component.css'],
-    standalone: false
+    imports: [FaIconComponent, NgIf, NgFor, RouterLink, AddSongsComponent_1]
 })
 export class RankSongsComponent {
     @ViewChild('addSongsModal') private addSongsModal: AddSongsComponent;

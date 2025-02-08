@@ -4,6 +4,7 @@ import { EnterSongsComponent } from './enter-songs.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import {MatNativeDateModule} from '@angular/material/core';
 
 
 describe('EnterSongsComponent', () => {
@@ -18,8 +19,7 @@ describe('EnterSongsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [EnterSongsComponent],
-    imports: [],
+    imports: [EnterSongsComponent, MatNativeDateModule],
     providers: [
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         provideHttpClient(withInterceptorsFromDi()),

@@ -11,8 +11,7 @@ describe('ChartSelectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [ChartSelectComponent],
-    imports: [RouterTestingModule],
+    imports: [RouterTestingModule, ChartSelectComponent],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

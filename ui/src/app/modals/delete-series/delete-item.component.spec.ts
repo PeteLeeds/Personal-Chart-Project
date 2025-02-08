@@ -11,8 +11,7 @@ describe('DeleteItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [DeleteItemComponent],
-    imports: [RouterTestingModule],
+    imports: [RouterTestingModule, DeleteItemComponent],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

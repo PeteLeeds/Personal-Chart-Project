@@ -3,6 +3,7 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CreateChartComponent } from './create-chart.component';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
     template: `Basic`,
@@ -25,11 +26,8 @@ export const routes: Routes = [
 describe('CreateChartComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes)],
-      declarations: [
-        CreateChartComponent,
-      ],
-    }).compileComponents();
+    imports: [RouterTestingModule.withRoutes(routes), CreateChartComponent, MatNativeDateModule],
+}).compileComponents();
   });
 
   it('should create the app', () => {

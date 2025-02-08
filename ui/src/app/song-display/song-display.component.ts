@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ClipboardService } from 'ngx-clipboard';
 import { forkJoin, of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
@@ -11,12 +11,16 @@ import { getChartHistory } from '../shared/get-chart-history';
 import { getFullChartRun } from '../shared/get-chart-run';
 import { AbstractSongInfo } from '../types/song';
 import { faMusic } from '@fortawesome/free-solid-svg-icons';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { NgIf, NgFor } from '@angular/common';
+import { ArtistSelectorComponent } from '../shared/artist-selector.commponent';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
     selector: 'app-song-display',
     templateUrl: './song-display.component.html',
     styleUrls: ['../styles/common-styles.css', './song-display.component.css'],
-    standalone: false
+    imports: [FaIconComponent, NgIf, NgFor, RouterLink, FormsModule, ReactiveFormsModule, ArtistSelectorComponent, MatProgressSpinner, MarkDuplicateComponent]
 })
 export class SongDisplayComponent implements OnInit {
   @ViewChild('markDuplicateModal') private markDuplicateModal: MarkDuplicateComponent;

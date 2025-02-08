@@ -11,8 +11,7 @@ describe('ArtistComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [ArtistComponent],
-    imports: [RouterTestingModule],
+    imports: [RouterTestingModule, ArtistComponent],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

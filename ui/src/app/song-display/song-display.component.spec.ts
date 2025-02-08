@@ -11,8 +11,7 @@ describe('SongDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [SongDisplayComponent],
-    imports: [RouterTestingModule],
+    imports: [RouterTestingModule, SongDisplayComponent],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

@@ -1,17 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators'
 import { DeleteItemComponent } from '../modals/delete-series/delete-item.component';
 import { ModalConfig } from '../modals/modal.config';
 import { ChartService } from '../services/chart.service';
 import { Chart } from '../types/chart';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
     selector: 'app-chart-select',
     templateUrl: './chart-select.component.html',
     styleUrls: ['../styles/common-styles.css', './chart-select.component.css'],
-    standalone: false
+    imports: [RouterLink, NgIf, NgFor, DeleteItemComponent]
 })
 export class ChartSelectComponent implements OnInit {
   @ViewChild('deleteItemModal') private deleteItemModal: DeleteItemComponent;

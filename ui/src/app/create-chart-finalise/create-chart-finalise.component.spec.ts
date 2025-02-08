@@ -15,8 +15,7 @@ describe('CreateChartFinaliseComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [CreateChartFinaliseComponent],
-    imports: [],
+    imports: [CreateChartFinaliseComponent],
     providers: [
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         provideHttpClient(withInterceptorsFromDi()),

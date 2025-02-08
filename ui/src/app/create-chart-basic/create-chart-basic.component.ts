@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,12 +10,14 @@ import { CheckedSong, FormattedSong } from '../types/song';
 import moment from 'moment';
 import { preEmptArtistName } from '../shared/pre-empt-artist-name';
 import { hyphenValidator } from '../shared/hyphen-validator';
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-create-chart',
     templateUrl: './create-chart-basic.component.html',
     styleUrls: ['./create-chart-basic.component.css'],
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule, MatDatepickerInput, MatDatepickerToggle, MatDatepicker, NgIf, NewSongsComponent]
 })
 export class CreateBasicChartComponent implements OnInit {
   @ViewChild('newSongsModal') private newSongsModal: NewSongsComponent;

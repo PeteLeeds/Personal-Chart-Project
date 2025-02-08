@@ -11,8 +11,7 @@ describe('NewSongsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [NewSongsComponent],
-    imports: [RouterTestingModule],
+    imports: [RouterTestingModule, NewSongsComponent],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

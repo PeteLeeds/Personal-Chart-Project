@@ -10,8 +10,7 @@ describe('SongComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [SongComponent],
-    imports: [],
+    imports: [SongComponent],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

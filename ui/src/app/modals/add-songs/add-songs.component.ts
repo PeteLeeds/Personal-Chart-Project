@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ModalTemplateComponent } from '../modal-template/modal-template.component';
 import { ModalConfig } from '../modal.config';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { hyphenValidator } from 'src/app/shared/hyphen-validator';
 import { SessionSong } from 'src/app/types/chart';
 
@@ -9,7 +9,7 @@ import { SessionSong } from 'src/app/types/chart';
     selector: 'add-songs-modal',
     templateUrl: './add-songs.component.html',
     styleUrls: ['./add-songs.component.css'],
-    standalone: false
+    imports: [ModalTemplateComponent, FormsModule, ReactiveFormsModule]
 })
 export class AddSongsComponent {
   @ViewChild('modal') private baseModal: ModalTemplateComponent;

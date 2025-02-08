@@ -1,9 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'; // First, import Input
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms'; // First, import Input
 
 @Component({
     selector: 'search',
     templateUrl: './search.component.html',
-    standalone: false
+    imports: [NgIf, FormsModule]
 })
 export class SearchComponent {
   @Input() type: 'song' | 'artist'

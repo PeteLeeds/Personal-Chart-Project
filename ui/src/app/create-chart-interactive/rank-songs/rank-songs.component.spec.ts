@@ -16,12 +16,11 @@ describe('RankSongsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [
-        {provide: ActivatedRoute, useValue: mockActivatedRoute},
-      ], 
-      imports: [HttpClientModule],
-      declarations: [ RankSongsComponent ]
-    })
+    providers: [
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+    ],
+    imports: [HttpClientModule, RankSongsComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(RankSongsComponent);

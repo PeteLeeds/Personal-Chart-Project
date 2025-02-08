@@ -11,8 +11,7 @@ describe('ArtistDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [ArtistDisplayComponent],
-    imports: [RouterTestingModule],
+    imports: [RouterTestingModule, ArtistDisplayComponent],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

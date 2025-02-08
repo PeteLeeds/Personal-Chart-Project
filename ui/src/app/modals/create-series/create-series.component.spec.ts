@@ -10,8 +10,7 @@ describe('CreateSeriesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [CreateSeriesComponent],
-    imports: [],
+    imports: [CreateSeriesComponent],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

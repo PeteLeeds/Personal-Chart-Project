@@ -11,8 +11,7 @@ describe('MarkDuplicateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [MarkDuplicateComponent],
-    imports: [RouterTestingModule],
+    imports: [RouterTestingModule, MarkDuplicateComponent],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

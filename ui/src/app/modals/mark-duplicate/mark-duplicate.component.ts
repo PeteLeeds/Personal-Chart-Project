@@ -6,12 +6,14 @@ import { ModalTemplateComponent } from '../modal-template/modal-template.compone
 import { ModalConfig } from '../modal.config';
 import { Observable } from 'rxjs';
 import { Artist } from 'src/app/types/artist';
+import { SearchComponent } from '../../shared/search/search.component';
+import { NgFor, NgClass, NgIf } from '@angular/common';
 
 @Component({
     selector: 'mark-duplicate-modal',
     templateUrl: './mark-duplicate.component.html',
     styleUrls: ['./mark-duplicate.component.css'],
-    standalone: false
+    imports: [ModalTemplateComponent, SearchComponent, NgFor, NgClass, NgIf]
 })
 export class MarkDuplicateComponent implements OnInit {
   @ViewChild('modal') private baseModal: ModalTemplateComponent;

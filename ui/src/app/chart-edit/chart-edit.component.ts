@@ -1,16 +1,17 @@
 import { Component } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { mergeMap } from "rxjs/operators";
 import { ChartService } from "../services/chart.service";
 import moment from "moment";
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
 
 @Component({
     selector: 'app-chart-edit',
     templateUrl: './chart-edit.component.html',
     styleUrls: ['./chart-edit.component.css'],
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule, MatDatepickerInput, MatDatepickerToggle, MatDatepicker]
 })
 
 export class ChartEditComponent {

@@ -2,12 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { ArtistService } from '../services/artist.service';
 import { Artist } from '../types/artist';
+import { SearchComponent } from '../shared/search/search.component';
+import { NgIf, NgFor } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-artist',
     templateUrl: './artist.component.html',
     styleUrls: ['../styles/common-styles.css', './artist.component.css'],
-    standalone: false
+    imports: [SearchComponent, NgIf, NgFor, RouterLink]
 })
 export class ArtistComponent implements OnInit {
   private artistService: ArtistService;

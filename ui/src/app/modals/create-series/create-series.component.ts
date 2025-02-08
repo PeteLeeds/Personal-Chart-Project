@@ -2,12 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartService } from 'src/app/services/chart.service';
 import { ModalTemplateComponent } from '../modal-template/modal-template.component';
 import { ModalConfig } from '../modal.config';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'create-series-modal',
     templateUrl: './create-series.component.html',
     styleUrls: ['./create-series.component.css'],
-    standalone: false
+    imports: [ModalTemplateComponent, FormsModule]
 })
 export class CreateSeriesComponent implements OnInit {
   @ViewChild('modal') private baseModal: ModalTemplateComponent;
