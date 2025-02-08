@@ -1,10 +1,13 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core'; // First, import Input
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'artist-selector',
     templateUrl: './artist-selector.component.html',
-    standalone: false
+    imports: [NgFor, FormsModule, NgIf, FaIconComponent]
 })
 export class ArtistSelectorComponent {
   @Input() artists = []; // decorate the property with @Input()

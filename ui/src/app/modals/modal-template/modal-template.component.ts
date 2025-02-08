@@ -1,12 +1,13 @@
 import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalConfig } from '../modal.config';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'custom-modal',
     templateUrl: './modal-template.component.html',
     styleUrls: ['../../styles/common-styles.css', './modal-template.component.scss'],
-    standalone: false
+    imports: [NgIf]
 })
 export class ModalTemplateComponent implements OnInit {
   @Input() public modalConfig: ModalConfig

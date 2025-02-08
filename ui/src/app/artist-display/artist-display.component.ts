@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ClipboardService } from 'ngx-clipboard';
 import { of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
@@ -8,12 +8,16 @@ import { ArtistService } from '../services/artist.service';
 import { getChartHistory } from '../shared/get-chart-history';
 import { Artist } from '../types/artist';
 import { faGuitar } from '@fortawesome/free-solid-svg-icons';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { NgIf, NgFor } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
     selector: 'app-artist-display',
     templateUrl: './artist-display.component.html',
     styleUrls: ['../styles/common-styles.css', './artist-display.component.css'],
-    standalone: false
+    imports: [FaIconComponent, NgIf, FormsModule, NgFor, RouterLink, MatProgressSpinner, MarkDuplicateComponent]
 })
 export class ArtistDisplayComponent implements OnInit {
   @ViewChild('markDuplicateModal') private markDuplicateModal: MarkDuplicateComponent;

@@ -25,11 +25,8 @@ export const routes: Routes = [
 describe('CreateChartComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes)],
-      declarations: [
-        CreateChartComponent,
-      ],
-    }).compileComponents();
+    imports: [RouterTestingModule.withRoutes(routes), CreateChartComponent],
+}).compileComponents();
   });
 
   it('should create the app', () => {

@@ -10,10 +10,7 @@ import { AppComponent } from './app.component';
 })
 class TestHomeComponent {}
 
-@Component({
-    template: `Series`,
-    standalone: false
-})
+@Component({ template: `Series` })
 class TestSeriesSelectComponent {}
 
 @Component({
@@ -45,12 +42,9 @@ export const routes: Routes = [
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes)],
-      declarations: [
-        AppComponent,
-        TestSeriesSelectComponent,
-      ],
-    }).compileComponents();
+    imports: [RouterTestingModule.withRoutes(routes), TestSeriesSelectComponent],
+    declarations: [AppComponent],
+}).compileComponents();
   });
 
   it('should create the app', () => {

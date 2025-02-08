@@ -1,16 +1,18 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartService } from 'src/app/services/chart.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import moment from 'moment';
 import { hyphenValidator } from 'src/app/shared/hyphen-validator';
 import { Subscription } from 'rxjs';
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
     selector: 'app-enter-songs',
     templateUrl: './enter-songs.component.html',
     styleUrls: ['../../styles/common-styles.css', './enter-songs.component.css'],
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule, MatDatepickerInput, MatDatepickerToggle, MatDatepicker, MatRadioGroup, MatRadioButton]
 })
 export class EnterSongsComponent {
 

@@ -11,8 +11,7 @@ describe('TotalsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [TotalsComponent],
-    imports: [RouterTestingModule],
+    imports: [RouterTestingModule, TotalsComponent],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

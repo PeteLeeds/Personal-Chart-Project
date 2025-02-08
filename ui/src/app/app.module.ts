@@ -39,9 +39,21 @@ import { RankSongsComponent } from './create-chart-interactive/rank-songs/rank-s
 import { CreateChartFinaliseComponent } from './create-chart-finalise/create-chart-finalise.component';
 import { AddSongsComponent } from './modals/add-songs/add-songs.component';
 
-@NgModule({ declarations: [
-        AppComponent,
-        ChartDisplayComponent,
+@NgModule({ declarations: [AppComponent],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        CommonModule,
+        ReactiveFormsModule,
+        MatDatepickerModule,
+        MatMomentDateModule,
+        BrowserAnimationsModule,
+        FontAwesomeModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        ClipboardModule,
+        MatProgressSpinnerModule,
+        MatRadioModule, ChartDisplayComponent,
         ChartSelectComponent,
         SeriesSelectComponent,
         ModalTemplateComponent,
@@ -63,20 +75,5 @@ import { AddSongsComponent } from './modals/add-songs/add-songs.component';
         EnterSongsComponent,
         RankSongsComponent,
         CreateChartFinaliseComponent,
-        AddSongsComponent
-    ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
-        AppRoutingModule,
-        FormsModule,
-        CommonModule,
-        ReactiveFormsModule,
-        MatDatepickerModule,
-        MatMomentDateModule,
-        BrowserAnimationsModule,
-        FontAwesomeModule,
-        MatSelectModule,
-        MatFormFieldModule,
-        ClipboardModule,
-        MatProgressSpinnerModule,
-        MatRadioModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        AddSongsComponent], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }

@@ -69,8 +69,7 @@ describe('ChartDisplayComponent', () => {
     );
 
     await TestBed.configureTestingModule({
-    declarations: [ChartDisplayComponent],
-    imports: [RouterTestingModule.withRoutes(routes)],
+    imports: [RouterTestingModule.withRoutes(routes), ChartDisplayComponent],
     providers: [
         { provide: ChartService, useValue: mockChartService },
         { provide: ActivatedRoute, useValue: new ActivatedRouterMock() },

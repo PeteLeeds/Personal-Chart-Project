@@ -11,8 +11,7 @@ describe('ChartEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [ChartEditComponent],
-    imports: [RouterTestingModule],
+    imports: [RouterTestingModule, ChartEditComponent],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

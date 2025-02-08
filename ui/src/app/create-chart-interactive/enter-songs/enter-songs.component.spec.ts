@@ -18,8 +18,7 @@ describe('EnterSongsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [EnterSongsComponent],
-    imports: [],
+    imports: [EnterSongsComponent],
     providers: [
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         provideHttpClient(withInterceptorsFromDi()),

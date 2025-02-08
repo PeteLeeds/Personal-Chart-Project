@@ -32,17 +32,13 @@ describe('SeriesSelectComponent', () => {
       }
     );
 
-    @Component({
-    selector: 'create-series-modal',
-    standalone: false
-})
+    @Component({ selector: 'create-series-modal' })
     class MockCreateSeriesComponent {
       public open = () => {return 'Test Series'}
     }
     
     await TestBed.configureTestingModule({
-    declarations: [SeriesSelectComponent, MockCreateSeriesComponent],
-    imports: [RouterTestingModule.withRoutes(routes)],
+    imports: [RouterTestingModule.withRoutes(routes), SeriesSelectComponent, MockCreateSeriesComponent],
     providers: [{ provide: ChartService, useValue: mockChartService }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

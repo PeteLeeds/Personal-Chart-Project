@@ -19,8 +19,7 @@ describe('CreateBasicChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [CreateBasicChartComponent],
-    imports: [RouterTestingModule],
+    imports: [RouterTestingModule, CreateBasicChartComponent],
     providers: [
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         provideHttpClient(withInterceptorsFromDi()),

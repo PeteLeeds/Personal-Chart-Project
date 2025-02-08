@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { of, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { DeleteItemComponent } from '../modals/delete-series/delete-item.component';
@@ -8,6 +8,9 @@ import { AbstractSongInfo } from '../types/song';
 import { faPenSquare, faTrash, faPlus, faCopy } from '@fortawesome/free-solid-svg-icons';
 import { FullChart } from '../types/chart';
 import { ClipboardService } from 'ngx-clipboard';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { NgIf, NgFor } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 const CHART_SIZES = [10, 20, 40, 75]
 
@@ -15,7 +18,7 @@ const CHART_SIZES = [10, 20, 40, 75]
     selector: 'app-chart-display',
     templateUrl: './chart-display.component.html',
     styleUrls: ['../styles/common-styles.css', './chart-display.component.css'],
-    standalone: false
+    imports: [FaIconComponent, RouterLink, NgIf, NgFor, DeleteItemComponent, MatProgressSpinner]
 })
 
 export class ChartDisplayComponent implements OnInit {
