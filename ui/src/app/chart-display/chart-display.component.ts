@@ -101,6 +101,15 @@ export class ChartDisplayComponent implements OnInit {
     this.clipboardService.copyFromContent(chartString)
   }
 
+  public copyChartSongs() {
+    let chartString = ""
+    for (const song of this.chartData) {
+      chartString += `${song.artistDisplay} - ${song.title}\n`
+    }
+    this.clipboardService.copyFromContent(chartString)
+  }
+
+
   public copyBBCode() {
     this.chartService.getChartString(this.seriesName, this.chartName).subscribe((chartString: string) => 
       this.clipboardService.copyFromContent(chartString)
