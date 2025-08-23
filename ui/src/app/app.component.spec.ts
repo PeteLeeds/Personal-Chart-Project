@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Routes } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 
 @Component({
@@ -42,7 +41,8 @@ export const routes: Routes = [
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule.withRoutes(routes), TestSeriesSelectComponent, AppComponent],
+    imports: [TestSeriesSelectComponent, AppComponent],
+    providers: [provideRouter(routes)],
 }).compileComponents();
   });
 
