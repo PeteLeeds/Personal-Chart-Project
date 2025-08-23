@@ -1,9 +1,9 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from "@angular/router/testing";
 import { ChartEditComponent } from './chart-edit.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MatNativeDateModule } from '@angular/material/core';
+import { provideRouter } from '@angular/router';
 
 
 describe('ChartEditComponent', () => {
@@ -12,8 +12,12 @@ describe('ChartEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, ChartEditComponent, MatNativeDateModule],
-    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+    imports: [ChartEditComponent, MatNativeDateModule],
+    providers: [
+      provideHttpClient(withInterceptorsFromDi()), 
+      provideHttpClientTesting(),
+      provideRouter([])
+    ]
 })
     .compileComponents();
   });

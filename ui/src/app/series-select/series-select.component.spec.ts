@@ -1,8 +1,7 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Router, Routes } from '@angular/router';
-import { RouterTestingModule } from "@angular/router/testing";
+import { provideRouter, Router, Routes } from '@angular/router';
 import { of } from 'rxjs';
 import { ChartService } from '../services/chart.service';
 
@@ -39,8 +38,13 @@ describe('SeriesSelectComponent', () => {
     }
     
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule.withRoutes(routes), SeriesSelectComponent, MockCreateSeriesComponent],
-    providers: [{ provide: ChartService, useValue: mockChartService }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+    imports: [SeriesSelectComponent, MockCreateSeriesComponent],
+    providers: [
+      { provide: ChartService, useValue: mockChartService }, 
+      provideHttpClient(withInterceptorsFromDi()), 
+      provideHttpClientTesting(),
+      provideRouter(routes)
+    ]
     }).overrideComponent(SeriesSelectComponent, {
       remove: { imports: [ CreateSeriesComponent ] },
       add: { imports: [ MockCreateSeriesComponent ] }

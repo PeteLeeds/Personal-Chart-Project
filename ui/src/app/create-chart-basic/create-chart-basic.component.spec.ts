@@ -1,6 +1,5 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { CreateBasicChartComponent } from './create-chart-basic.component';
 import { of } from 'rxjs';
@@ -20,7 +19,7 @@ describe('CreateBasicChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, CreateBasicChartComponent, MatNativeDateModule],
+    imports: [CreateBasicChartComponent, MatNativeDateModule],
     providers: [
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         provideHttpClient(withInterceptorsFromDi()),

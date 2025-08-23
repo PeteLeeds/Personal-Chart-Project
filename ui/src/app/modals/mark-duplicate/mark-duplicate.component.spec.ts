@@ -1,6 +1,5 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from "@angular/router/testing";
 import { MarkDuplicateComponent } from './mark-duplicate.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
@@ -11,7 +10,7 @@ describe('MarkDuplicateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, MarkDuplicateComponent],
+    imports: [MarkDuplicateComponent],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

@@ -1,6 +1,5 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { TotalsComponent } from './totals.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {MatNativeDateModule} from '@angular/material/core';
@@ -12,7 +11,7 @@ describe('TotalsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, TotalsComponent, MatNativeDateModule],
+    imports: [TotalsComponent, MatNativeDateModule],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();
