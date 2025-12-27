@@ -247,6 +247,7 @@ export class ChartDb {
                 const existingSong = await this.db.collection<Song>(SONG_COLLECTION).findOne({ $and: [{ artistDisplay }, { title }] })
                 if (existingSong) {
                     song._id = existingSong._id.toString()
+                    await this.updateChartWeek(song._id, seriesName, params.name, newChartPositions[0], sessionId)
                 } else {
                     const artistIds = await this.getArtistIds(song)
                     if (nextChart) {
@@ -498,7 +499,15 @@ export class ChartDb {
             { $match: { name: series } },
             { $unwind: "$charts" },
             { $replaceRoot: { newRoot: "$charts" } },
-            { $match: { name: chart } },
+            { $match: {
+                $and: [
+                    { name: chart },
+                    {$or: [
+                        {sessionId: {$exists: false}},
+                        {sessionId}
+                    ]}
+                ]}
+            },
         ]).toArray())
         const chartDate = chartDateArray[0].date
         console.log('get previous', JSON.stringify(chart));
