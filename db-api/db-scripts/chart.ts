@@ -409,12 +409,12 @@ export class ChartDb {
 
         const prevChartNames = previousCharts.map(chart => chart.name);
         const songsWithStats = songs.map((song: Song) => {
-            // Index '1' is correct here as '0' will be the current chart
-            if (!song.charts) {
+            const {charts, ...songMinusCharts} = song
+            if (!charts) {
                 throw new Error(`Song ${song.title} has no charts!`);
             }
-            const currentSeries = song.charts[series]
-            const charts = currentSeries.filter(
+            const currentSeries = charts[series]
+            const matchingCharts = currentSeries.filter(
                 chart => {
                     if (chart.position == DROPOUT) {
                         return false
@@ -427,17 +427,18 @@ export class ChartDb {
                     return false
                 }
             );
-            const lastChartRecord = charts.find(chart => chart.chart === prevChartNames[1] && !chart.sessionId)
-            charts.sort((a, b) => a.position - b.position);
+            const lastChartRecord = matchingCharts.find(chart => chart.chart === prevChartNames[1] && !chart.sessionId)
+            matchingCharts.sort((a, b) => a.position - b.position);
             return {
-              ...song,
+              ...songMinusCharts,
               lastWeek: lastChartRecord?.position,
-              weeksOn: charts.length,
-              peak: charts[0].position,
+              weeksOn: matchingCharts.length,
+              peak: matchingCharts[0].position,
             }
           });
 
         return {
+            // Index '1' is correct here as '0' will be the current chart
             lastChart: previousCharts[1].name,
             nextChart,
             songs: songsWithStats,
