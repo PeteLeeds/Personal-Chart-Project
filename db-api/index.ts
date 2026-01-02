@@ -3,7 +3,6 @@ import { ChartDb } from './db-scripts/chart';
 import { MONGO_DB, MONGO_URI } from './config'
 import Express from 'express'
 import { ServerRouter } from './routes';
-import BodyParser from 'body-parser'
 import { SongDb } from './db-scripts/song';
 import { ArtistDb } from './db-scripts/artist';
 
@@ -40,8 +39,7 @@ class App {
         const database = db.db(MONGO_DB);
         const db2 = new Database(ChartDb.init(database), SongDb.init(database), ArtistDb.init(database));
 
-        app.use(BodyParser.urlencoded({ extended: true }))
-        app.use(BodyParser.json())
+        app.use(Express.urlencoded({ extended: true }))
 
         app.use((_, res, next) => {
             res.locals = { db: db2 }
