@@ -35,8 +35,8 @@
             <tr>
                 <th>Debut</th>
                 <th>Song</th>
-                <th>Weeks On</th>
                 <th>Peak</th>
+                <th>Weeks On</th>
             </tr>
             <ng-container *ngFor="let song of artistInfo.songs">
                 <tr>
@@ -49,8 +49,8 @@
                             </div>
                         </a>
                     </td>
-                    <td class="text-center">{{song.weeksOn}}</td>
                     <td class="text-center">{{song.peak}}</td>
+                    <td class="text-center">{{song.weeksOn}}</td>
                 </tr>
             </ng-container>
         </table>
