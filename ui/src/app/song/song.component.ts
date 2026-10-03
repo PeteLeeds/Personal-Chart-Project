@@ -4,14 +4,14 @@ import { SongService } from '../services/song.service';
 import { FullSongInfo } from '../types/song';
 import { SearchComponent } from '../shared/search/search.component';
 import { FormsModule } from '@angular/forms';
-import { NgFor, NgIf } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-song',
     templateUrl: './song.component.html',
     styleUrls: ['../styles/common-styles.css', './song.component.css'],
-    imports: [SearchComponent, FormsModule, NgFor, NgIf, RouterLink]
+    imports: [SearchComponent, FormsModule, RouterLink]
 })
 export class SongComponent implements OnInit {
 

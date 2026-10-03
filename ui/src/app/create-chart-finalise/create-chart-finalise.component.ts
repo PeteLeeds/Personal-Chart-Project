@@ -6,14 +6,14 @@ import { mergeMap } from 'rxjs/operators';
 import { FullChart } from '../types/chart';
 import { NewSongsComponent } from '../modals/new-songs/new-songs.component';
 import { preEmptArtistName } from '../shared/pre-empt-artist-name';
-import { NgIf, NgFor } from '@angular/common';
+
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
     selector: 'app-create-chart-finalise',
     templateUrl: './create-chart-finalise.component.html',
     styleUrls: ['../styles/common-styles.css', './create-chart-finalise.component.css'],
-    imports: [NgIf, NgFor, RouterLink, MatProgressSpinner, NewSongsComponent]
+    imports: [RouterLink, MatProgressSpinner, NewSongsComponent]
 })
 export class CreateChartFinaliseComponent {
   @ViewChild('newSongsModal') private newSongsModal: NewSongsComponent;

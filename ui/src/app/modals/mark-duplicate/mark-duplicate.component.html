@@ -1,11 +1,17 @@
 <custom-modal #modal [modalConfig]="modalConfig">
-    <b>Please search for the {{type}} this is a duplicate of:</b>
-    <search [type]="type" (changeEvent)="reloadSuggestions($event)"></search>
-    <div (click)="selectItem(item)" 
-        [ngClass]="item._id === selectedId ? 'bold' : 'fake-link'" 
-        *ngFor="let item of suggestions">
-        <!-- *ngIf to prevent us making a song a duplicate of itself -->
-        <p *ngIf="type === 'song' && !(id === item._id)">{{item.artistDisplay}} - {{item.title}}</p>
-        <p *ngIf="type === 'artist' && !(id === item._id)">{{item.name}}</p>
+  <b>Please search for the {{type}} this is a duplicate of:</b>
+  <search [type]="type" (changeEvent)="reloadSuggestions($event)"></search>
+  @for (item of suggestions; track item) {
+    <div (click)="selectItem(item)"
+      [ngClass]="item._id === selectedId ? 'bold' : 'fake-link'"
+      >
+      <!-- *ngIf to prevent us making a song a duplicate of itself -->
+      @if (type === 'song' && !(id === item._id)) {
+        <p>{{item.artistDisplay}} - {{item.title}}</p>
+      }
+      @if (type === 'artist' && !(id === item._id)) {
+        <p>{{item.name}}</p>
+      }
     </div>
+  }
 </custom-modal>

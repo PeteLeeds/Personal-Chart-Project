@@ -1,17 +1,17 @@
 <a class="right">
-    <div class="button" (click)="openModal()">
-        Create new series
-    </div>
+  <div class="button" (click)="openModal()">
+    Create new series
+  </div>
 </a>
 <h1>Select a Series</h1>
 
 
-<ng-container *ngFor="let series of seriesList">
-    <a [routerLink]="[series.name, 'chart']">
-        <div class="select-option">
-            <p>{{series.name}}</p>
-        </div>
-    </a>
-</ng-container>
+@for (series of seriesList; track series) {
+  <a [routerLink]="[series.name, 'chart']">
+    <div class="select-option">
+      <p>{{series.name}}</p>
+    </div>
+  </a>
+}
 
 <create-series-modal #createSeriesModal></create-series-modal>

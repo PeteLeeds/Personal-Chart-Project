@@ -9,7 +9,7 @@ import { faPenSquare, faTrash, faPlus, faCopy } from '@fortawesome/free-solid-sv
 import { FullChart } from '../types/chart';
 import { ClipboardService } from 'ngx-clipboard';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf, NgFor } from '@angular/common';
+
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 const CHART_SIZES = [10, 20, 40, 75]
@@ -18,7 +18,7 @@ const CHART_SIZES = [10, 20, 40, 75]
     selector: 'app-chart-display',
     templateUrl: './chart-display.component.html',
     styleUrls: ['../styles/common-styles.css', './chart-display.component.css'],
-    imports: [FaIconComponent, RouterLink, NgIf, NgFor, DeleteItemComponent, MatProgressSpinner]
+    imports: [FaIconComponent, RouterLink, DeleteItemComponent, MatProgressSpinner]
 })
 
 export class ChartDisplayComponent implements OnInit {

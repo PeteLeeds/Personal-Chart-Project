@@ -6,13 +6,13 @@ import { DeleteItemComponent } from '../modals/delete-series/delete-item.compone
 import { ModalConfig } from '../modals/modal.config';
 import { ChartService } from '../services/chart.service';
 import { Chart } from '../types/chart';
-import { NgIf, NgFor } from '@angular/common';
+
 
 @Component({
     selector: 'app-chart-select',
     templateUrl: './chart-select.component.html',
     styleUrls: ['../styles/common-styles.css', './chart-select.component.css'],
-    imports: [RouterLink, NgIf, NgFor, DeleteItemComponent]
+    imports: [RouterLink, DeleteItemComponent]
 })
 export class ChartSelectComponent implements OnInit {
   @ViewChild('deleteItemModal') private deleteItemModal: DeleteItemComponent;

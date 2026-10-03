@@ -4,7 +4,7 @@ import { ChartService } from '../services/chart.service';
 import { SongService } from '../services/song.service';
 import { ExportToCsv } from 'export-to-csv';
 import { getFullChartRun } from '../shared/get-chart-run';
-import { NgFor, NgIf } from '@angular/common';
+
 import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
@@ -13,7 +13,7 @@ import { RouterLink } from '@angular/router';
     selector: 'totals',
     templateUrl: './totals.component.html',
     styleUrls: ['../styles/common-styles.css', './totals.component.css'],
-    imports: [FormsModule, ReactiveFormsModule, NgFor, MatDatepickerInput, MatDatepickerToggle, MatDatepicker, NgIf, MatProgressSpinner, RouterLink]
+    imports: [FormsModule, ReactiveFormsModule, MatDatepickerInput, MatDatepickerToggle, MatDatepicker, MatProgressSpinner, RouterLink]
 })
 export class TotalsComponent {
 

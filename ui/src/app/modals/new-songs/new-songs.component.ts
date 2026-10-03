@@ -3,7 +3,7 @@ import { ModalTemplateComponent } from '../modal-template/modal-template.compone
 import { ModalConfig } from '../modal.config';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { FormattedSong } from 'src/app/types/song';
-import { NgFor, NgIf } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { ArtistSelectorComponent } from '../../shared/artist-selector.commponent';
 
@@ -11,7 +11,7 @@ import { ArtistSelectorComponent } from '../../shared/artist-selector.commponent
     selector: 'new-songs-modal',
     templateUrl: './new-songs.component.html',
     styleUrls: ['./new-songs.component.css'],
-    imports: [ModalTemplateComponent, NgFor, NgIf, FormsModule, ArtistSelectorComponent]
+    imports: [ModalTemplateComponent, FormsModule, ArtistSelectorComponent]
 })
 export class NewSongsComponent implements OnInit {
   @ViewChild('modal') private baseModal: ModalTemplateComponent;

@@ -1,23 +1,27 @@
 <p>Number of songs: {{songCount}}</p>
 <search [type]="'song'" (changeEvent)="setParams($event)"></search>
 <div>
-    <b>Sort By:</b>
-    <select [(ngModel)]="sortBy" (change)="reloadSongs()">
-        <ng-container *ngFor="let option of sortOptions">
-            <option>{{option}}</option>
-        </ng-container>
-    </select>
+  <b>Sort By:</b>
+  <select [(ngModel)]="sortBy" (change)="reloadSongs()">
+    @for (option of sortOptions; track option) {
+      <option>{{option}}</option>
+    }
+  </select>
 </div>
 <div class="row">
-    <div *ngIf="pageNumber > 1" class="button" (click)="decPageNumber()">Previous Page</div>
-    <div *ngIf="songCount && songCount > pageNumber * 20" class="button" (click)="incPageNumber()">Next Page</div>    
+  @if (pageNumber > 1) {
+    <div class="button" (click)="decPageNumber()">Previous Page</div>
+  }
+  @if (songCount && songCount > pageNumber * 20) {
+    <div class="button" (click)="incPageNumber()">Next Page</div>
+  }
 </div>
 
-<ng-container *ngFor="let song of songs">
-    <a [routerLink]="['/song', song._id]">
-        <div class="select-option">
-            <div><b>{{song.title}}</b></div>
-            <div><i>{{song.artistDisplay}}</i></div>
-        </div>
-    </a>
-</ng-container>
+@for (song of songs; track song) {
+  <a [routerLink]="['/song', song._id]">
+    <div class="select-option">
+      <div><b>{{song.title}}</b></div>
+      <div><i>{{song.artistDisplay}}</i></div>
+    </div>
+  </a>
+}

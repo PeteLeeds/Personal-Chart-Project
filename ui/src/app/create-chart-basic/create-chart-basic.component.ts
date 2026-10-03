@@ -11,13 +11,13 @@ import moment from 'moment';
 import { preEmptArtistName } from '../shared/pre-empt-artist-name';
 import { hyphenValidator } from '../shared/hyphen-validator';
 import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'app-create-chart',
     templateUrl: './create-chart-basic.component.html',
     styleUrls: ['./create-chart-basic.component.css'],
-    imports: [FormsModule, ReactiveFormsModule, MatDatepickerInput, MatDatepickerToggle, MatDatepicker, NgIf, NewSongsComponent]
+    imports: [FormsModule, ReactiveFormsModule, MatDatepickerInput, MatDatepickerToggle, MatDatepicker, NewSongsComponent]
 })
 export class CreateBasicChartComponent implements OnInit {
   @ViewChild('newSongsModal') private newSongsModal: NewSongsComponent;

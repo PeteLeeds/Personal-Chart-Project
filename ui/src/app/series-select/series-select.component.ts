@@ -4,13 +4,13 @@ import { Subscription } from 'rxjs';
 import { CreateSeriesComponent } from '../modals/create-series/create-series.component';
 import { ModalConfig } from '../modals/modal.config';
 import { ChartService } from '../services/chart.service';
-import { NgFor } from '@angular/common';
+
 
 @Component({
     selector: 'app-series-select',
     templateUrl: './series-select.component.html',
     styleUrls: ['../styles/common-styles.css', './series-select.component.css'],
-    imports: [NgFor, RouterLink, CreateSeriesComponent]
+    imports: [RouterLink, CreateSeriesComponent]
 })
 export class SeriesSelectComponent implements OnInit {
   @ViewChild('createSeriesModal') private createSeriesModal: CreateSeriesComponent;

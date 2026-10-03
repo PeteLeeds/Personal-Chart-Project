@@ -1,92 +1,103 @@
 <div class="container">
-    <div class="song-header text-center">
-        <div id="song-square">
-            <div id="center-music-note">
-                <fa-icon [icon]="faMusic" class="fa-lg"></fa-icon>
-            </div>
-        </div>
-        <!-- This is displayed if just looking at the song page -->
-        <div id="song-details" *ngIf="!editMode">
-            <div class="xlarge"><i>{{songInfo?.artistDisplay}}</i></div>
-            <div class="xxlarge"><b>{{songInfo?.title}}</b></div>
-            <div class="xlarge">Artists: 
-                <span *ngFor="let artist of songInfo?.artists">
-                    <a class="artist-link" [routerLink]="['/artist', artist._id]">{{artist.name}}</a>
-                </span>
-            </div>
-        </div>
-        <!-- This is displayed when song details are being edited -->
-        <div *ngIf="editMode">
-            <div>
-                <form [formGroup]="songDetailsForm">
-        
-                    <label for="title">Title Section: </label>
-                    <input id="title" type="text" formControlName="title"><br>
-        
-                    <label for="artist-display">Artist Section: </label>
-                    <input id="artist-display" type="text" formControlName="artistDisplay">
-                    <artist-selector [artists]="artistNames" (artistsChangeEvent)="updateArtists($event)">
-                    </artist-selector>
-                </form>
-                <button (click)="updateSongDetails()">Save</button>
-                <button (click)="exitEditMode()">Cancel</button>
-            </div>
-        </div>
+  <div class="song-header text-center">
+    <div id="song-square">
+      <div id="center-music-note">
+        <fa-icon [icon]="faMusic" class="fa-lg"></fa-icon>
+      </div>
     </div>
-    <div>
-        Selected Series:
-        <select *ngIf="chartSelectOptions" [(ngModel)]="selectedSeries" (click)="reloadSongDetails()">
-            <ng-container *ngFor="let chart of chartSelectOptions">
-                <option>{{chart}}</option>
-            </ng-container>
-        </select>
-    </div>
-    <h2>Chart Stats</h2>
-    <div>
-        <div class="infobox text-center">
-            <table>
-                <tr>
-                    <td>Weeks on Chart</td>
-                    <td>Peak Position</td>
-                </tr>
-                <tr>
-                    <td>{{songInfo.weeksOn}}</td>
-                    <td>{{songInfo.peak}}</td>
-                </tr>
-            </table>
+    <!-- This is displayed if just looking at the song page -->
+    @if (!editMode) {
+      <div id="song-details">
+        <div class="xlarge"><i>{{songInfo?.artistDisplay}}</i></div>
+        <div class="xxlarge"><b>{{songInfo?.title}}</b></div>
+        <div class="xlarge">Artists:
+          @for (artist of songInfo?.artists; track artist) {
+            <span>
+              <a class="artist-link" [routerLink]="['/artist', artist._id]">{{artist.name}}</a>
+            </span>
+          }
         </div>
-    </div>
-    <div class="top-right">
-        <div class="dropdown">
-            <p class="fake-link">Options</p>
-            <div class="dropdown-content">
-                <div class="dropdown-option" (click)="enterEditMode()">Edit Details</div>
-                <div class="dropdown-option" (click)="markDuplicate()">Mark as Duplicate</div>
-                <div class="dropdown-option" (click)="copyDisplay()">Copy BBCode Display</div>
-            </div>
+      </div>
+    }
+    <!-- This is displayed when song details are being edited -->
+    @if (editMode) {
+      <div>
+        <div>
+          <form [formGroup]="songDetailsForm">
+            <label for="title">Title Section: </label>
+            <input id="title" type="text" formControlName="title"><br>
+            <label for="artist-display">Artist Section: </label>
+            <input id="artist-display" type="text" formControlName="artistDisplay">
+            <artist-selector [artists]="artistNames" (artistsChangeEvent)="updateArtists($event)">
+            </artist-selector>
+          </form>
+          <button (click)="updateSongDetails()">Save</button>
+          <button (click)="exitEditMode()">Cancel</button>
         </div>
+      </div>
+    }
+  </div>
+  <div>
+    Selected Series:
+    @if (chartSelectOptions) {
+      <select [(ngModel)]="selectedSeries" (click)="reloadSongDetails()">
+        @for (chart of chartSelectOptions; track chart) {
+          <option>{{chart}}</option>
+        }
+      </select>
+    }
+  </div>
+  <h2>Chart Stats</h2>
+  <div>
+    <div class="infobox text-center">
+      <table>
+        <tr>
+          <td>Weeks on Chart</td>
+          <td>Peak Position</td>
+        </tr>
+        <tr>
+          <td>{{songInfo.weeksOn}}</td>
+          <td>{{songInfo.peak}}</td>
+        </tr>
+      </table>
     </div>
-    <h2>Chart History</h2>
-    <ng-container *ngIf="songInfo?.chartRuns; else loading">
-        <div *ngFor="let run of songInfo.chartRuns; let i = index">
-            <div class="text-center">
-                <p class="run-header">Chart run {{i + 1}}</p>
-                <p>{{run[0].chart}} - {{run[run.length - 1].chart}}</p>
-            </div>
-            <div class="chart-run-container">
-                <a *ngFor="let val of run" class="position-link"
-                    [routerLink]="['/series', selectedSeries, 'chart', val.chart]">
-                    <div class="position" [class.peak]="val.position === songInfo.peak">
-                        <span class="tooltiptext">{{val.chart}}</span>
-                        <p><b>{{val.position}}</b></p>
-                    </div>
-                </a>
-            </div>
+  </div>
+  <div class="top-right">
+    <div class="dropdown">
+      <p class="fake-link">Options</p>
+      <div class="dropdown-content">
+        <div class="dropdown-option" (click)="enterEditMode()">Edit Details</div>
+        <div class="dropdown-option" (click)="markDuplicate()">Mark as Duplicate</div>
+        <div class="dropdown-option" (click)="copyDisplay()">Copy BBCode Display</div>
+      </div>
+    </div>
+  </div>
+  <h2>Chart History</h2>
+  @if (songInfo?.chartRuns) {
+    @for (run of songInfo.chartRuns; track run; let i = $index) {
+      <div>
+        <div class="text-center">
+          <p class="run-header">Chart run {{i + 1}}</p>
+          <p>{{run[0].chart}} - {{run[run.length - 1].chart}}</p>
         </div>
-        <button (click)="copyChartRun()">Copy BBCode To Clipboard</button>
-    </ng-container>
+        <div class="chart-run-container">
+          @for (val of run; track val) {
+            <a class="position-link"
+              [routerLink]="['/series', selectedSeries, 'chart', val.chart]">
+              <div class="position" [class.peak]="val.position === songInfo.peak">
+                <span class="tooltiptext">{{val.chart}}</span>
+                <p><b>{{val.position}}</b></p>
+              </div>
+            </a>
+          }
+        </div>
+      </div>
+    }
+    <button (click)="copyChartRun()">Copy BBCode To Clipboard</button>
+  } @else {
+    <mat-spinner></mat-spinner>
+  }
 </div>
 
-<ng-template #loading><mat-spinner></mat-spinner></ng-template>
 
 <mark-duplicate-modal #markDuplicateModal></mark-duplicate-modal>

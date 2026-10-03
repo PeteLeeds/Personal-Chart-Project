@@ -7,14 +7,14 @@ import { Session, SessionSong } from 'src/app/types/chart';
 import { faListOl, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { AddSongsComponent } from 'src/app/modals/add-songs/add-songs.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf, NgFor } from '@angular/common';
+
 import { AddSongsComponent as AddSongsComponent_1 } from '../../modals/add-songs/add-songs.component';
 
 @Component({
     selector: 'app-rank-songs',
     templateUrl: './rank-songs.component.html',
     styleUrls: ['../../styles/common-styles.css', './rank-songs.component.css'],
-    imports: [FaIconComponent, NgIf, NgFor, RouterLink, AddSongsComponent_1]
+    imports: [FaIconComponent, RouterLink, AddSongsComponent_1]
 })
 export class RankSongsComponent {
     @ViewChild('addSongsModal') private addSongsModal: AddSongsComponent;
