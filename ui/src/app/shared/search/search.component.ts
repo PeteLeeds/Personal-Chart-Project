@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms'; // First, import Input
     imports: [FormsModule]
 })
 export class SearchComponent {
-  @Input() type: 'song' | 'artist'
+  @Input() type: 'song' | 'artist' = 'artist'
   @Output() changeEvent = new EventEmitter<Record<string, string>>();
 
   public title = ''

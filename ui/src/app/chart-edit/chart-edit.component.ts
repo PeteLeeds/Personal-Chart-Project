@@ -6,6 +6,7 @@ import { mergeMap } from "rxjs/operators";
 import { ChartService } from "../services/chart.service";
 import moment from "moment";
 import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
+import { Chart } from "../types/chart";
 
 @Component({
     selector: 'app-chart-edit',
@@ -21,9 +22,9 @@ export class ChartEditComponent {
     private chartService: ChartService;
     public useDateAsTitle = false
 
-    public seriesName: string;
-    public originalChartName: string;
-    public chartDate: string;
+    public seriesName: string | undefined;
+    public originalChartName: string | undefined;
+    public chartDate: string | undefined;
 
     public chartForm = new FormGroup({
         name: new FormControl<string>({ value: '', disabled: this.useDateAsTitle }),
@@ -43,8 +44,9 @@ export class ChartEditComponent {
                     this.seriesName = params.series
                     this.originalChartName = params.name
                     this.chartForm.controls.name.setValue(params.name)
-                    return this.chartService.getChartDate(this.seriesName, this.originalChartName)
+                    return this.chartService.getChartDate(params.series, params.name)
                 }
+                return this.chartService.getChartDate('', '')
             })).subscribe(res => {
                 this.chartForm.controls.date.setValue(new Date(res))
                 this.chartDate = res;
@@ -68,8 +70,18 @@ export class ChartEditComponent {
             chartParams.date = moment(chartParams.date).toDate()
             chartParams.name = chartParams.date.toDateString();
         }
+
+        if (!this.seriesName) {
+            throw new Error('seriesName is not defined')
+        }
+        if (!this.originalChartName) {
+            throw new Error('originalChartName is not defined')
+        }
+        if (!chartParams.name || !chartParams.date) {
+            throw new Error('chartParams are not defined correctly')
+        }
     
-        this.chartService.updateChart(this.seriesName, this.originalChartName, chartParams).subscribe(() => { 
+        this.chartService.updateChart(this.seriesName, this.originalChartName, chartParams as Chart).subscribe(() => { 
             console.log('Chart Updated');
             this.router.navigate(['../..', chartParams.name], { relativeTo: this.activatedRoute })
         })

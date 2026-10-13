@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { ChartService } from '../services/chart.service';
 
 import { RouterLink } from '@angular/router';
+import { Chart } from '../types/chart';
 
 @Component({
     selector: 'app-home',
@@ -13,7 +14,7 @@ import { RouterLink } from '@angular/router';
 export class HomeComponent implements OnInit {
   private chartService: ChartService
   private subscriptions: Subscription[] = []
-  public recentCharts = []
+  public recentCharts: Chart[] = []
 
   constructor(chartService: ChartService) {
     this.chartService = chartService

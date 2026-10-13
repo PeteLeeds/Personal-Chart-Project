@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ClipboardService } from 'ngx-clipboard';
-import { forkJoin, of, Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { MarkDuplicateComponent } from '../modals/mark-duplicate/mark-duplicate.component';
 import { ArtistService } from '../services/artist.service';
@@ -23,7 +23,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     imports: [FaIconComponent, RouterLink, FormsModule, ReactiveFormsModule, ArtistSelectorComponent, MatProgressSpinner, MarkDuplicateComponent]
 })
 export class SongDisplayComponent implements OnInit {
-  @ViewChild('markDuplicateModal') private markDuplicateModal: MarkDuplicateComponent;
+  @ViewChild('markDuplicateModal') private markDuplicateModal?: MarkDuplicateComponent;
 
   private subscriptions: Subscription[] = []
   private activatedRoute: ActivatedRoute;
@@ -32,18 +32,18 @@ export class SongDisplayComponent implements OnInit {
   private clipboardService: ClipboardService;
   private router: Router;
 
-  public songInfo: AbstractSongInfo;
+  public songInfo?: AbstractSongInfo;
   public selectedSeries = "";
-  public chartSelectOptions: string[];
+  public chartSelectOptions?: string[];
   public chartRuns = [];
   public editMode = false;
-  public artistNames = []
+  public artistNames: string[] = []
 
   public faMusic = faMusic;
 
   public songDetailsForm = new FormGroup({
-    title: new FormControl<string>(''),
-    artistDisplay: new FormControl<string>(''),
+    title: new FormControl<string>('', {nonNullable: true}),
+    artistDisplay: new FormControl<string>('', {nonNullable: true}),
   });
 
   constructor(activatedRoute: ActivatedRoute, 
@@ -68,11 +68,14 @@ export class SongDisplayComponent implements OnInit {
         if (params.id) {
           return this.songService.getSongById(params.id, this.selectedSeries)
         }
-        return of([])
+        throw new Error('id is not defined')
       })).subscribe((song: AbstractSongInfo) => {
         this.songInfo = song;
         this.chartSelectOptions = this.songInfo.series
         if (initialLoad) {
+          if (!this.chartSelectOptions) {
+            throw new Error('chartSelectOptions is not defined')
+          }
           this.selectedSeries = this.chartSelectOptions[0];
         }
         this.songDetailsForm.setValue({ title: song.title, artistDisplay: song.artistDisplay });
@@ -80,6 +83,9 @@ export class SongDisplayComponent implements OnInit {
   }
 
   public updateSongDetails() {
+    if (!this.songInfo) {
+      throw new Error('songInfo is not defined')
+    }
     const updatedDetails = !this.artistsChanged()
       ? this.songDetailsForm.getRawValue()
       : { ...this.songDetailsForm.getRawValue(), ...{ artists: this.artistNames } }
@@ -90,7 +96,10 @@ export class SongDisplayComponent implements OnInit {
   }
 
   public enterEditMode() {
-    this.artistNames = this.songInfo.artists.map(artist => (artist as unknown as Record<string, unknown>).name)
+    if (!this.songInfo?.artists) {
+      throw new Error('artists are not defined')
+    }
+    this.artistNames = this.songInfo.artists.map(artist => (artist as unknown as Record<string, string>).name)
     this.editMode = true
   }
 
@@ -103,6 +112,12 @@ export class SongDisplayComponent implements OnInit {
   }
 
   public async markDuplicate() {
+    if (!this.markDuplicateModal) {
+      throw new Error('markDuplicateModal is not defined')
+    }
+    if (!this.songInfo) {
+      throw new Error('songInfo is not defined')
+    }
     const duplicateId = await this.markDuplicateModal.open('song', this.songInfo._id)
     this.router.navigate(['../', duplicateId], { relativeTo: this.activatedRoute })
   }
@@ -131,11 +146,14 @@ export class SongDisplayComponent implements OnInit {
   }
 
   public copyDisplay() {
+    if (!this.songInfo) {
+      throw new Error('songInfo is not defined')
+    }
     let display = '[color=#000000][size=5][b]#xx[/b] (xxpts)[/size][/color]'
     display += `\n\n[size=4][b]${this.songInfo.artistDisplay}[/b][/size]\n[i][size=3][b]${this.songInfo.title}[/b][/size][/i]`
-    display += `\n-\n[size=4][b]Chart Statistics[/b][/size]\n\n${getFullChartRun(this.songInfo.chartRuns)}\n\n`
+    display += `\n-\n[size=4][b]Chart Statistics[/b][/size]\n\n${this.songInfo.chartRuns && getFullChartRun(this.songInfo.chartRuns)}\n\n`
     display += `[size=4][b]Video[/b][/size]\n\n[youtube][/youtube]\n\n[size=4][b]Commentary[/b][/size]\n\n`
-    const artistObservables = this.songInfo.artists.map(artist => this.artistService.getArtistById(artist._id))
+    const artistObservables = this.songInfo.artists ? this.songInfo.artists.map(artist => this.artistService.getArtistById(artist._id)) : []
     forkJoin(artistObservables).subscribe(async artists => {
       let chartHistories = ''
       for (const artist of artists) {

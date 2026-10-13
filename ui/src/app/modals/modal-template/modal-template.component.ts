@@ -10,10 +10,10 @@ import { ModalConfig } from '../modal.config';
     imports: []
 })
 export class ModalTemplateComponent implements OnInit {
-  @Input() public modalConfig: ModalConfig
-  @ViewChild('modal') private modalContent: TemplateRef<ModalTemplateComponent>
+  @Input() public modalConfig?: ModalConfig
+  @ViewChild('modal') private modalContent?: TemplateRef<ModalTemplateComponent>
 
-  private modalRef: NgbModalRef;
+  private modalRef?: NgbModalRef;
 
   public modalService: NgbModal;
 
@@ -34,6 +34,12 @@ export class ModalTemplateComponent implements OnInit {
   }
 
   async dismiss() {
+    if (!this.modalConfig) {
+      throw new Error('modalConfig is not defined')
+    }
+    if (!this.modalRef) {
+      throw new Error('modalRef is not defined')
+    }
     if (this.modalConfig.shouldDismiss === undefined || await this.modalConfig.shouldDismiss()) {
       if (this.modalConfig.onDismiss) {
         await this.modalConfig.onDismiss()
@@ -43,6 +49,12 @@ export class ModalTemplateComponent implements OnInit {
   }
 
   async complete() {
+    if (!this.modalConfig) {
+      throw new Error('modalConfig is not defined')
+    }
+    if (!this.modalRef) {
+      throw new Error('modalRef is not defined')
+    }
     let returnVal: unknown;
     if (this.modalConfig.shouldClose === undefined || await this.modalConfig.shouldClose()) {
       if (this.modalConfig.onClose) {

@@ -33,7 +33,7 @@ export class EnterSongsComponent {
     private activatedRoute: ActivatedRoute
     private subscriptions: Subscription[] = []
 
-    public seriesName: string
+    public seriesName: string | undefined
 
     public constructor(chartService: ChartService, router: Router, activatedRoute: ActivatedRoute) {
       this.chartService = chartService
@@ -42,6 +42,9 @@ export class EnterSongsComponent {
     }
 
     ngOnInit(): void {
+      if (!this.activatedRoute.parent) {
+        throw new Error('activatedRoute.parent is not defined')
+      }
       this.subscriptions.push(this.activatedRoute.parent.params.subscribe((params => {
         if (params.series) {
           this.seriesName = params.series
@@ -65,6 +68,12 @@ export class EnterSongsComponent {
       if (this.useDateAsTitle) {
         chartParams.date = moment(chartParams.date).toDate()
         chartParams.name = chartParams.date.toDateString();
+      }
+      if (!this.seriesName) {
+        throw new Error('seriesName is not defined')
+      }
+      if (chartParams) {
+        throw new Error('chartParams is not defined')
       }
       this.chartService.initiateInteractiveChartCreation(this.seriesName, chartParams).subscribe(res => {
         this.router.navigate([res.sessionId, 'rank'], {relativeTo: this.activatedRoute})

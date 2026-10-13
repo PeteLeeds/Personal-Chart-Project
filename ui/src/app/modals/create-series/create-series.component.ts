@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
     imports: [ModalTemplateComponent, FormsModule]
 })
 export class CreateSeriesComponent implements OnInit {
-  @ViewChild('modal') private baseModal: ModalTemplateComponent;
+  @ViewChild('modal') private baseModal?: ModalTemplateComponent;
 
   public seriesName = '';
   private chartService: ChartService;
@@ -21,6 +21,9 @@ export class CreateSeriesComponent implements OnInit {
   }
 
   public open(): Promise<unknown> {
+    if (!this.baseModal) {
+      throw new Error('baseModal is not defined')
+    }
     return this.baseModal.open();
   }
 

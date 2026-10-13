@@ -16,8 +16,8 @@ import { RouterLink } from '@angular/router';
 export class SongComponent implements OnInit {
 
   private songService: SongService;
-  public songs: FullSongInfo[];
-  public songCount: number;
+  public songs?: FullSongInfo[];
+  public songCount?: number;
   public sortBy = "title";
   public sortOptions = ["title", "artistDisplay"];
   public pageNumber = 1;

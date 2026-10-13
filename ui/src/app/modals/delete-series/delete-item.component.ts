@@ -10,7 +10,7 @@ import { ModalConfig } from '../modal.config';
     imports: [ModalTemplateComponent]
 })
 export class DeleteItemComponent implements OnInit {
-  @ViewChild('modal') private baseModal: ModalTemplateComponent;
+  @ViewChild('modal') private baseModal?: ModalTemplateComponent;
 
   public seriesName = '';
   public chartName = '';
@@ -22,8 +22,11 @@ export class DeleteItemComponent implements OnInit {
   }
 
   public open(seriesName: string, chartName?: string): Promise<unknown> {
+    if (!this.baseModal) {
+      throw new Error('baseModal is not defined')
+    }
     this.seriesName = seriesName;
-    this.chartName = chartName;
+    this.chartName = chartName || '';
     this.type = chartName ? 'chart' : 'series'
     this.modalConfig.modalTitle = `Delete ${this.type}`;
     return this.baseModal.open();

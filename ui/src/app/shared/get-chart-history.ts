@@ -39,7 +39,7 @@ export function getChartHistory(artistInfo: Artist) {
     let bbCodeString = `[b]${artistInfo.name}[/b]\n[size=1]`
     for (const song of artistInfo.songs) {
       let songString = new Date(song.debut).getFullYear() + " " 
-                        + getFormattedPeak(song.peak) + " " 
+                        + getFormattedPeak(song.peak || 0) + " " 
                         + getFormattedTitle(song.title, song.artistDisplay, artistInfo.name)
       songString += '\n'
       bbCodeString += songString

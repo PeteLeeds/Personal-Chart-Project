@@ -8,6 +8,8 @@ import { getFullChartRun } from '../shared/get-chart-run';
 import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
+import { Series } from '../types/series';
+import { FullSongInfo } from '../types/song';
 
 @Component({
     selector: 'totals',
@@ -17,9 +19,9 @@ import { RouterLink } from '@angular/router';
 })
 export class TotalsComponent {
 
-  public seriesList = []
-  public leaderboard = []
-  public seriesBeingUsed = null
+  public seriesList: Series[] = []
+  public leaderboard: FullSongInfo[] = []
+  public seriesBeingUsed: String | null = null
   public calculating = false
 
   private songService: SongService
@@ -50,7 +52,7 @@ export class TotalsComponent {
   public onSubmit(): void {
     this.calculating = true
     this.seriesBeingUsed = this.totalsForm.controls['series'].value
-    const stringForm = {}
+    const stringForm: Record<string, string> = {}
     for (const [key, value] of Object.entries(this.totalsForm.value)) {
       if (value) {
         stringForm[key] = value.toString()

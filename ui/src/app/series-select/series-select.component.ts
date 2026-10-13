@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { CreateSeriesComponent } from '../modals/create-series/create-series.component';
 import { ModalConfig } from '../modals/modal.config';
 import { ChartService } from '../services/chart.service';
+import { Series } from '../types/series';
 
 
 @Component({
@@ -13,12 +14,12 @@ import { ChartService } from '../services/chart.service';
     imports: [RouterLink, CreateSeriesComponent]
 })
 export class SeriesSelectComponent implements OnInit {
-  @ViewChild('createSeriesModal') private createSeriesModal: CreateSeriesComponent;
+  @ViewChild('createSeriesModal') private createSeriesModal?: CreateSeriesComponent;
   private chartService: ChartService
   private subscriptions: Subscription[] = []
   private activatedRoute: ActivatedRoute
   private router: Router;
-  public seriesList = []
+  public seriesList: Series[] = []
 
   public modalConfig: ModalConfig = {modalTitle: 'Create new Series', dismissButtonLabel: 'dismiss', completeButtonLabel: 'close'}
 
@@ -29,6 +30,9 @@ export class SeriesSelectComponent implements OnInit {
   }
 
   public async openModal() {
+    if (!this.createSeriesModal) {
+      throw new Error('createSeriesModal is not defined')
+    }
     console.log('create series modal', this.createSeriesModal);
     let newSeriesTitle = await this.createSeriesModal.open();
     // When modal closes, navigate to newly created series

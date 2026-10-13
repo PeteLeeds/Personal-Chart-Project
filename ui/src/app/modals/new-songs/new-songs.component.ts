@@ -14,11 +14,11 @@ import { ArtistSelectorComponent } from '../../shared/artist-selector.commponent
     imports: [ModalTemplateComponent, FormsModule, ArtistSelectorComponent]
 })
 export class NewSongsComponent implements OnInit {
-  @ViewChild('modal') private baseModal: ModalTemplateComponent;
+  @ViewChild('modal') private baseModal?: ModalTemplateComponent;
   faPlus = faPlus;
   faMinus = faMinus;
 
-  public chartSongs: FormattedSong[]
+  public chartSongs?: FormattedSong[]
 
   public modalConfig: ModalConfig = {
     modalTitle: 'New Songs',
@@ -30,8 +30,10 @@ export class NewSongsComponent implements OnInit {
   }
 
   public open(songs: FormattedSong[]): Promise<FormattedSong[]> {
+    if (!this.baseModal) {
+      throw new Error('baseModal is not defined')
+    }
     this.chartSongs = songs;
-    console.log('songs', this.chartSongs)
     return this.baseModal.open() as Promise<FormattedSong[]>;
   }
 

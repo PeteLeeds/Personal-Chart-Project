@@ -15,14 +15,14 @@ import { Chart } from '../types/chart';
     imports: [RouterLink, DeleteItemComponent]
 })
 export class ChartSelectComponent implements OnInit {
-  @ViewChild('deleteItemModal') private deleteItemModal: DeleteItemComponent;
+  @ViewChild('deleteItemModal') private deleteItemModal: DeleteItemComponent | undefined;
   private chartService: ChartService
   private activatedRoute: ActivatedRoute
   private subscriptions: Subscription[] = []
   private router: Router;
-  public chartList = []
+  public chartList: Chart[] = []
   public pageNumber = 1;
-  public seriesName: string
+  public seriesName: string | undefined
   public sortOrder = '-1'
 
   public modalConfig: ModalConfig = { modalTitle: 'Create new Series', dismissButtonLabel: 'dismiss', completeButtonLabel: 'close' }
@@ -53,14 +53,23 @@ export class ChartSelectComponent implements OnInit {
         this.seriesName = params.series
         return this.chartService.getChartsInSeries(params.series, this.pageNumber - 1, this.sortOrder)
       }
-      return of([])
-    })).subscribe((charts: Chart[]) => {
+      return of(undefined)
+    })).subscribe((charts: Chart[] | undefined) => {
+      if (!charts) {
+        console.warn('charts are not defined')
+        return
+      }
       this.chartList = charts
     })
   }
 
   public async openModal() {
-    console.log('delete series modal', this.deleteItemModal)
+    if (!this.deleteItemModal) {
+      throw new Error('deleteItemModal is not defined')
+    }
+    if (!this.seriesName) {
+      throw new Error('seriesName is not defined')
+    }
     await this.deleteItemModal.open(this.seriesName)
     // When modal closes, navigate to 'series' page
     this.router.navigate(['../..'], { relativeTo: this.activatedRoute })

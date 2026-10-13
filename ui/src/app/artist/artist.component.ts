@@ -14,9 +14,9 @@ import { RouterLink } from '@angular/router';
 })
 export class ArtistComponent implements OnInit {
   private artistService: ArtistService;
-  public artistCount: number;
+  public artistCount: number | undefined;
   public pageNumber = 1;
-  public artists: Artist[];
+  public artists: Artist[] | undefined;
 
   public searchParams = {}
 
