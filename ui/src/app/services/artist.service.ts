@@ -32,7 +32,7 @@ export class ArtistService {
         return this.httpClient.head(`${BASE_URL}/artist/count?${getQueryString(options)}`, {observe: 'response'})
           .pipe(
             // + operator converts string to number
-            map((res) => +res.headers.get("X-Count"))
+            map((res) => +(res.headers.get("X-Count") ?? "0"))
           );
       }
 

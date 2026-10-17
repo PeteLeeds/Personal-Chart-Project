@@ -7,25 +7,25 @@ import { ModalConfig } from '../modal.config';
 import { Observable } from 'rxjs';
 import { Artist } from 'src/app/types/artist';
 import { SearchComponent } from '../../shared/search/search.component';
-import { NgFor, NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'mark-duplicate-modal',
     templateUrl: './mark-duplicate.component.html',
     styleUrls: ['./mark-duplicate.component.css'],
-    imports: [ModalTemplateComponent, SearchComponent, NgFor, NgClass, NgIf]
+    imports: [ModalTemplateComponent, SearchComponent, NgClass]
 })
 export class MarkDuplicateComponent implements OnInit {
-  @ViewChild('modal') private baseModal: ModalTemplateComponent;
+  @ViewChild('modal') private baseModal?: ModalTemplateComponent;
 
   public title = '';
   public artist = '';
   private songService: SongService;
   private artistService: ArtistService;
-  public suggestions = []
+  public suggestions: Artist[] | FullSongInfo[] = []
   public selectedId = ''
   private id = ''
-  public type: 'artist' | 'song'
+  public type: 'artist' | 'song' = 'artist'
 
   constructor(songService: SongService, artistService: ArtistService) {
     this.songService = songService
@@ -38,6 +38,9 @@ export class MarkDuplicateComponent implements OnInit {
     }
     this.type = type
     this.id = id
+    if (!this.baseModal) {
+      throw new Error('baseModal is not defined')
+    }
     return this.baseModal.open();
   }
 

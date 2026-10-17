@@ -11,16 +11,15 @@ import moment from 'moment';
 import { preEmptArtistName } from '../shared/pre-empt-artist-name';
 import { hyphenValidator } from '../shared/hyphen-validator';
 import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
-import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-create-chart',
     templateUrl: './create-chart-basic.component.html',
     styleUrls: ['./create-chart-basic.component.css'],
-    imports: [FormsModule, ReactiveFormsModule, MatDatepickerInput, MatDatepickerToggle, MatDatepicker, NgIf, NewSongsComponent]
+    imports: [FormsModule, ReactiveFormsModule, MatDatepickerInput, MatDatepickerToggle, MatDatepicker, NewSongsComponent]
 })
 export class CreateBasicChartComponent implements OnInit {
-  @ViewChild('newSongsModal') private newSongsModal: NewSongsComponent;
+  @ViewChild('newSongsModal') private newSongsModal: NewSongsComponent | undefined;
 
   private chartService: ChartService;
   private songService: SongService
@@ -28,7 +27,7 @@ export class CreateBasicChartComponent implements OnInit {
   private router: Router;
 
   public useDateAsTitle = false;
-  public seriesName: string;
+  public seriesName: string | undefined;
   public checkingSongs = false;
   public numberOfSongs = 0
   public songsChecked = 0;
@@ -47,6 +46,9 @@ export class CreateBasicChartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.activatedRoute.parent) {
+      throw new Error('activatedRoute.parent is not defined')
+    }
     this.activatedRoute.parent.params.subscribe((params => {
       if (params.series) {
         this.seriesName = params.series
@@ -68,6 +70,9 @@ export class CreateBasicChartComponent implements OnInit {
 
   public onSubmit(): void {
     this.checkingSongs = true
+    if (!this.chartForm.controls.songs.value) {
+      throw new Error('this.chartForm.controls.songs.value is not defined')
+    }
     const songs = this.chartForm.controls.songs.value.split('\n');
     const chartParams = {...this.chartForm.getRawValue()}
     if (this.useDateAsTitle) {
@@ -92,10 +97,15 @@ export class CreateBasicChartComponent implements OnInit {
     forkJoin(songObservables).subscribe(async songs => {
       chartSongs = songs.map(song => {
       if (song.exists) {
-        console.log('song', song)
+        if (!song.song) {
+          throw new Error('song title is not defined')
+        }
         return {pos: song.pos, _id: song.song._id, exists: song.exists};
       }
       else {
+        if (!song.songString) {
+          throw new Error('songString is not defined')
+        }
         const indexOfFirstHyphen = song.songString.indexOf(' - ')
         let artist = song.songString.slice(0, indexOfFirstHyphen);
         let title = song.songString.slice(indexOfFirstHyphen + 3);
@@ -104,16 +114,28 @@ export class CreateBasicChartComponent implements OnInit {
       }
     })
       // Ensure all are in correct position
-      chartSongs.sort((a, b) => (a.pos < b.pos ? -1 : 1));
+      chartSongs.sort((a, b) => {
+        if (!a.pos || !b.pos) throw Error('positions not defined')
+        return a.pos < b.pos ? -1 : 1}
+      );
       for (const song of chartSongs) {
         delete song.pos;
       }
       const newSongsExist = chartSongs.filter(song => !song.exists).length != 0;
       this.checkingSongs = false
+      if (!this.newSongsModal) {
+        throw new Error('newSongsModal is not defined')
+      }
       const songsToSend = newSongsExist ? await this.newSongsModal.open(chartSongs) : chartSongs;
-      console.log("In Create Chart: ", songsToSend);
-      // This bit creates the chart
-      this.chartService.createChart(this.seriesName, {...chartParams, songs: songsToSend}).subscribe(() => { 
+      if (!this.seriesName) {
+        throw new Error('seriesName is not defined')
+      }
+      const chartName = chartParams.name;
+      const chartDate = chartParams.date;
+      if (chartName === null || chartDate === null) {
+        throw new Error('Chart name or date is not defined')
+      }
+      this.chartService.createChart(this.seriesName, {name: chartName, date: chartDate, songs: songsToSend}).subscribe(() => { 
         console.log('Chart Created');
         this.router.navigate(['../..', chartParams.name], { relativeTo: this.activatedRoute })
       })

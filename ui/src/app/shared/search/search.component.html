@@ -1,10 +1,14 @@
-<div *ngIf="type">
-    <div *ngIf="type === 'song'">
+@if (type) {
+  <div>
+    @if (type === 'song') {
+      <div>
         Title:
         <input type="text" [(ngModel)]="title" (input)="setParams()" />
-    </div>
+      </div>
+    }
     <div>
-        Artist:
-        <input type="text" [(ngModel)]="artist" (input)="setParams()" />
+      Artist:
+      <input type="text" [(ngModel)]="artist" (input)="setParams()" />
     </div>
-</div>
+  </div>
+}

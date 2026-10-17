@@ -3,7 +3,7 @@ import { ModalTemplateComponent } from '../modal-template/modal-template.compone
 import { ModalConfig } from '../modal.config';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { FormattedSong } from 'src/app/types/song';
-import { NgFor, NgIf } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { ArtistSelectorComponent } from '../../shared/artist-selector.commponent';
 
@@ -11,14 +11,14 @@ import { ArtistSelectorComponent } from '../../shared/artist-selector.commponent
     selector: 'new-songs-modal',
     templateUrl: './new-songs.component.html',
     styleUrls: ['./new-songs.component.css'],
-    imports: [ModalTemplateComponent, NgFor, NgIf, FormsModule, ArtistSelectorComponent]
+    imports: [ModalTemplateComponent, FormsModule, ArtistSelectorComponent]
 })
 export class NewSongsComponent implements OnInit {
-  @ViewChild('modal') private baseModal: ModalTemplateComponent;
+  @ViewChild('modal') private baseModal?: ModalTemplateComponent;
   faPlus = faPlus;
   faMinus = faMinus;
 
-  public chartSongs: FormattedSong[]
+  public chartSongs?: FormattedSong[]
 
   public modalConfig: ModalConfig = {
     modalTitle: 'New Songs',
@@ -30,8 +30,10 @@ export class NewSongsComponent implements OnInit {
   }
 
   public open(songs: FormattedSong[]): Promise<FormattedSong[]> {
+    if (!this.baseModal) {
+      throw new Error('baseModal is not defined')
+    }
     this.chartSongs = songs;
-    console.log('songs', this.chartSongs)
     return this.baseModal.open() as Promise<FormattedSong[]>;
   }
 

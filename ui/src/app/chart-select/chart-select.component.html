@@ -1,29 +1,31 @@
 <h1>{{seriesName}}</h1>
 <a class="right" routerLink="new/basic">
-    <div class="button">
-        Upload new chart
-    </div>
+  <div class="button">
+    Upload new chart
+  </div>
 </a>
 <h2>Select a Chart</h2>
 
 <div class="row">
-    <p>Order By:</p>
-    <div class="toggle" [class.toggle-selected]="sortOrder == '1'" (click)="setSortOrder('1')">Ascending</div>
-    <div class="toggle" [class.toggle-selected]="sortOrder == '-1'" (click)="setSortOrder('-1')">Descending</div>
+  <p>Order By:</p>
+  <div class="toggle" [class.toggle-selected]="sortOrder == '1'" (click)="setSortOrder('1')">Ascending</div>
+  <div class="toggle" [class.toggle-selected]="sortOrder == '-1'" (click)="setSortOrder('-1')">Descending</div>
 </div>
 
 <div class="row">
-    <div *ngIf="pageNumber > 1" class="button" (click)="decPageNumber()">Previous Page</div>
-    <div  class="button" (click)="incPageNumber()">Next Page</div>
+  @if (pageNumber > 1) {
+    <div class="button" (click)="decPageNumber()">Previous Page</div>
+  }
+  <div  class="button" (click)="incPageNumber()">Next Page</div>
 </div>
 
-<ng-container *ngFor="let chart of chartList">
-    <a [routerLink]=[chart.name]>
-        <div class="select-option">
-            <p>{{chart.name}}</p>
-        </div>
-    </a>
-</ng-container>
+@for (chart of chartList; track chart) {
+  <a [routerLink]=[chart.name]>
+    <div class="select-option">
+      <p>{{chart.name}}</p>
+    </div>
+  </a>
+}
 
 <p class="button" (click)="openModal()">Delete Series</p>
 

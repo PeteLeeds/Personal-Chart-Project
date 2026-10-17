@@ -1,7 +1,7 @@
 import { ChartPosition } from "../types/song";
 
 function getBbCodeChartRun(charts: ChartPosition[], peak: number, reEntry = false): string {
-    const formattedDate = formatDate(new Date(charts[0].date))
+    const formattedDate = formatDate(charts[0].date ? new Date(charts[0].date) : new Date())
     let bbCodeString = `[b]${reEntry ? 'R' : 'N'}E[/b] (${formattedDate}) `
     let currentColour = ''
     for (const chart of charts) {

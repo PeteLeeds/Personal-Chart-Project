@@ -9,7 +9,7 @@ import { faPenSquare, faTrash, faPlus, faCopy } from '@fortawesome/free-solid-sv
 import { FullChart } from '../types/chart';
 import { ClipboardService } from 'ngx-clipboard';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf, NgFor } from '@angular/common';
+
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 const CHART_SIZES = [10, 20, 40, 75]
@@ -18,11 +18,11 @@ const CHART_SIZES = [10, 20, 40, 75]
     selector: 'app-chart-display',
     templateUrl: './chart-display.component.html',
     styleUrls: ['../styles/common-styles.css', './chart-display.component.css'],
-    imports: [FaIconComponent, RouterLink, NgIf, NgFor, DeleteItemComponent, MatProgressSpinner]
+    imports: [FaIconComponent, RouterLink, DeleteItemComponent, MatProgressSpinner]
 })
 
 export class ChartDisplayComponent implements OnInit {
-  @ViewChild('deleteItemModal') private deleteItemModal: DeleteItemComponent;
+  @ViewChild('deleteItemModal') private deleteItemModal: DeleteItemComponent | undefined;
 
   private chartService: ChartService;
   private clipboardService: ClipboardService;
@@ -30,15 +30,15 @@ export class ChartDisplayComponent implements OnInit {
   private activatedRoute: ActivatedRoute;
   private router: Router;
 
-  public chartData: AbstractSongInfo[]
-  public seriesName: string;
-  public chartName: string;
+  public chartData: AbstractSongInfo[] | undefined
+  public seriesName: string | undefined;
+  public chartName: string | undefined;
 
-  public lastChart: string;
-  public nextChart: string;
+  public lastChart: string | undefined;
+  public nextChart: string | undefined;
 
-  private songNumberToRetrieve = undefined
-  public availableSizes = []
+  private songNumberToRetrieve: number | undefined = undefined
+  public availableSizes = [] as number[]
 
   faPlus = faPlus;
   faTrash = faTrash;
@@ -66,9 +66,9 @@ export class ChartDisplayComponent implements OnInit {
             if (params.series && params.name) {
               this.seriesName = params.series
               this.chartName = params.name
-              return this.chartService.getChart(this.seriesName, this.chartName, this.songNumberToRetrieve)
+              return this.chartService.getChart(params.series, params.name, this.songNumberToRetrieve)
             }
-            return of({songs: [], lastChart: null, nextChart: null})
+            return of({songs: [] as AbstractSongInfo[], lastChart: undefined, nextChart: undefined})
           })).subscribe((chart: FullChart) => {
           this.lastChart = chart.lastChart
           this.nextChart = chart.nextChart;
@@ -87,7 +87,12 @@ export class ChartDisplayComponent implements OnInit {
   }
 
   public async openModal() {
-    console.log('delete item modal', this.deleteItemModal)
+    if (!this.deleteItemModal) {
+      throw new Error('deleteItemModal is undefined')
+    }
+    if (!this.seriesName) {
+      throw new Error('seriesName is undefined')
+    }
     await this.deleteItemModal.open(this.seriesName, this.chartName)
     // When modal closes, navigate to 'series' page
     this.router.navigate(['..'], { relativeTo: this.activatedRoute })
@@ -95,6 +100,9 @@ export class ChartDisplayComponent implements OnInit {
 
   public copyPlaintext() {
     let chartString = ""
+    if (!this.chartData) {
+      throw new Error('chartData is undefined')
+    }
     for (const song of this.chartData) {
       chartString += `${song.position} [${song.lastWeek || (song.weeksOn > 1 ? 'RE' : 'NEW')}] ${song.artistDisplay} - ${song.title}\n`
     }
@@ -103,6 +111,9 @@ export class ChartDisplayComponent implements OnInit {
 
   public copyChartSongs() {
     let chartString = ""
+    if (!this.chartData) {
+      throw new Error('chartData is undefined')
+    }
     for (const song of this.chartData) {
       chartString += `${song.artistDisplay} - ${song.title}\n`
     }
@@ -111,6 +122,12 @@ export class ChartDisplayComponent implements OnInit {
 
 
   public copyBBCode() {
+    if (!this.seriesName) {
+      throw new Error('seriesName is undefined')
+    }
+    if (!this.chartName) {
+      throw new Error('chartName is undefined')
+    }
     this.chartService.getChartString(this.seriesName, this.chartName).subscribe((chartString: string) => 
       this.clipboardService.copyFromContent(chartString)
     )
@@ -128,6 +145,6 @@ export class ChartDisplayComponent implements OnInit {
   }
 
   public resetData() {
-    this.chartData = null
+    this.chartData = undefined
   }
 }

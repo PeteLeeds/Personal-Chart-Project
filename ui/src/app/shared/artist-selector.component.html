@@ -1,7 +1,9 @@
-<p *ngFor="let artist of modifiedArtists; let i = index; trackBy:trackByFn">
+@for (artist of modifiedArtists; track trackByFn(i, artist); let i = $index) {
+  <p>
     <input [(ngModel)]="modifiedArtists[i]" (change)="emitNewArtists()" >
-    <ng-container *ngIf="modifiedArtists.length > 1">
-        <a (click)="removeArtist(i)"><fa-icon [icon]="faMinus"></fa-icon></a>
-    </ng-container>
-</p>
+    @if (modifiedArtists.length > 1) {
+      <a (click)="removeArtist(i)"><fa-icon [icon]="faMinus"></fa-icon></a>
+    }
+  </p>
+}
 <a (click)="addArtist()"><fa-icon [icon]="faPlus"></fa-icon></a>

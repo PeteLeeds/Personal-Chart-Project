@@ -12,7 +12,7 @@ import { SessionSong } from 'src/app/types/chart';
     imports: [ModalTemplateComponent, FormsModule, ReactiveFormsModule]
 })
 export class AddSongsComponent {
-  @ViewChild('modal') private baseModal: ModalTemplateComponent;
+  @ViewChild('modal') private baseModal?: ModalTemplateComponent;
 
   public addSongsForm = new FormGroup({
       songs: new FormControl<string>('', hyphenValidator()),
@@ -24,6 +24,9 @@ export class AddSongsComponent {
     completeButtonLabel: 'Add Songs',
     disableCloseButton: () => !this.addSongsForm.valid,
     onClose: () => new Promise<SessionSong[]>((resolve) => {
+        if (!this.addSongsForm.value.songs) {
+          throw new Error('songs are not defined')
+        }
         const newSongs = this.formatSongs(this.addSongsForm.value.songs)
         resolve(newSongs);
     })
@@ -41,6 +44,9 @@ export class AddSongsComponent {
   }
 
   public open(): Promise<unknown> {
+    if (!this.baseModal) {
+      throw new Error('baseModal is not defined')
+    }
     return this.baseModal.open();
   }
 

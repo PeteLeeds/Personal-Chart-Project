@@ -3,20 +3,20 @@ import { forkJoin } from 'rxjs';
 import { ArtistService } from '../services/artist.service';
 import { Artist } from '../types/artist';
 import { SearchComponent } from '../shared/search/search.component';
-import { NgIf, NgFor } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-artist',
     templateUrl: './artist.component.html',
     styleUrls: ['../styles/common-styles.css', './artist.component.css'],
-    imports: [SearchComponent, NgIf, NgFor, RouterLink]
+    imports: [SearchComponent, RouterLink]
 })
 export class ArtistComponent implements OnInit {
   private artistService: ArtistService;
-  public artistCount: number;
+  public artistCount: number | undefined;
   public pageNumber = 1;
-  public artists: Artist[];
+  public artists: Artist[] | undefined;
 
   public searchParams = {}
 

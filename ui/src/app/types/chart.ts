@@ -10,14 +10,14 @@ export interface Chart {
 }
 
 export interface FullChart {
-    lastChart: string,
-    nextChart: string,
+    lastChart: string | undefined,
+    nextChart: string | undefined,
     songs: AbstractSongInfo[]
 }
 
 export interface PutSessionParams {
     songOrder: SessionSong[]
-    placedSongs: SessionSong[]
+    placedSongs: (SessionSong | null)[]
 }
 
 export interface Session extends PutSessionParams {

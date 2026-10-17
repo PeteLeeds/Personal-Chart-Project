@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core'; // First, import Input
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { NgFor, NgIf } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'artist-selector',
     templateUrl: './artist-selector.component.html',
-    imports: [NgFor, FormsModule, NgIf, FaIconComponent]
+    imports: [FormsModule, FaIconComponent]
 })
 export class ArtistSelectorComponent {
   @Input() artists = []; // decorate the property with @Input()
@@ -16,7 +16,7 @@ export class ArtistSelectorComponent {
   faPlus = faPlus;
   faMinus = faMinus;
 
-  public modifiedArtists = []
+  public modifiedArtists: string[] = []
 
   public addArtist() {
     this.modifiedArtists.push("");
@@ -30,7 +30,7 @@ export class ArtistSelectorComponent {
 
   public ngOnChanges(changes: SimpleChanges) {
     console.log('CHANGES', changes)
-    this.modifiedArtists = changes.artists.currentValue as unknown as unknown[]
+    this.modifiedArtists = changes.artists.currentValue as unknown as string[]
   }
 
   public emitNewArtists() {
