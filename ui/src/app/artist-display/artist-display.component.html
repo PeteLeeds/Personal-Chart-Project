@@ -22,7 +22,7 @@
 
   <div>
     Selected Series:
-    @if (artistInfo.series) {
+    @if (artistInfo && artistInfo.series) {
       <select [(ngModel)]="selectedSeries" (click)="reloadArtist()">
         @for (series of artistInfo.series; track series) {
           <option>{{series}}</option>
@@ -32,7 +32,7 @@
   </div>
   <h2>Songs:</h2>
 
-  @if (artistInfo.songs) {
+  @if (artistInfo && artistInfo.songs) {
     <table class="song-table">
       <tr>
         <th>Debut</th>

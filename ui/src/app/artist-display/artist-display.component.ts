@@ -44,7 +44,6 @@ export class ArtistDisplayComponent implements OnInit {
   }
 
   public reloadArtist(initialLoad = false): void {
-    console.log('reloading', this.selectedSeries)
     this.subscriptions.push(
       this.activatedRoute.params.pipe(mergeMap(params => {
         if (params.id) {

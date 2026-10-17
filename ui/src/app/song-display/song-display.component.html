@@ -56,8 +56,8 @@
           <td>Peak Position</td>
         </tr>
         <tr>
-          <td>{{songInfo.weeksOn}}</td>
-          <td>{{songInfo.peak}}</td>
+          <td>{{songInfo?.weeksOn || 'N/A'}}</td>
+          <td>{{songInfo?.peak || 'N/A'}}</td>
         </tr>
       </table>
     </div>
