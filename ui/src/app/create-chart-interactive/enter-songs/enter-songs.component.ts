@@ -20,13 +20,13 @@ export class EnterSongsComponent {
     public useDateAsTitle = false
 
     public chartForm = new FormGroup({
-      name: new FormControl<string>({ value: '', disabled: this.useDateAsTitle }),
-      date: new FormControl<Date>(new Date()),
-      includeSongs: new FormControl<Boolean>(false),
-      numberOfCharts: new FormControl<Number>(1),
-      cutOffNumber: new FormControl<Number>(100),
-      songs: new FormControl<string>('', hyphenValidator()),
-      revealOrder: new FormControl<'random' | 'inOrder'>('inOrder')
+      name: new FormControl<string>({ value: '', disabled: this.useDateAsTitle }, {nonNullable: true}),
+      date: new FormControl<Date>(new Date(), {nonNullable: true}),
+      includeSongs: new FormControl<Boolean>(false, {nonNullable: true}),
+      numberOfCharts: new FormControl<Number>(1, {nonNullable: true}),
+      cutOffNumber: new FormControl<Number>(100, {nonNullable: true}),
+      songs: new FormControl<string>('', {validators: hyphenValidator(), nonNullable: true}),
+      revealOrder: new FormControl<'random' | 'inOrder'>('inOrder', {nonNullable: true})
     });
 
     private router: Router
@@ -72,9 +72,7 @@ export class EnterSongsComponent {
       if (!this.seriesName) {
         throw new Error('seriesName is not defined')
       }
-      if (chartParams) {
-        throw new Error('chartParams is not defined')
-      }
+      console.log('chartParams', chartParams)
       this.chartService.initiateInteractiveChartCreation(this.seriesName, chartParams).subscribe(res => {
         this.router.navigate([res.sessionId, 'rank'], {relativeTo: this.activatedRoute})
       })
