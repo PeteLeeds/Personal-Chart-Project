@@ -7,6 +7,9 @@ function getMarkdownChartRun(charts: ChartPosition[], peak: number, reEntry = fa
         if (chart.position === peak) {
             markdownString += `**${chart.position}**-`
         }
+        else if (chart.position > 40) {
+            markdownString += `*${chart.position}*-`
+        }
         else {
             markdownString += `${chart.position}-`
         }
