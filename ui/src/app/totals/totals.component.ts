@@ -71,7 +71,7 @@ export class TotalsComponent {
         pos: index + 1,
         artist: song.artistDisplay,
         title: song.title,
-        chartRun: getFullChartRun(song.chartRuns),
+        chartRun: getFullChartRun(song.chartRuns, 'bbcode'),
         points: song.totalPoints
       }
     })

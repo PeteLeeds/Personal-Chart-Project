@@ -7,11 +7,12 @@ import { mergeMap } from 'rxjs/operators';
 import { MarkDuplicateComponent } from '../modals/mark-duplicate/mark-duplicate.component';
 import { ArtistService } from '../services/artist.service';
 import { SongService } from '../services/song.service';
-import { getChartHistory } from '../shared/get-chart-history';
+import { getChartHistory, getMarkdownChartHistory } from '../shared/get-chart-history';
 import { getFullChartRun } from '../shared/get-chart-run';
 import { AbstractSongInfo } from '../types/song';
 import { faMusic } from '@fortawesome/free-solid-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import MarkdownIt from 'markdown-it'
 
 import { ArtistSelectorComponent } from '../shared/artist-selector.commponent';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -141,7 +142,7 @@ export class SongDisplayComponent implements OnInit {
   }
 
   public copyChartRun() {
-    const bbCodeChartRun = getFullChartRun(this.chartRuns)
+    const bbCodeChartRun = getFullChartRun(this.chartRuns, 'bbcode')
     this.clipboardService.copyFromContent(bbCodeChartRun)
   }
 
@@ -151,7 +152,7 @@ export class SongDisplayComponent implements OnInit {
     }
     let display = '[color=#000000][size=5][b]#xx[/b] (xxpts)[/size][/color]'
     display += `\n\n[size=4][b]${this.songInfo.artistDisplay}[/b][/size]\n[i][size=3][b]${this.songInfo.title}[/b][/size][/i]`
-    display += `\n-\n[size=4][b]Chart Statistics[/b][/size]\n\n${this.songInfo.chartRuns && getFullChartRun(this.songInfo.chartRuns)}\n\n`
+    display += `\n-\n[size=4][b]Chart Statistics[/b][/size]\n\n${this.songInfo.chartRuns && getFullChartRun(this.songInfo.chartRuns, 'bbcode')}\n\n`
     display += `[size=4][b]Video[/b][/size]\n\n[youtube][/youtube]\n\n[size=4][b]Commentary[/b][/size]\n\n`
     const artistObservables = this.songInfo.artists ? this.songInfo.artists.map(artist => this.artistService.getArtistById(artist._id)) : []
     forkJoin(artistObservables).subscribe(async artists => {
@@ -162,6 +163,33 @@ export class SongDisplayComponent implements OnInit {
       }
       display += `[size=4][b]Top 100 Chart History[/b][/size]\n\n[size=1]${chartHistories}[/size]`
       this.clipboardService.copyFromContent(display)
+    })
+  }
+
+  public copyMarkdownDisplay() {
+    if (!this.songInfo) {
+      throw new Error('songInfo is not defined')
+    }
+    let display = '## *xx* (xxpts)'
+    display += `\n\n## **${this.songInfo.artistDisplay}**\n### ***${this.songInfo.title}***`
+    display += `\n--\n### **Chart Statistics**\n\n${this.songInfo.chartRuns && getFullChartRun(this.songInfo.chartRuns, 'markdown')}\n\n`
+    display += `### **Video**\n\n--\n\n### **Commentary**\n\n`
+    const artistObservables = this.songInfo.artists ? this.songInfo.artists.map(artist => this.artistService.getArtistById(artist._id)) : []
+    forkJoin(artistObservables).subscribe(async artists => {
+      let chartHistories = ''
+      for (const artist of artists) {
+        chartHistories += getMarkdownChartHistory(artist)
+        chartHistories += '\n\n\n'
+      }
+      display += `### **Top 100 Chart History**\n\n${chartHistories}`
+      const md = new MarkdownIt()
+
+      await navigator.clipboard.write([
+          new ClipboardItem({
+              'text/html': new Blob([md.render(display)], { type: 'text/html' }),
+              'text/plain': new Blob([display], { type: 'text/plain' })
+          })
+      ]);
     })
   }
 }

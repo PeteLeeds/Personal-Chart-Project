@@ -9,7 +9,7 @@ describe('getFullChartRun', () => {
             ]
         ]
         const expected_result = "[b]NE[/b] (29/5/2021) [color=#0000FF][b]4[/b]-10-xx[/color]"
-        const result = getFullChartRun(test_run)
+        const result = getFullChartRun(test_run, 'bbcode')
         expect(result).toEqual(expected_result)
     }),
 
@@ -25,7 +25,7 @@ describe('getFullChartRun', () => {
         ]
         const expected_result = "[b]NE[/b] (29/5/2021) [color=#0000FF][b]4[/b]-10-xx[/color]\n"
                               + "[b]RE[/b] (19/6/2021) [color=#000000]11-xx[/color]"
-        const result = getFullChartRun(test_run)
+        const result = getFullChartRun(test_run, 'bbcode')
         expect(result).toEqual(expected_result)
     })
 })
