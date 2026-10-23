@@ -12,6 +12,7 @@ import { getFullChartRun } from '../shared/get-chart-run';
 import { AbstractSongInfo } from '../types/song';
 import { faMusic } from '@fortawesome/free-solid-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import MarkdownIt from 'markdown-it'
 
 import { ArtistSelectorComponent } from '../shared/artist-selector.commponent';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -178,10 +179,17 @@ export class SongDisplayComponent implements OnInit {
       let chartHistories = ''
       for (const artist of artists) {
         chartHistories += getMarkdownChartHistory(artist)
-        chartHistories += '\n\n'
+        chartHistories += '\n\n\n'
       }
       display += `### **Top 100 Chart History**\n\n${chartHistories}`
-      this.clipboardService.copyFromContent(display)
+      const md = new MarkdownIt()
+
+      await navigator.clipboard.write([
+          new ClipboardItem({
+              'text/html': new Blob([md.render(display)], { type: 'text/html' }),
+              'text/plain': new Blob([display], { type: 'text/plain' })
+          })
+      ]);
     })
   }
 }
