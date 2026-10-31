@@ -1,7 +1,7 @@
 import { getFullChartRun } from "../src/app/shared/get-chart-run";
 
 describe('getFullChartRun', () => {
-    test('should return correctly formatted chart run given chart run', () => {
+    it('should return correctly formatted chart run given chart run', () => {
         const test_run = [
             [
                 {"position": 4,"date": "2021-05-29T00:00:00.000Z"},
@@ -13,7 +13,7 @@ describe('getFullChartRun', () => {
         expect(result).toEqual(expected_result)
     }),
 
-    test('should return correctly formatted chart run given multiple chart runs', () => {
+    it('should return correctly formatted chart run given multiple chart runs', () => {
         const test_run = [
             [
                 {"position": 4,"date": "2021-05-29T00:00:00.000Z"},
