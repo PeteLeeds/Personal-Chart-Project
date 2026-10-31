@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "jest && ng test",
     "test:ci": "jest && ng test --browsers=ChromeHeadless --watch=false",
-    "lint": "tsc --noEmit && eslint . --ext js,ts,json --quiet --fix",
+    "lint": "eslint . --quiet",
+    "lint:fix": "eslint . --quiet --fix",
     "e2e": "ng e2e"
   },
   "private": true,
@@ -23,6 +24,7 @@
     "@angular/platform-browser": "^20.3.33",
     "@angular/platform-browser-dynamic": "^20.3.33",
     "@angular/router": "^20.3.33",
+    "@eslint/js": "^10.0.1",
     "@fortawesome/angular-fontawesome": "^3.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
@@ -33,6 +35,7 @@
     "ngx-clipboard": "16.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
+    "typescript-eslint": "^8.72.1",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
