@@ -5,7 +5,7 @@ describe('getQueryString', () => {
         const testData = {testKey: 'testValue'}
         const result = getQueryString(testData)
         expect(result).toBe('testKey=testValue')
-    }),
+    })
 
     it('should correctly convert multiple key-value pairs into string', () => {
         const testData = {

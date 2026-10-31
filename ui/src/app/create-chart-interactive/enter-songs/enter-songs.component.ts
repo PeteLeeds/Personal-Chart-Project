@@ -22,9 +22,9 @@ export class EnterSongsComponent {
     public chartForm = new FormGroup({
       name: new FormControl<string>({ value: '', disabled: this.useDateAsTitle }, {nonNullable: true}),
       date: new FormControl<Date>(new Date(), {nonNullable: true}),
-      includeSongs: new FormControl<Boolean>(false, {nonNullable: true}),
-      numberOfCharts: new FormControl<Number>(1, {nonNullable: true}),
-      cutOffNumber: new FormControl<Number>(100, {nonNullable: true}),
+      includeSongs: new FormControl<boolean>(false, {nonNullable: true}),
+      numberOfCharts: new FormControl<number>(1, {nonNullable: true}),
+      cutOffNumber: new FormControl<number>(100, {nonNullable: true}),
       songs: new FormControl<string>('', {validators: hyphenValidator(), nonNullable: true}),
       revealOrder: new FormControl<'random' | 'inOrder'>('inOrder', {nonNullable: true})
     });

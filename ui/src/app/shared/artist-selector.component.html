@@ -1,4 +1,4 @@
-@for (artist of modifiedArtists; track trackByFn(i, artist); let i = $index) {
+@for (artist of modifiedArtists; track i; let i = $index) {
   <p>
     <input [(ngModel)]="modifiedArtists[i]" (change)="emitNewArtists()" >
     @if (modifiedArtists.length > 1) {

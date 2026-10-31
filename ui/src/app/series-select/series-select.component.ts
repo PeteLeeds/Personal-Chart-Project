@@ -34,7 +34,7 @@ export class SeriesSelectComponent implements OnInit {
       throw new Error('createSeriesModal is not defined')
     }
     console.log('create series modal', this.createSeriesModal);
-    let newSeriesTitle = await this.createSeriesModal.open();
+    const newSeriesTitle = await this.createSeriesModal.open();
     // When modal closes, navigate to newly created series
     this.router.navigate([newSeriesTitle, 'chart'], { relativeTo: this.activatedRoute })
   }

@@ -27,7 +27,7 @@ export interface Session extends PutSessionParams {
 }
 
 export interface SessionSong {
-    _id?: Object,
+    _id?: object,
     artistDisplay: string,
     title: string
 }

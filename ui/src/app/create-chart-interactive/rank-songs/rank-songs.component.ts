@@ -116,7 +116,7 @@ export class RankSongsComponent {
       if (!this.addSongsModal) {
         throw new Error('addSongsModal is not defined')
       }
-      let newSongs = await this.addSongsModal.open() as SessionSong[]
+      const newSongs = await this.addSongsModal.open() as SessionSong[]
       this.session.songOrder.push(...newSongs)
       this.updateCurrentSession()
     }

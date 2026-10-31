@@ -92,7 +92,7 @@ export class CreateBasicChartComponent implements OnInit {
         })))
     }
 
-    var chartSongs: FormattedSong[] = []
+    let chartSongs: FormattedSong[] = []
 
     forkJoin(songObservables).subscribe(async songs => {
       chartSongs = songs.map(song => {
