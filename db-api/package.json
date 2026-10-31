@@ -6,7 +6,8 @@
     "scripts": {
         "build": "tsc",
         "test": "jest",
-        "lint": "tsc --noEmit && eslint . --ext js,ts,json --quiet --fix"
+        "lint": "eslint . --quiet",
+        "lint:fix": "eslint . --quiet --fix"
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",
