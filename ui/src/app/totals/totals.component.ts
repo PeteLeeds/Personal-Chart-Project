@@ -21,19 +21,19 @@ export class TotalsComponent {
 
   public seriesList: Series[] = []
   public leaderboard: FullSongInfo[] = []
-  public seriesBeingUsed: String | null = null
+  public seriesBeingUsed: string | null = null
   public calculating = false
 
   private songService: SongService
   private chartService: ChartService
 
   public totalsForm = new FormGroup({
-    series: new FormControl<String>(''),
+    series: new FormControl<string>(''),
     from: new FormControl<Date>(new Date(), Validators.required),
     to: new FormControl<Date>(new Date(), Validators.required),
-    includeFullChartRun: new FormControl<Boolean>(true),
-    numberOfResults: new FormControl<Number>(100),
-    estimateFuturePoints: new FormControl<Boolean>(true)
+    includeFullChartRun: new FormControl<boolean>(true),
+    numberOfResults: new FormControl<number>(100),
+    estimateFuturePoints: new FormControl<boolean>(true)
   });
 
   public constructor(songService: SongService, chartService: ChartService) {

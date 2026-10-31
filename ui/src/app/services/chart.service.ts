@@ -33,7 +33,7 @@ export class ChartService {
     return this.httpClient.post(`${BASE_URL}/series/`, {name: seriesName}, {headers: new HttpHeaders({'Content-Type':  'application/json'})})
   }
 
-  public initiateInteractiveChartCreation(seriesName: string, params: Record<string, string | Number | Boolean | Date>): Observable<{sessionId: string}> {
+  public initiateInteractiveChartCreation(seriesName: string, params: Record<string, string | number | boolean | Date>): Observable<{sessionId: string}> {
     return this.httpClient.post<{sessionId: string}>(`${BASE_URL}/series/${seriesName}/interactive`, params)
   }
 

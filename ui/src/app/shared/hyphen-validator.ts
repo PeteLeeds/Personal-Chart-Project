@@ -1,7 +1,7 @@
 import { AbstractControl, ValidatorFn } from "@angular/forms";
 
 export function hyphenValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
+    return (control: AbstractControl<string>): { [key: string]: string } | null => {
     if (control.value.length == 0) {
         return null
     }

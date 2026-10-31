@@ -82,7 +82,7 @@ export class SongDb {
 
     public async updateSong(id: string, newData: Record<string, unknown>) {
         if (newData.artists) {
-            let artistIds: ObjectId[] = []
+            const artistIds: ObjectId[] = []
             for (const artist of newData.artists as string[]) {
                 artistIds.push(await updateArtists(this.db.collection(ARTIST_COLLECTION), artist))
             }
@@ -103,7 +103,7 @@ export class SongDb {
             throw new Error('Both fromId and toId need to be correctly defined')
         }
         // Merge chart runs
-        for (let series of Object.keys(from.charts)) {
+        for (const series of Object.keys(from.charts)) {
             if (!to.charts[series]) {
                 to.charts[series] = from.charts[series]
             } else {

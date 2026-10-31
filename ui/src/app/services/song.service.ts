@@ -27,7 +27,7 @@ export class SongService {
     const httpCodeReplacementArray = [['/', '%2F'], ['?', '%3F'], ['\\', '%5C']]
     for (const codeReplacement of httpCodeReplacementArray) {
       while (httpSongString.includes(codeReplacement[0])) {
-        let indexToReplace = httpSongString.indexOf(codeReplacement[0]);
+        const indexToReplace = httpSongString.indexOf(codeReplacement[0]);
         httpSongString = httpSongString.substring(0, indexToReplace) + codeReplacement[1] + httpSongString.substring(indexToReplace + 1)
       }
     }

@@ -1,7 +1,7 @@
 import { getFullChartRun } from "../src/app/shared/get-chart-run";
 
 describe('getFullChartRun', () => {
-    test('should return correctly formatted chart run given chart run', () => {
+    it('should return correctly formatted chart run given chart run', () => {
         const test_run = [
             [
                 {"position": 4,"date": "2021-05-29T00:00:00.000Z"},
@@ -11,9 +11,9 @@ describe('getFullChartRun', () => {
         const expected_result = "[b]NE[/b] (29/5/2021) [color=#0000FF][b]4[/b]-10-xx[/color]"
         const result = getFullChartRun(test_run, 'bbcode')
         expect(result).toEqual(expected_result)
-    }),
+    })
 
-    test('should return correctly formatted chart run given multiple chart runs', () => {
+    it('should return correctly formatted chart run given multiple chart runs', () => {
         const test_run = [
             [
                 {"position": 4,"date": "2021-05-29T00:00:00.000Z"},

@@ -1,19 +1,19 @@
-import { ObjectId } from "mongodb"
-import { sortSongs } from "../common/sort-songs"
+import { ObjectId } from "mongodb";
+import { sortSongs } from "../common/sort-songs";
 
-const SELECTED_SERIES = 'test series'
+const SELECTED_SERIES = 'test series';
 
 const BASE_SONG_INFO = {
     _id: new ObjectId('123456789012345678901234'),
     title: 'test',
     artistDisplay: 'test',
     artistIds: []
-}
+};
 
 const BASE_CHART_INFO = {
     chart: 'test',
     position: 1
-}
+};
 
 describe('sort songs', () => {
     test('should return the correct number when one date specified', () => {
@@ -27,7 +27,7 @@ describe('sort songs', () => {
                     }
                 ]
             }
-        }
+        };
         const songB = {
             ...BASE_SONG_INFO,
             charts: {
@@ -38,10 +38,10 @@ describe('sort songs', () => {
                     }
                 ]
             }
-        }
-        const result = sortSongs(songA, songB, SELECTED_SERIES)
-        expect(result).toBe(1)
-    }),
+        };
+        const result = sortSongs(songA, songB, SELECTED_SERIES);
+        expect(result).toBe(1);
+    })
 
     test('should return the correct number when multiple dates specified', () => {
         const songA = {
@@ -58,7 +58,7 @@ describe('sort songs', () => {
                     }
                 ]
             }
-        }
+        };
         const songB = {
             ...BASE_SONG_INFO,
             charts: {
@@ -74,10 +74,10 @@ describe('sort songs', () => {
                     }
                 ]
             }
-        }
-        const result = sortSongs(songA, songB, SELECTED_SERIES)
-        expect(result).toBe(-1)
-    }),
+        };
+        const result = sortSongs(songA, songB, SELECTED_SERIES);
+        expect(result).toBe(-1);
+    });
 
     test('should return the difference in entry positions when earliest dates are equal', () => {
         const songA = {
@@ -95,7 +95,7 @@ describe('sort songs', () => {
                     }
                 ]
             }
-        }
+        };
         const songB = {
             ...BASE_SONG_INFO,
             charts: {
@@ -112,8 +112,8 @@ describe('sort songs', () => {
                     }
                 ]
             }
-        }
-        const result = sortSongs(songA, songB, SELECTED_SERIES)
-        expect(result).toBe(4)
-    })
-})
+        };
+        const result = sortSongs(songA, songB, SELECTED_SERIES);
+        expect(result).toBe(4);
+    });
+});

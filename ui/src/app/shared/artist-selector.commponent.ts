@@ -36,8 +36,4 @@ export class ArtistSelectorComponent {
   public emitNewArtists() {
     this.artistsChangeEvent.emit(this.modifiedArtists)
   }
-
-  public trackByFn(index: any, _: any) {
-    return index;
-  } 
 }
