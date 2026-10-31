@@ -10,8 +10,8 @@ export interface Chart {
 }
 
 export interface InteractiveChartParams extends Chart {
-    includeSongs: Boolean;
-    numberOfCharts: Number;
+    includeSongs: boolean;
+    numberOfCharts: number;
     cutOffNumber: number;
     songs: string;
     revealOrder: 'random' | 'inOrder'

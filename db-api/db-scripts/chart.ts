@@ -45,7 +45,7 @@ export class ChartDb {
         ]).toArray()
     }
 
-    private async getXPreviousCharts(seriesName: String, date: string, number: Number): Promise<string[]> {
+    private async getXPreviousCharts(seriesName: string, date: string, number: number): Promise<string[]> {
         const previousCharts = await this.db.collection(CHART_COLLECTION).aggregate<Chart>([
             { '$match': { name: seriesName } },
             {'$unwind': '$charts'},
@@ -86,8 +86,8 @@ export class ChartDb {
         const songArray = songs.split('\n');
         return songArray.map(song => {
             const indexOfFirstHyphen = song.indexOf(' - ')
-            let artist = song.slice(0, indexOfFirstHyphen);
-            let title = song.slice(indexOfFirstHyphen + 3);
+            const artist = song.slice(0, indexOfFirstHyphen);
+            const title = song.slice(indexOfFirstHyphen + 3);
             return {
                 artistDisplay: artist.trim(),
                 title: title.trim()
@@ -100,7 +100,7 @@ export class ChartDb {
 
         while (currentIndex != 0) {
 
-            let randomIndex = Math.floor(Math.random() * currentIndex);
+            const randomIndex = Math.floor(Math.random() * currentIndex);
             currentIndex--;
 
             [array[currentIndex], array[randomIndex]] = [
@@ -340,7 +340,7 @@ export class ChartDb {
         return {name: session.chartName}
     }
 
-    public listSeries(): FindCursor<any> {
+    public listSeries(): FindCursor<unknown> {
         return this.db.collection(CHART_COLLECTION).find();
     }
 
