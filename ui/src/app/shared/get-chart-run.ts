@@ -2,7 +2,7 @@ import { ChartPosition } from "../types/song";
 
 function getMarkdownChartRun(charts: ChartPosition[], peak: number, reEntry = false): string {
     const formattedDate = formatDate(charts[0].date ? new Date(charts[0].date) : new Date())
-    let markdownString = `*${reEntry ? 'R' : 'N'}E* (${formattedDate}) `
+    let markdownString = `**${reEntry ? 'R' : 'N'}E** (${formattedDate}) `
     for (const chart of charts) {
         if (chart.position === peak) {
             markdownString += `**${chart.position}**-`

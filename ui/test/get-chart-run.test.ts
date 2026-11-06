@@ -1,7 +1,7 @@
 import { getFullChartRun } from "../src/app/shared/get-chart-run";
 
 describe('getFullChartRun', () => {
-    it('should return correctly formatted chart run given chart run', () => {
+    it('should return correctly BBCode formatted chart run given chart run', () => {
         const test_run = [
             [
                 {"position": 4,"date": "2021-05-29T00:00:00.000Z"},
@@ -13,7 +13,20 @@ describe('getFullChartRun', () => {
         expect(result).toEqual(expected_result)
     })
 
-    it('should return correctly formatted chart run given multiple chart runs', () => {
+    it('should return correctly Markdown formatted chart run given chart run', () => {
+        const test_run = [
+            [
+                {"position": 4,"date": "2021-05-29T00:00:00.000Z"},
+                {"position": 10,"date": "2021-06-05T00:00:00.000Z"},
+                {"position": 41,"date": "2021-06-12T00:00:00.000Z"}
+            ]
+        ]
+        const expected_result = "**NE** (29/5/2021) **4**-10-*41*-xx"
+        const result = getFullChartRun(test_run, 'markdown')
+        expect(result).toEqual(expected_result)
+    })
+
+    it('should return correctly formatted BBCode chart run given multiple chart runs', () => {
         const test_run = [
             [
                 {"position": 4,"date": "2021-05-29T00:00:00.000Z"},

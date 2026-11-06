@@ -13,6 +13,17 @@
             "artistDisplay": "Bakermat",
             "peak": 19,
             "debut": "Sat Jan 02 2021"
+        },
+        {
+            "_id": "638bbba594fd773d5c63946c",
+            "title": "Good Dreams",
+            "artistIds": [
+                "6372a32169aed00c443a0a83",
+                "638bbba594fd773d5c63946a"
+            ],
+            "artistDisplay": "7Chariot",
+            "peak": 9,
+            "debut": "Sat Jan 02 2022"
         }
     ]
 }
